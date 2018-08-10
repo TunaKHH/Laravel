@@ -49,8 +49,10 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td scope="row">按鈕1</td>
-                                                <td>按鈕2</td>
+                                                <td scope="row"></td>
+                                                <td>
+                                                    <button class="btn btn-danger btn-sm"><i class="fab fa-accessible-icon fa-xs"></i></button>
+                                                </td>
                                                 <td>按鈕3</td>
                                                 <td>0808父親節快樂</td>
                                                 <td>林幼晴</td>

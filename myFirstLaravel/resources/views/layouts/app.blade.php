@@ -20,6 +20,9 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    
+
 </head>
 
 <body>
@@ -40,6 +43,9 @@
 
                     </ul>
                     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        @guest
+
+                        @else
                         <li class="nav-item">
                             <a class="nav-link active" id="pills-order-tab" data-toggle="pill" href="#pills-order" role="tab" aria-controls="pills-order"
                                 aria-selected="true">訂單管理</a>
@@ -60,6 +66,7 @@
                             <a class="nav-link" id="pills-track-tab" data-toggle="pill" href="#pills-track" role="tab" aria-controls="pills-track"
                                 aria-selected="false">訂購紀錄</a>
                         </li>
+                        @endguest
                     </ul>
 
                     <!-- Right Side Of Navbar -->
