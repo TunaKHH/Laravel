@@ -20,6 +20,12 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/order', 'HomeController@index')->name('store');
+
+Route::get('/store', 'HomeController@store')->name('store');
+
+Route::post('/getStore', 'HomeController@getStore');
+
 Route::post('/setNewStore', 'HomeController@setNewStore');
 
 Route::post('/editStore', 'HomeController@editStore');

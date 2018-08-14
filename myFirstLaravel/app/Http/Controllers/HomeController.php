@@ -25,7 +25,13 @@ class HomeController extends Controller
     public function index()
     {
         $stores = $this->getAllStores();
-        return view('home')->with('stores',$stores);        
+        return view('order')->with('stores',$stores);        
+    }
+
+    public function store()
+    {
+        $stores = $this->getAllStores();
+        return view('store')->with('stores',$stores);        
     }
 
     static private function getAllStores(){

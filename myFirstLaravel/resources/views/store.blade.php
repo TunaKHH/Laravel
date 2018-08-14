@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <!-- <div class="card-header">主畫面</div> -->
+                <div class="card-header">店家管理</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -12,78 +12,9 @@
                     </div>
                     @endif
                     <div class="tab-content" id="pills-tabContent">
-                        <div class="tab-pane fade show active" id="pills-order" role="tabpanel" aria-labelledby="pills-order-tab">
-                            <!-- <button class="btn btn-success" type="button" data-toggle="modal" data-target="#addOrderModal">
-                                新增訂單
-                            </button>   -->
-                            <form>
-                                <div class="row">
-                                    <div class="col">
-                                        <input type="text" class="form-control" placeholder="訂單名稱">
-                                    </div>
-                                    <div class="col">
-                                        <select id="inputState" class="form-control">
-                                            <option selected>請選擇店家</option>
-                                            @foreach($stores as $store)
-                                            <option>
-                                                {{ $store->name }}
-                                            </option>
-                                            @endforeach
+                        
 
-                                        </select>
-                                    </div>
-                                    <div class="col">
-                                        <button type="submit" class="btn btn-primary">
-                                            新增</button>
-                                    </div>
-                                </div>
-                                <br/>
-                                <div class="row">
-                                    <table class="table table-striped">
-                                        <thead class="thead-dark">
-                                            <tr>
-                                                <th scope="col">刪除</th>
-                                                <th scope="col">加訂</th>
-                                                <th scope="col">Lock</th>
-                                                <th scope="col">訂單名稱</th>
-                                                <th scope="col">主揪</th>
-                                                <th scope="col">店家</th>
-                                                <th scope="col">類型</th>
-                                                <th scope="col">開單時間</th>
-                                                <th scope="col">店家電話</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td scope="row">
-                                                    <button class="btn btn-danger btn-sm" id="btn_delOrder">
-                                                        <i class="far fa-trash-alt fa-xs"></i>
-                                                    </button>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-success btn-sm">
-                                                        <i class="fas fa-plus fa-xs"></i>
-                                                    </button>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-dark btn-sm">
-                                                        <i class="fas fa-lock fa-xs"></i>
-                                                    </button>
-                                                </td>
-                                                <td>0808父親節快樂</td>
-                                                <td>林幼晴</td>
-                                                <td>古早湯飯</td>
-                                                <td>飲料</td>
-                                                <td>2018-08-08 09:13:53</td>
-                                                <td>0915251335</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="tab-pane fade" id="pills-store" role="tabpanel" aria-labelledby="pills-store-tab">
+                        <div class="tab-pane" id="pills-store">
 
                             <?php echo Form::open(array('action' => 'HomeController@setNewStore'))?>
                             <div class="row">
