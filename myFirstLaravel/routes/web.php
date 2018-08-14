@@ -22,3 +22,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('/setNewStore', 'HomeController@setNewStore');
 
+Route::post('/editStore', 'HomeController@editStore');
+
+Route::post('/delStore', 'HomeController@delStore');
