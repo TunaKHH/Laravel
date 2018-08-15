@@ -40,6 +40,13 @@ class HomeController extends Controller
         return $results;
     }
 
+    
+    public function getOneStore(){
+        $result = Store::getOneStore($_POST['id']);
+
+        return $result;
+    }
+
     public function setNewStore(){
         if (Request::has('setStoreName') && Request::has('setStoretel') && Request::has('setStoreType'))
         {            
@@ -54,4 +61,9 @@ class HomeController extends Controller
         }
         
     }
+
+    public function setEditStore(){
+        
+    }
+    
 }

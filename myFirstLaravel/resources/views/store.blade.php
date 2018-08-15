@@ -3,8 +3,16 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">店家管理</div>
-
+                <div class="card-header">
+                    <div class="row">
+                        <div class="h4 col">
+                            店家管理
+                        </div>
+                        <div class="col" style="text-align: end;">
+                            <button data-toggle="modal" data-target="#addMenuModal" type="button" class="btn btn-primary">新增</button>
+                        </div>
+                    </div>                                        
+                </div>
                 <div class="card-body">
                     @if (session('status'))
                     <div class="alert alert-success" role="alert">
@@ -12,29 +20,10 @@
                     </div>
                     @endif
                     <div class="tab-content" id="pills-tabContent">
-                        
+                        <div class="tab-pane fade show active" id="pills-store">
 
-                        <div class="tab-pane" id="pills-store">
-
-                            <?php echo Form::open(array('action' => 'HomeController@setNewStore'))?>
-                            <div class="row">
-                                <div class="col">
-                                    <input name="setStoreName" type="text" class="form-control" placeholder="店家名稱" required>
-                                </div>
-                                <div class="col">
-                                    <input name="setStoretel" type="text" class="form-control" placeholder="店家電話" required>
-                                </div>
-                                <div class="col">
-                                    <select name="setStoreType" id="setStoreType" class="form-control">
-                                        <option selected>請選擇商店類型</option>
-                                        <option value="0">飲料店</option>
-                                        <option value="1">便當店</option>
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <button type="submit" class="btn btn-primary">新增</button>
-                                </div>
-                            </div>
+                            
+                            
                             <br>
                             <div class="row">
                                 <table class="table table-striped">
@@ -74,52 +63,74 @@
                                     </tbody>
                                 </table>
                             </div>
-                            {{ Form::close() }}
 
                         </div>
                         <div class="tab-pane fade" id="pills-menu" role="tabpanel" aria-labelledby="pills-menu-tab">menuPage</div>
                         <div class="tab-pane fade" id="pills-authority" role="tabpanel" aria-labelledby="pills-authority-tab">authorityPage</div>
                         <div class="tab-pane fade" id="pills-track" role="tabpanel" aria-labelledby="pills-track-tab">trackPage</div>
-
                     </div>
-
-
-
-
-                    <!--Add Order Modal -->
-                    <div class="modal fade" id="addOrderModal" tabindex="-1" role="dialog" aria-labelledby="addOrderModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
+                    <!--Add Store Menu Modal -->
+                    <?php echo Form::open(array('action' => 'HomeController@setNewStore'))?>
+                    <div class="modal fade" id="addMenuModal" tabindex="-1" role="dialog" aria-labelledby="addMenuModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">新增訂單</h5>
+                                <div class="modal-header bg-primary" style="color: #ffffff">
+                                    <h5 class="modal-title" id="exampleModalLabel">新增菜單</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="form-group row">
-                                        <input class="form-control form-control-lg" type="text" placeholder="請輸入訂單名稱">
-                                    </div>
-                                    <div class="form-group row">
-                                        <select class="form-control form-control-lg">
-                                            <option>請選擇店家</option>
-                                        </select>
-                                    </div>
-
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="store-name" class="control-label">店家名稱:</label>
+                                            <input type="text" class="form-control" id="store-name" name="setStoreName">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="store-tel" class="control-label">店家電話:</label>
+                                            <input type="text" class="form-control" id="store-tel" name="setStoreTel">
+                                        </div>
+                                        <br>
+                                        <div class="form-group" style="text-align: center;">
+                                            <label for="store-tel" class="control-label h3 ">菜單管理</label>
+                                            <div class="col" style="text-align: right;">
+                                                <button class="add btn btn-primary"><i class="fas fa-plus"></i></button>
+                                            </div>                                           
+                                            
+                                            <div class="row">
+                                                <div class="col-5">
+                                                    <input name="setProductName" type="text" class="form-control" placeholder="品項名稱" required>
+                                                </div>
+                                                <div class="col-2">
+                                                    <input name="setPriceS" type="number" class="form-control" placeholder="價格(小)" required>
+                                                </div>
+                                                <div class="col-2">
+                                                    <input name="setPriceM" type="number" class="form-control" placeholder="價格(中)" required>
+                                                </div>
+                                                <div class="col-2">
+                                                    <input name="setPriceL" type="number" class="form-control" placeholder="價格(大)" required>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            
+                                            <div id="addItem"></div>
+                                        </div>
+                                    </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                                    <button type="button" class="btn btn-danger">送出</button>
+                                    <button type="button" class="btn btn-danger" id="submit">送出</button>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>                    
+                    {{ Form::close() }}
                     <!--Edit Menu Modal -->
                     <div class="modal fade " id="editMenuModal" tabindex="-1" role="dialog" aria-labelledby="editMenuModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">管理菜單</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">修改菜單</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -133,14 +144,13 @@
                                         <div class="form-group">
                                             <label for="store-tel" class="control-label">店家電話:</label>
                                             <input type="text" class="form-control" id="store-tel">
-                                            </textarea>
                                         </div>
 
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                                    <button type="button" class="btn btn-danger">送出</button>
+                                    <button type="button" class="btn btn-danger" id="submit">送出</button>
                                 </div>
                             </div>
                         </div>
@@ -153,12 +163,85 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        var html = '<div class="row">'+
+                        '<div class="col-5">'+
+                            '<input name="setStoreName" type="text" class="form-control" placeholder="品項名稱" required>'+
+                        '</div>'+
+                        '<div class="col-2">'+
+                            '<input name="setPriceS" type="number" class="form-control" placeholder="價格(小)" required>'+
+                        '</div>'+
+                        '<div class="col-2">'+
+                            '<input name="setPriceM" type="number" class="form-control" placeholder="價格(中)" required>'+
+                        '</div>'+
+                        '<div class="col-2">'+
+                            '<input name="setPriceL" type="number" class="form-control" placeholder="價格(大)" required>'+
+                        '</div>'+
+                        '<div class="col-1">'+
+                            '<button class="del btn btn-danger">'+
+                                '<i class="fas fa-minus"></i>'+
+                            '</button>'+
+                        '</div>'+
+                    '</div>'+
+                    '<br>';
+        $(".add").click(function(){
+            $("#addItem").append(html);
+            del();
+        })
+
+        function del(){
+            $(".del").click(function(){
+                $(this).parent().parent().remove();
+            })
+        }
+
+        $('#submit').click(function(){
+            var ProductName = $('setProductName').val();
+            alert(ProductName);       
+        })
+
         $('.btn_editStore').click(function () {
             var id = $(this).attr('value');
-            console.log(id);
+            $.ajax({
+                url: 'getOneStore',
+                method: 'POST',
+                data: {
+                    id: id
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    $('#store-name').val(data.name);
+                    $('#store-tel').val(data.tel);
+                    $('#submit').click(function () {
+                        $.ajax({
+                            url: 'setEditStore',
+                            method: 'POST',
+                            data: {
+                                id: id
+                            },
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (data) {
+                                $('#store-name').val(data.name);
+                                $('#store-tel').val(data.tel);
+                                
+                            },
+                            error: function (data) {
+                                console.log('error');
+                            }
+                        })
+                    });
+                },
+                error: function (data) {
+                    console.log('error');
+                }
+            })
         });
-
-
     });
     // $(document).ready(function () {
     //             $(".view_news").click(function () {
@@ -181,5 +264,6 @@
     //                 })
     //             });
     //         });
+
 </script>
 @endsection
