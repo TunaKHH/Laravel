@@ -48,19 +48,42 @@ class HomeController extends Controller
     }
 
     public function setNewStore(){
-        if (Request::has('setStoreName') && Request::has('setStoretel') && Request::has('setStoreType'))
+        if (Request::has('setStoreName') && Request::has('setStoreTel') && Request::input('setStoreType') != "請選擇商店類型" && Request::has('setProductName'))
         {            
             $name = Request::input('setStoreName');
-            $tel = Request::input('setStoretel');
+            $tel = Request::input('setStoreTel');
             $type = Request::input('setStoreType');
-
+            
+            $ProductName = Request::input('setProductName');            
+            $PriceS = Request::input('setPriceS');
+            $PriceM = Request::input('setPriceM');
+            $PriceL = Request::input('setPriceL');
             Store::setNewStore($name, $tel, $type);
-            return redirect()->action('HomeController@index');
+            Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $tel);
+            return redirect()->action('HomeController@store');
         }else{
             return "新增店家失敗";
         }
         
     }
+
+    public function setNewMenu(){
+        if (Request::has('setProductName'))
+        {
+            $ProductName = Request::input('setProductName');            
+            $PriceS = Request::input('setPriceS');
+            $PriceM = Request::input('setPriceM');
+            $PriceL = Request::input('setPriceL');
+            
+            Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $StoreTel);
+            return redirect()->action('HomeController@index');
+        }else{
+            return "新增菜單失敗";
+        }
+        
+    }
+
+    
 
     public function setEditStore(){
         

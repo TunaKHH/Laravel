@@ -16,10 +16,10 @@ class CreateMenusTable extends Migration
         Schema::create('menus', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('price_s');
-            $table->string('price_m');
-            $table->string('price_l');
-            $table->string('store_id');
+            $table->string('price_s')->nullable();
+            $table->string('price_m')->nullable();
+            $table->string('price_l')->nullable();
+            $table->string('store_tel');
             $table->timestamps();
         });
     }

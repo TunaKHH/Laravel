@@ -16,8 +16,11 @@ class Store extends Model
         DB::insert('insert into stores (name,telphone,type) values (?, ?, ?)', array($name, $tel, $type));
     }
 
-    static function setNewMenu($name, $tel, $type){
-        DB::insert('insert into stores (name,telphone,type) values (?, ?, ?)', array($name, $tel, $type));
+    static function setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $tel){
+        for($i = 0; $i<count($ProductName); $i++){
+            DB::insert('insert into menus (name,price_s,price_m,price_l,store_tel) values (?, ?, ?, ?, ?)', array($ProductName[$i], $PriceS[$i], $PriceM[$i], $PriceL[$i], $tel));
+        }
+        
     }
 
     static function getOneStore($id){
@@ -25,6 +28,7 @@ class Store extends Model
         $json_arr = array(
             'name' => $results[0]->name,
             'tel' => $results[0]->telphone,
+            'type' => $results[0]->type,
         );
         return json_encode($json_arr);        
     }

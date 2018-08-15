@@ -69,14 +69,14 @@
                         <div class="tab-pane fade" id="pills-authority" role="tabpanel" aria-labelledby="pills-authority-tab">authorityPage</div>
                         <div class="tab-pane fade" id="pills-track" role="tabpanel" aria-labelledby="pills-track-tab">trackPage</div>
                     </div>
-                    <!--Add Store Menu Modal -->
-                    <?php echo Form::open(array('action' => 'HomeController@setNewStore'))?>
+                    <!--Add Store Modal -->
+                    <?php echo Form::open(array('action' => 'HomeController@setNewStore', 'id' => 'addForm'))?>
                     <div class="modal fade" id="addMenuModal" tabindex="-1" role="dialog" aria-labelledby="addMenuModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-primary" style="color: #ffffff">
-                                    <h5 class="modal-title" id="exampleModalLabel">新增菜單</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <h5 class="modal-title" id="exampleModalLabel">新增店家</h5>
+                                    <button style="color: #ffffff" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -84,11 +84,19 @@
                                     <form>
                                         <div class="form-group">
                                             <label for="store-name" class="control-label">店家名稱:</label>
-                                            <input type="text" class="form-control" id="store-name" name="setStoreName">
+                                            <input type="text" class="form-control" id="store-name" name="setStoreName" value="test" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="store-tel" class="control-label">店家電話:</label>
-                                            <input type="text" class="form-control" id="store-tel" name="setStoreTel">
+                                            <input type="text" class="form-control" id="store-tel" name="setStoreTel" value="test" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="setStoreType" class="control-label">商店類型</label>
+                                            <select name="setStoreType" id="setStoreType" class="form-control">
+                                                <!-- <option selected>請選擇商店類型</option> -->
+                                                <option value="0">飲料店</option>
+                                                <option value="1" selected>便當店</option>
+                                            </select>
                                         </div>
                                         <br>
                                         <div class="form-group" style="text-align: center;">
@@ -99,16 +107,16 @@
                                             
                                             <div class="row">
                                                 <div class="col-5">
-                                                    <input name="setProductName" type="text" class="form-control" placeholder="品項名稱" required>
+                                                    <input value="111" name="setProductName[]" type="text" class="form-control" placeholder="品項名稱" required>
                                                 </div>
                                                 <div class="col-2">
-                                                    <input name="setPriceS" type="number" class="form-control" placeholder="價格(小)" required>
+                                                    <input value="111" name="setPriceS[]" type="number" class="form-control" placeholder="價格(小)" required>
                                                 </div>
                                                 <div class="col-2">
-                                                    <input name="setPriceM" type="number" class="form-control" placeholder="價格(中)" required>
+                                                    <input value="111" name="setPriceM[]" type="number" class="form-control" placeholder="價格(中)" required>
                                                 </div>
                                                 <div class="col-2">
-                                                    <input name="setPriceL" type="number" class="form-control" placeholder="價格(大)" required>
+                                                    <input value="111" name="setPriceL[]" type="number" class="form-control" placeholder="價格(大)" required>
                                                 </div>
                                             </div>
                                             <br>
@@ -119,7 +127,72 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                                    <button type="button" class="btn btn-danger" id="submit">送出</button>
+                                    <button type="submit" class="btn btn-danger" id="submit">送出</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                    {{ Form::close() }}
+                    
+                    <!--Add Menu Modal -->
+                    <?php echo Form::open(array('action' => 'HomeController@setNewStore', 'id' => 'addForm'))?>
+                    <div class="modal fade" id="addMenuModal" tabindex="-1" role="dialog" aria-labelledby="addMenuModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary" style="color: #ffffff">
+                                    <h5 class="modal-title" id="exampleModalLabel">新增店家</h5>
+                                    <button style="color: #ffffff" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="store-name" class="control-label">店家名稱:</label>
+                                            <input type="text" class="form-control" id="store-name" name="setStoreName" value="test" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="store-tel" class="control-label">店家電話:</label>
+                                            <input type="text" class="form-control" id="store-tel" name="setStoreTel" value="test" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="setStoreType" class="control-label">商店類型</label>
+                                            <select name="setStoreType" id="setStoreType" class="form-control">
+                                                <!-- <option selected>請選擇商店類型</option> -->
+                                                <option value="0">飲料店</option>
+                                                <option value="1" selected>便當店</option>
+                                            </select>
+                                        </div>
+                                        <br>
+                                        <div class="form-group" style="text-align: center;">
+                                            <label for="store-tel" class="control-label h3 ">菜單管理</label>
+                                            <div class="col" style="text-align: right;">
+                                                <button class="add btn btn-primary"><i class="fas fa-plus"></i></button>
+                                            </div>                                           
+                                            
+                                            <div class="row">
+                                                <div class="col-5">
+                                                    <input value="111" name="setProductName[]" type="text" class="form-control" placeholder="品項名稱" required>
+                                                </div>
+                                                <div class="col-2">
+                                                    <input value="111" name="setPriceS[]" type="number" class="form-control" placeholder="價格(小)" required>
+                                                </div>
+                                                <div class="col-2">
+                                                    <input value="111" name="setPriceM[]" type="number" class="form-control" placeholder="價格(中)" required>
+                                                </div>
+                                                <div class="col-2">
+                                                    <input value="111" name="setPriceL[]" type="number" class="form-control" placeholder="價格(大)" required>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            
+                                            <div id="addItem"></div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                                    <button type="submit" class="btn btn-danger" id="submit">送出</button>
                                 </div>
                             </div>
                         </div>
@@ -170,16 +243,16 @@
         });
         var html = '<div class="row">'+
                         '<div class="col-5">'+
-                            '<input name="setStoreName" type="text" class="form-control" placeholder="品項名稱" required>'+
+                            '<input name="setProductName[]" type="text" class="form-control" placeholder="品項名稱" required>'+
                         '</div>'+
                         '<div class="col-2">'+
-                            '<input name="setPriceS" type="number" class="form-control" placeholder="價格(小)" required>'+
+                            '<input name="setPriceS[]" type="number" class="form-control" placeholder="價格(小)" required>'+
                         '</div>'+
                         '<div class="col-2">'+
-                            '<input name="setPriceM" type="number" class="form-control" placeholder="價格(中)" required>'+
+                            '<input name="setPriceM[]" type="number" class="form-control" placeholder="價格(中)" required>'+
                         '</div>'+
                         '<div class="col-2">'+
-                            '<input name="setPriceL" type="number" class="form-control" placeholder="價格(大)" required>'+
+                            '<input name="setPriceL[]" type="number" class="form-control" placeholder="價格(大)" required>'+
                         '</div>'+
                         '<div class="col-1">'+
                             '<button class="del btn btn-danger">'+
@@ -197,12 +270,7 @@
             $(".del").click(function(){
                 $(this).parent().parent().remove();
             })
-        }
-
-        $('#submit').click(function(){
-            var ProductName = $('setProductName').val();
-            alert(ProductName);       
-        })
+        }        
 
         $('.btn_editStore').click(function () {
             var id = $(this).attr('value');
