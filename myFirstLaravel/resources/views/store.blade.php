@@ -9,7 +9,7 @@
                             店家管理
                         </div>
                         <div class="col" style="text-align: end;">
-                            <button data-toggle="modal" data-target="#addMenuModal" type="button" class="btn btn-primary">新增</button>
+                            <button data-toggle="modal" data-target="#addStoreModal" type="button" class="btn btn-primary">新增</button>
                         </div>
                     </div>                                        
                 </div>
@@ -52,8 +52,8 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <button value="{{$store->id}}" type="button" class="btn_editStore btn btn-primary btn-sm"
-                                                    data-toggle="modal" data-target="#editMenuModal">
+                                                <button value="{{$store->id}}" type="button" class="btn_addMenu btn btn-primary btn-sm"
+                                                    data-toggle="modal" data-target="#addMenuModal">
                                                     <i class="fas fa-plus"></i>
                                                 </button>
                                             </td>
@@ -77,8 +77,8 @@
                         <div class="tab-pane fade" id="pills-track" role="tabpanel" aria-labelledby="pills-track-tab">trackPage</div>
                     </div>
                     <!--Add Store Modal -->
-                    <?php echo Form::open(array('action' => 'HomeController@setNewStore', 'id' => 'addForm'))?>
-                    <div class="modal fade" id="addMenuModal" tabindex="-1" role="dialog" aria-labelledby="addMenuModalLabel" aria-hidden="true">
+                    <?php echo Form::open(array('action' => 'HomeController@setNewStore', 'id' => 'addStoreForm'))?>
+                    <div class="modal fade" id="addStoreModal" tabindex="-1" role="dialog" aria-labelledby="addStoreModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-primary" style="color: #ffffff">
@@ -134,7 +134,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                                    <button type="submit" class="btn btn-danger" id="submit">送出</button>
+                                    <button type="button" class="btn btn-danger addStoreForm_submit">送出</button>
                                 </div>
                             </div>
                         </div>
@@ -142,12 +142,12 @@
                     {{ Form::close() }}
                     
                     <!--Add Menu Modal -->
-                    <?php echo Form::open(array('action' => 'HomeController@setNewStore', 'id' => 'addForm'))?>
+                    <?php echo Form::open(array('action' => 'HomeController@setNewStore', 'id' =>'addMenuForm'))?>
                     <div class="modal fade" id="addMenuModal" tabindex="-1" role="dialog" aria-labelledby="addMenuModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-primary" style="color: #ffffff">
-                                    <h5 class="modal-title" id="exampleModalLabel">新增店家</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">新增菜單</h5>
                                     <button style="color: #ffffff" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -156,15 +156,15 @@
                                     <form>
                                         <div class="form-group">
                                             <label for="store-name" class="control-label">店家名稱:</label>
-                                            <input type="text" class="form-control" id="store-name" name="setStoreName" value="test" required>
+                                            <input type="text" class="form-control" id="addMenu_storeName" name="setStoreName" disabled>
                                         </div>
                                         <div class="form-group">
                                             <label for="store-tel" class="control-label">店家電話:</label>
-                                            <input type="text" class="form-control" id="store-tel" name="setStoreTel" value="test" required>
+                                            <input type="text" class="form-control" id="addMenu_storeTel" name="setStoreTel" disabled>
                                         </div>
                                         <div class="form-group">
                                             <label for="setStoreType" class="control-label">商店類型</label>
-                                            <select name="setStoreType" id="setStoreType" class="form-control">
+                                            <select name="setStoreType" id="addMenu_storeType" class="form-control" disabled>
                                                 <!-- <option selected>請選擇商店類型</option> -->
                                                 <option value="0">飲料店</option>
                                                 <option value="1" selected>便當店</option>
@@ -174,9 +174,8 @@
                                         <div class="form-group" style="text-align: center;">
                                             <label for="store-tel" class="control-label h3 ">菜單管理</label>
                                             <div class="col" style="text-align: right;">
-                                                <button class="add btn btn-primary"><i class="fas fa-plus"></i></button>
-                                            </div>                                           
-                                            
+                                                <button type="button" class="add2 btn btn-primary"><i class="fas fa-plus"></i></button>
+                                            </div>
                                             <div class="row">
                                                 <div class="col-5">
                                                     <input value="111" name="setProductName[]" type="text" class="form-control" placeholder="品項名稱" required>
@@ -192,8 +191,7 @@
                                                 </div>
                                             </div>
                                             <br>
-                                            
-                                            <div id="addItem"></div>
+                                            <div id="addItem2"></div>
                                         </div>
                                     </form>
                                 </div>
@@ -273,11 +271,64 @@
             del();
         })
 
+        $(".add2").click(function(){
+            $("#addItem2").append(html);
+            del();
+        })
+
+        $(".addStoreForm_submit").click(function(){
+            $("#addStoreForm").submit();
+        })
+        
         function del(){
             $(".del").click(function(){
                 $(this).parent().parent().remove();
             })
-        }        
+        }
+
+        $('.btn_addMenu').click(function () {
+            var id = $(this).attr('value');
+            $.ajax({
+                url: 'getTheStoreAndMenuListByTheStore',
+                method: 'POST',
+                data: {
+                    id: id
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    $('#addMenu_storeName').val(data.name);
+                    $('#addMenu_storeTel').val(data.tel);
+                    $('#addMenu_storeType').val(data.type);
+
+                    $('#submit').click(function () {
+                        $.ajax({
+                            url: 'setEditStore',
+                            method: 'POST',
+                            data: {
+                                id: id
+                            },
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (data) {
+                                // $('#addMenu_storeName').val(data.name);
+                                // $('#addMenu_storeTel').val(data.tel);
+                                // $('#addMenu_storeType')[0].selectedIndex(data.type);
+                                
+                            },
+                            error: function (data) {
+                                console.log('error');
+                            }
+                        })
+                    });
+                },
+                error: function (data) {
+                    console.log('error');
+                }
+            })
+        });
+
 
         $('.btn_editStore').click(function () {
             var id = $(this).attr('value');

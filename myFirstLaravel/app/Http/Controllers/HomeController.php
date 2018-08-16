@@ -41,10 +41,12 @@ class HomeController extends Controller
     }
 
     
-    public function getOneStore(){
+    public function getTheStoreAndMenuListByTheStore(){
         $result = Store::getOneStore($_POST['id']);
 
-        return $result;
+        $result2 = Store::getMenuListByTheStore($result['tel']);
+
+        // return $result;
     }
 
     public function setNewStore(){
@@ -58,9 +60,11 @@ class HomeController extends Controller
             $PriceS = Request::input('setPriceS');
             $PriceM = Request::input('setPriceM');
             $PriceL = Request::input('setPriceL');
+
             Store::setNewStore($name, $tel, $type);
             Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $tel);
-            return redirect()->action('HomeController@store');
+
+            return $this->store();
         }else{
             return "新增店家失敗";
         }
@@ -76,7 +80,7 @@ class HomeController extends Controller
             $PriceL = Request::input('setPriceL');
             
             Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $StoreTel);
-            return redirect()->action('HomeController@index');
+            $this->store();
         }else{
             return "新增菜單失敗";
         }

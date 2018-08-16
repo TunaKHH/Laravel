@@ -12,6 +12,11 @@ class Store extends Model
         return $results;
     }
 
+    static function getMenuListByTheStore($id){
+        $results = DB::select('select * from menus,stores where menus.store_tel=stores.telphone and', array($id));
+        return $results;
+    }
+
     static function setNewStore($name, $tel, $type){
         DB::insert('insert into stores (name,telphone,type) values (?, ?, ?)', array($name, $tel, $type));
     }

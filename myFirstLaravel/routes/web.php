@@ -24,7 +24,7 @@ Route::get('/order', 'HomeController@index')->name('store');
 
 Route::get('/store', 'HomeController@store')->name('store');
 
-Route::post('/getOneStore', 'HomeController@getOneStore');
+Route::post('/getTheStoreAndMenuListByTheStore', 'HomeController@getTheStoreAndMenuListByTheStore');
 
 Route::post('/setEditStore', 'HomeController@setEditStore');
 
