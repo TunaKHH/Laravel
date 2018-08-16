@@ -31,6 +31,7 @@
                                         <tr>
                                             <th scope="col">刪除</th>
                                             <th scope="col">修改</th>
+                                            <th scope="col">新增菜單</th>
                                             <th scope="col">店家名稱</th>
                                             <th scope="col">電話</th>
                                             <th scope="col">類型</th>
@@ -48,6 +49,12 @@
                                                 <button value="{{$store->id}}" type="button" class="btn_editStore btn btn-warning btn-sm" style="background-color: #ffc107;border-color: #ffc107;color: #ffffff;"
                                                     data-toggle="modal" data-target="#editMenuModal">
                                                     <i class="far fa-edit fa-xs"></i>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button value="{{$store->id}}" type="button" class="btn_editStore btn btn-primary btn-sm"
+                                                    data-toggle="modal" data-target="#editMenuModal">
+                                                    <i class="fas fa-plus"></i>
                                                 </button>
                                             </td>
                                             <td>{{ $store->name }}</td>
