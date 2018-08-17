@@ -19,7 +19,7 @@ class CreateMenusTable extends Migration
             $table->string('price_s')->nullable();
             $table->string('price_m')->nullable();
             $table->string('price_l')->nullable();
-            $table->string('store_tel');
+            $table->string('store_id');
             $table->timestamps();
         });
     }

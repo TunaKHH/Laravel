@@ -42,9 +42,8 @@ class HomeController extends Controller
 
     
     public function getTheStoreAndMenuListByTheStore(){
-        $result = Store::getOneStore($_POST['id']);
 
-        $result2 = Store::getMenuListByTheStore($result['tel']);
+        return $result = Store::getMenuListByTheStore($_POST['id']);
 
         // return $result;
     }
@@ -62,7 +61,7 @@ class HomeController extends Controller
             $PriceL = Request::input('setPriceL');
 
             Store::setNewStore($name, $tel, $type);
-            Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $tel);
+            Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $store_id);
 
             return $this->store();
         }else{
@@ -78,16 +77,21 @@ class HomeController extends Controller
             $PriceS = Request::input('setPriceS');
             $PriceM = Request::input('setPriceM');
             $PriceL = Request::input('setPriceL');
-            
-            Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $StoreTel);
-            $this->store();
+            $id = $_POST['id'];
+            nl2br(print_r($_POST));
+            // print_r($_POST);
+            // return $StoreTel;
+            // Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $StoreTel);
+            // return $this->store();
         }else{
             return "新增菜單失敗";
         }
         
     }
 
-    
+    public function setAddMenu(){
+
+    }
 
     public function setEditStore(){
         

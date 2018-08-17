@@ -52,8 +52,7 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <button value="{{$store->id}}" type="button" class="btn_addMenu btn btn-primary btn-sm"
-                                                    data-toggle="modal" data-target="#addMenuModal">
+                                                <button value="{{$store->id}}" type="button" class="btn_addMenu btn btn-primary btn-sm">
                                                     <i class="fas fa-plus"></i>
                                                 </button>
                                             </td>
@@ -142,7 +141,7 @@
                     {{ Form::close() }}
                     
                     <!--Add Menu Modal -->
-                    <?php echo Form::open(array('action' => 'HomeController@setNewStore', 'id' =>'addMenuForm'))?>
+                    <?php echo Form::open(array('action' => 'HomeController@setNewMenu', 'id' =>'addMenuForm'))?>
                     <div class="modal fade" id="addMenuModal" tabindex="-1" role="dialog" aria-labelledby="addMenuModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
@@ -154,18 +153,18 @@
                                 </div>
                                 <div class="modal-body">
                                     <form>
+                                        <input type="hidden" name="id" id="addMenu_id">
                                         <div class="form-group">
                                             <label for="store-name" class="control-label">店家名稱:</label>
-                                            <input type="text" class="form-control" id="addMenu_storeName" name="setStoreName" disabled>
+                                            <input type="text" class="form-control" id="addMenu_storeName" disabled>
                                         </div>
                                         <div class="form-group">
                                             <label for="store-tel" class="control-label">店家電話:</label>
-                                            <input type="text" class="form-control" id="addMenu_storeTel" name="setStoreTel" disabled>
+                                            <input type="text" name="setStoreTel2" class="form-control" id="addMenu_storeTel" disabled>
                                         </div>
                                         <div class="form-group">
                                             <label for="setStoreType" class="control-label">商店類型</label>
-                                            <select name="setStoreType" id="addMenu_storeType" class="form-control" disabled>
-                                                <!-- <option selected>請選擇商店類型</option> -->
+                                            <select id="addMenu_storeType" class="form-control" disabled>
                                                 <option value="0">飲料店</option>
                                                 <option value="1" selected>便當店</option>
                                             </select>
@@ -176,7 +175,7 @@
                                             <div class="col" style="text-align: right;">
                                                 <button type="button" class="add2 btn btn-primary"><i class="fas fa-plus"></i></button>
                                             </div>
-                                            <div class="row">
+                                            <!-- <div class="row">
                                                 <div class="col-5">
                                                     <input value="111" name="setProductName[]" type="text" class="form-control" placeholder="品項名稱" required>
                                                 </div>
@@ -190,14 +189,14 @@
                                                     <input value="111" name="setPriceL[]" type="number" class="form-control" placeholder="價格(大)" required>
                                                 </div>
                                             </div>
-                                            <br>
+                                            <br> -->
                                             <div id="addItem2"></div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                                    <button type="submit" class="btn btn-danger" id="submit">送出</button>
+                                    <button type="button" class="btn btn-danger" id="addMenu_submit">送出</button>
                                 </div>
                             </div>
                         </div>
@@ -287,7 +286,9 @@
         }
 
         $('.btn_addMenu').click(function () {
+                     
             var id = $(this).attr('value');
+            $('#addMenu_id').val(id);
             $.ajax({
                 url: 'getTheStoreAndMenuListByTheStore',
                 method: 'POST',
@@ -298,29 +299,38 @@
                 dataType: 'json',
                 success: function (data) {
                     console.log(data);
-                    $('#addMenu_storeName').val(data.name);
-                    $('#addMenu_storeTel').val(data.tel);
-                    $('#addMenu_storeType').val(data.type);
+                    $('#addMenu_storeName').val(data[0].sname);
+                    $('#addMenu_storeTel').val(data[0].stel);
+                    $('#addMenu_storeType').val(data[0].type);
 
-                    $('#submit').click(function () {
-                        $.ajax({
-                            url: 'setEditStore',
-                            method: 'POST',
-                            data: {
-                                id: id
-                            },
-                            type: 'POST',
-                            dataType: 'json',
-                            success: function (data) {
-                                // $('#addMenu_storeName').val(data.name);
-                                // $('#addMenu_storeTel').val(data.tel);
-                                // $('#addMenu_storeType')[0].selectedIndex(data.type);
+                    for(var i = 0; i<data.length; i++){
+                        var html2 = '<div class="row">'+
+                            '<div class="col-5">'+
+                                '<input value="'+ data[i].mname +'" type="text" class="form-control" placeholder="品項名稱" disabled>'+
+                            '</div>'+
+                            '<div class="col-2">'+
+                                '<input value="'+ data[i].price_s +'" type="number" class="form-control" placeholder="價格(小)" disabled>'+
+                            '</div>'+
+                            '<div class="col-2">'+
+                                '<input value="'+ data[i].price_m +'" type="number" class="form-control" placeholder="價格(中)" disabled>'+
+                            '</div>'+
+                            '<div class="col-2">'+
+                                '<input value="'+ data[i].price_l +'" type="number" class="form-control" placeholder="價格(大)" disabled>'+
+                            '</div>'+
+                            '<div class="col-1">'+
+                            '</div>'+
+                        '</div>'+
+                        '<br>';
                                 
-                            },
-                            error: function (data) {
-                                console.log('error');
-                            }
-                        })
+                        $("#addItem2").append(html2);
+                    }
+                    $("#addItem2").append(html);
+                    $('#addMenuModal').modal('show');
+                    $('#addMenu_submit').click(function () {
+                        
+                        if (confirm("確定要新增嗎?")) {
+                            $('#addMenuForm').submit();
+                        }
                     });
                 },
                 error: function (data) {
@@ -328,7 +338,6 @@
                 }
             })
         });
-
 
         $('.btn_editStore').click(function () {
             var id = $(this).attr('value');
@@ -369,27 +378,6 @@
             })
         });
     });
-    // $(document).ready(function () {
-    //             $(".view_news").click(function () {
-    //                 var id = $(this).attr('id');
-    //                 // console.log(id);
-    //                 $.ajax({ //傳值給news.php
-    //                     url: './news.php',
-    //                     method: 'POST', //資料'傳遞'的送出方式
-    //                     data: { //送出的資料
-    //                         action: 'get_news_detail',
-    //                         id: id
-    //                     },
-    //                     type: "POST", //資料'傳遞'的接收方式
-    //                     dataType: 'json', //資料內容型態
-    //                     success: function (data) {
-    //                         $(".modal-title").text(data.title);
-    //                         $(".modal-body").html(data.content);
-    //                         $("#myModal").modal();
-    //                     }
-    //                 })
-    //             });
-    //         });
 
 </script>
 @endsection

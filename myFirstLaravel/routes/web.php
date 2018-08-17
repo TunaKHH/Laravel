@@ -30,6 +30,8 @@ Route::post('/setEditStore', 'HomeController@setEditStore');
 
 Route::post('/setNewStore', 'HomeController@setNewStore');
 
+Route::post('/setNewMenu', 'HomeController@setNewMenu');
+
 Route::post('/editStore', 'HomeController@editStore');
 
 Route::post('/delStore', 'HomeController@delStore');

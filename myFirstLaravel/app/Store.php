@@ -13,8 +13,10 @@ class Store extends Model
     }
 
     static function getMenuListByTheStore($id){
-        $results = DB::select('select * from menus,stores where menus.store_tel=stores.telphone and', array($id));
-        return $results;
+        $results = DB::select('select s.name as sname, s.telphone as stel, s.type,m.name as mname, m.price_s,m.price_m, m.price_l from menus as m,stores as s where m.store_id=s.id and s.id=?', array($id));
+
+        return json_encode($results);
+        // return $results;
     }
 
     static function setNewStore($name, $tel, $type){
@@ -23,7 +25,7 @@ class Store extends Model
 
     static function setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $tel){
         for($i = 0; $i<count($ProductName); $i++){
-            DB::insert('insert into menus (name,price_s,price_m,price_l,store_tel) values (?, ?, ?, ?, ?)', array($ProductName[$i], $PriceS[$i], $PriceM[$i], $PriceL[$i], $tel));
+            DB::insert('insert into menus (name,price_s,price_m,price_l,store_id) values (?, ?, ?, ?, ?)', array($ProductName[$i], $PriceS[$i], $PriceM[$i], $PriceL[$i], $tel));
         }
         
     }
