@@ -15,8 +15,8 @@ class Store extends Model
     static function getMenuListByTheStore($id){
         $results = DB::select('select s.name as sname, s.telphone as stel, s.type,m.name as mname, m.price_s,m.price_m, m.price_l from menus as m,stores as s where m.store_id=s.id and s.id=?', array($id));
 
-        return json_encode($results);
-        // return $results;
+        // return json_encode($results);
+        return $results;
     }
 
     static function setNewStore($name, $tel, $type){
@@ -32,12 +32,8 @@ class Store extends Model
 
     static function getOneStore($id){
         $results = DB::select('select * from stores where id=?', array($id));
-        $json_arr = array(
-            'name' => $results[0]->name,
-            'tel' => $results[0]->telphone,
-            'type' => $results[0]->type,
-        );
-        return json_encode($json_arr);        
+        
+        return $results;        
     }
 
     static function setEditStore($data){

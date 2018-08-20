@@ -42,8 +42,18 @@ class HomeController extends Controller
 
     
     public function getTheStoreAndMenuListByTheStore(){
+        $result = Store::getMenuListByTheStore($_POST['id']);
 
-        return $result = Store::getMenuListByTheStore($_POST['id']);
+        if(!count($result)>0){
+            $result = $this->getOneStore($_POST['id']);
+        }       
+
+        return $result;
+    }
+
+    public function getOneStore($id){
+
+        return $result = Store::getOneStore($id);
 
         // return $result;
     }
@@ -78,11 +88,9 @@ class HomeController extends Controller
             $PriceM = Request::input('setPriceM');
             $PriceL = Request::input('setPriceL');
             $id = $_POST['id'];
-            nl2br(print_r($_POST));
-            // print_r($_POST);
-            // return $StoreTel;
-            // Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $StoreTel);
-            // return $this->store();
+            
+            Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $id);
+            return $this->store();
         }else{
             return "新增菜單失敗";
         }

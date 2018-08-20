@@ -11,7 +11,7 @@
                         <div class="col" style="text-align: end;">
                             <button data-toggle="modal" data-target="#addStoreModal" type="button" class="btn btn-primary">新增</button>
                         </div>
-                    </div>                                        
+                    </div>
                 </div>
                 <div class="card-body">
                     @if (session('status'))
@@ -22,8 +22,8 @@
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-store">
 
-                            
-                            
+
+
                             <br>
                             <div class="row">
                                 <table class="table table-striped">
@@ -106,11 +106,22 @@
                                         </div>
                                         <br>
                                         <div class="form-group" style="text-align: center;">
-                                            <label for="store-tel" class="control-label h3 ">菜單管理</label>
-                                            <div class="col" style="text-align: right;">
-                                                <button class="add btn btn-primary"><i class="fas fa-plus"></i></button>
-                                            </div>                                           
-                                            
+                                            <table class="table table-borderless">
+                                                <tbody>
+                                                    <tr class="row">
+                                                        <td class="col-2"></td>
+                                                        <td class="col-8">
+                                                            <label for="store-tel" class="control-label h3 ">菜單管理</label>
+                                                        </td>
+                                                        <td class="col-2">
+                                                            <button type="button" class="add btn btn-primary">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
                                             <div class="row">
                                                 <div class="col-5">
                                                     <input value="111" name="setProductName[]" type="text" class="form-control" placeholder="品項名稱" required>
@@ -126,7 +137,7 @@
                                                 </div>
                                             </div>
                                             <br>
-                                            
+
                                             <div id="addItem"></div>
                                         </div>
                                     </form>
@@ -137,9 +148,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                     {{ Form::close() }}
-                    
+
                     <!--Add Menu Modal -->
                     <?php echo Form::open(array('action' => 'HomeController@setNewMenu', 'id' =>'addMenuForm'))?>
                     <div class="modal fade" id="addMenuModal" tabindex="-1" role="dialog" aria-labelledby="addMenuModalLabel" aria-hidden="true">
@@ -171,10 +182,21 @@
                                         </div>
                                         <br>
                                         <div class="form-group" style="text-align: center;">
-                                            <label for="store-tel" class="control-label h3 ">菜單管理</label>
-                                            <div class="col" style="text-align: right;">
-                                                <button type="button" class="add2 btn btn-primary"><i class="fas fa-plus"></i></button>
-                                            </div>
+                                            <table class="table table-borderless">
+                                                <tbody>
+                                                    <tr class="row">
+                                                        <td class="col-2"></td>
+                                                        <td class="col-8">
+                                                            <label for="store-tel" class="control-label h3 ">菜單管理</label>
+                                                        </td>
+                                                        <td class="col-2">
+                                                            <button type="button" class="add2 btn btn-primary">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                             <!-- <div class="row">
                                                 <div class="col-5">
                                                     <input value="111" name="setProductName[]" type="text" class="form-control" placeholder="品項名稱" required>
@@ -200,7 +222,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                     {{ Form::close() }}
                     <!--Edit Menu Modal -->
                     <div class="modal fade " id="editMenuModal" tabindex="-1" role="dialog" aria-labelledby="editMenuModalLabel" aria-hidden="true">
@@ -245,48 +267,48 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        var html = '<div class="row">'+
-                        '<div class="col-5">'+
-                            '<input name="setProductName[]" type="text" class="form-control" placeholder="品項名稱" required>'+
-                        '</div>'+
-                        '<div class="col-2">'+
-                            '<input name="setPriceS[]" type="number" class="form-control" placeholder="價格(小)" required>'+
-                        '</div>'+
-                        '<div class="col-2">'+
-                            '<input name="setPriceM[]" type="number" class="form-control" placeholder="價格(中)" required>'+
-                        '</div>'+
-                        '<div class="col-2">'+
-                            '<input name="setPriceL[]" type="number" class="form-control" placeholder="價格(大)" required>'+
-                        '</div>'+
-                        '<div class="col-1">'+
-                            '<button class="del btn btn-danger">'+
-                                '<i class="fas fa-minus"></i>'+
-                            '</button>'+
-                        '</div>'+
-                    '</div>'+
-                    '<br>';
-        $(".add").click(function(){
+        var html = '<div class="row">' +
+            '<div class="col-5">' +
+            '<input name="setProductName[]" type="text" class="form-control" placeholder="品項名稱" required>' +
+            '</div>' +
+            '<div class="col-2">' +
+            '<input name="setPriceS[]" type="number" class="form-control" placeholder="價格(小)" required>' +
+            '</div>' +
+            '<div class="col-2">' +
+            '<input name="setPriceM[]" type="number" class="form-control" placeholder="價格(中)" required>' +
+            '</div>' +
+            '<div class="col-2">' +
+            '<input name="setPriceL[]" type="number" class="form-control" placeholder="價格(大)" required>' +
+            '</div>' +
+            '<div class="col-1">' +
+            '<button class="del btn btn-danger">' +
+            '<i class="fas fa-minus"></i>' +
+            '</button>' +
+            '</div>' +
+            '</div>' +
+            '<br>';
+        $(".add").click(function () {
             $("#addItem").append(html);
             del();
         })
 
-        $(".add2").click(function(){
+        $(".add2").click(function () {
             $("#addItem2").append(html);
             del();
         })
 
-        $(".addStoreForm_submit").click(function(){
+        $(".addStoreForm_submit").click(function () {
             $("#addStoreForm").submit();
         })
-        
-        function del(){
-            $(".del").click(function(){
+
+        function del() {
+            $(".del").click(function () {
                 $(this).parent().parent().remove();
             })
         }
 
         $('.btn_addMenu').click(function () {
-                     
+
             var id = $(this).attr('value');
             $('#addMenu_id').val(id);
             $.ajax({
@@ -299,35 +321,41 @@
                 dataType: 'json',
                 success: function (data) {
                     console.log(data);
-                    $('#addMenu_storeName').val(data[0].sname);
-                    $('#addMenu_storeTel').val(data[0].stel);
+                    $('#addMenu_storeName').val(data[0].name);
+                    $('#addMenu_storeTel').val(data[0].telphone);
                     $('#addMenu_storeType').val(data[0].type);
+                    if (typeof (data[0].mname) != 'undefined') {
+                        for (var i = 0; i < data.length; i++) {
+                            var html2 = '<div class="row">' +
+                                '<div class="col-5">' +
+                                '<input value="' + data[i].mname +
+                                '" type="text" class="form-control" placeholder="品項名稱" disabled>' +
+                                '</div>' +
+                                '<div class="col-2">' +
+                                '<input value="' + data[i].price_s +
+                                '" type="number" class="form-control" placeholder="價格(小)" disabled>' +
+                                '</div>' +
+                                '<div class="col-2">' +
+                                '<input value="' + data[i].price_m +
+                                '" type="number" class="form-control" placeholder="價格(中)" disabled>' +
+                                '</div>' +
+                                '<div class="col-2">' +
+                                '<input value="' + data[i].price_l +
+                                '" type="number" class="form-control" placeholder="價格(大)" disabled>' +
+                                '</div>' +
+                                '<div class="col-1">' +
+                                '</div>' +
+                                '</div>' +
+                                '<br>';
 
-                    for(var i = 0; i<data.length; i++){
-                        var html2 = '<div class="row">'+
-                            '<div class="col-5">'+
-                                '<input value="'+ data[i].mname +'" type="text" class="form-control" placeholder="品項名稱" disabled>'+
-                            '</div>'+
-                            '<div class="col-2">'+
-                                '<input value="'+ data[i].price_s +'" type="number" class="form-control" placeholder="價格(小)" disabled>'+
-                            '</div>'+
-                            '<div class="col-2">'+
-                                '<input value="'+ data[i].price_m +'" type="number" class="form-control" placeholder="價格(中)" disabled>'+
-                            '</div>'+
-                            '<div class="col-2">'+
-                                '<input value="'+ data[i].price_l +'" type="number" class="form-control" placeholder="價格(大)" disabled>'+
-                            '</div>'+
-                            '<div class="col-1">'+
-                            '</div>'+
-                        '</div>'+
-                        '<br>';
-                                
-                        $("#addItem2").append(html2);
+                            $("#addItem2").append(html2);
+                        }
                     }
+
                     $("#addItem2").append(html);
                     $('#addMenuModal').modal('show');
                     $('#addMenu_submit').click(function () {
-                        
+
                         if (confirm("確定要新增嗎?")) {
                             $('#addMenuForm').submit();
                         }
@@ -337,6 +365,10 @@
                     console.log('error');
                 }
             })
+        });
+
+        $('#addMenuModal').blur(function(){
+            // window.location.reload();
         });
 
         $('.btn_editStore').click(function () {
@@ -364,7 +396,7 @@
                             success: function (data) {
                                 $('#store-name').val(data.name);
                                 $('#store-tel').val(data.tel);
-                                
+
                             },
                             error: function (data) {
                                 console.log('error');
