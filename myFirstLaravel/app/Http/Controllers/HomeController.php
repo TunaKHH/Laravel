@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Request;
+use Redirect;
 use App\Store;
+
 
 class HomeController extends Controller
 {
@@ -73,7 +75,7 @@ class HomeController extends Controller
             Store::setNewStore($name, $tel, $type);
             Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $store_id);
 
-            return $this->store();
+            return Redirect::route('store');
         }else{
             return "新增店家失敗";
         }
@@ -90,7 +92,7 @@ class HomeController extends Controller
             $id = $_POST['id'];
             
             Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $id);
-            return $this->store();
+            return Redirect::route('store');
         }else{
             return "新增菜單失敗";
         }

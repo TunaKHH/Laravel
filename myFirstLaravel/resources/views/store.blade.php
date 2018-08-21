@@ -21,49 +21,41 @@
                     @endif
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-store">
-
-
-
                             <br>
-                            <div class="row">
+                            <div class="container">
                                 <table class="table table-striped">
                                     <thead class="thead-dark">
-                                        <tr>
-                                            <th scope="col">刪除</th>
-                                            <th scope="col">修改</th>
-                                            <th scope="col">新增菜單</th>
-                                            <th scope="col">店家名稱</th>
-                                            <th scope="col">電話</th>
-                                            <th scope="col">類型</th>
+                                        <tr class="row">
+                                            <th class="col-2">刪除</th>
+                                            <th class="col-2">新增/管理菜單</th>
+                                            <th class="col-5">店家名稱</th>
+                                            <th class="col-2">電話</th>
+                                            <th class="col-1">類型</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($stores as $store)
-                                        <tr>
-                                            <td scope="row">
+                                        <tr class="row">
+                                            <td class="col-2">
                                                 <button value="{{$store->id}}" type="button" class="btn_delStore btn btn-danger btn-sm">
                                                     <i class="far fa-trash-alt fa-xs"></i>
                                                 </button>
                                             </td>
-                                            <td>
-                                                <button value="{{$store->id}}" type="button" class="btn_editStore btn btn-warning btn-sm" style="background-color: #ffc107;border-color: #ffc107;color: #ffffff;"
-                                                    data-toggle="modal" data-target="#editMenuModal">
-                                                    <i class="far fa-edit fa-xs"></i>
-                                                </button>
-                                            </td>
-                                            <td>
+                                            <td class="col-2">
                                                 <button value="{{$store->id}}" type="button" class="btn_addMenu btn btn-primary btn-sm">
-                                                    <i class="fas fa-plus"></i>
+                                                    <i class="fas fa-archway"></i>
                                                 </button>
                                             </td>
-                                            <td>{{ $store->name }}</td>
-                                            <td>{{ $store->telphone }}</td>
-
-                                            @if($store->type == 0)
-                                            <td>飲料</td>
-                                            @elseif($store->type == 1)
-                                            <td>便當</td>
-                                            @endif
+                                            <td class="col-5">{{ $store->name }}</td>
+                                            <td class="col-2">{{ $store->telphone }}</td>
+                                            <td class="col-1">
+                                                @if($store->type == 0)
+                                                飲料
+                                                @elseif($store->type == 1)
+                                                便當
+                                                @endif
+                                            </td>
+                                            
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -157,7 +149,7 @@
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-primary" style="color: #ffffff">
-                                    <h5 class="modal-title" id="exampleModalLabel">新增菜單</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">新增/管理菜單</h5>
                                     <button style="color: #ffffff" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -185,11 +177,20 @@
                                             <table class="table table-borderless">
                                                 <tbody>
                                                     <tr class="row">
-                                                        <td class="col-2"></td>
-                                                        <td class="col-8">
+                                                        <td class="col-1"></td>
+                                                        <td class="col-3">
+                                                            <div class="row">
+                                                                <label class="switch">          
+                                                                    <input type="checkbox">
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                            </div>
+                                                            
+                                                        </td>
+                                                        <td class="col-4">
                                                             <label for="store-tel" class="control-label h3 ">菜單管理</label>
                                                         </td>
-                                                        <td class="col-2">
+                                                        <td class="col-4" style="text-align:end;">
                                                             <button type="button" class="add2 btn btn-primary">
                                                                 <i class="fas fa-plus"></i>
                                                             </button>
@@ -197,21 +198,6 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            <!-- <div class="row">
-                                                <div class="col-5">
-                                                    <input value="111" name="setProductName[]" type="text" class="form-control" placeholder="品項名稱" required>
-                                                </div>
-                                                <div class="col-2">
-                                                    <input value="111" name="setPriceS[]" type="number" class="form-control" placeholder="價格(小)" required>
-                                                </div>
-                                                <div class="col-2">
-                                                    <input value="111" name="setPriceM[]" type="number" class="form-control" placeholder="價格(中)" required>
-                                                </div>
-                                                <div class="col-2">
-                                                    <input value="111" name="setPriceL[]" type="number" class="form-control" placeholder="價格(大)" required>
-                                                </div>
-                                            </div>
-                                            <br> -->
                                             <div id="addItem2"></div>
                                         </div>
                                     </form>
@@ -267,7 +253,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        var html = '<div class="row">' +
+        var html = '<div class="row top-buffer">' +
             '<div class="col-5">' +
             '<input name="setProductName[]" type="text" class="form-control" placeholder="品項名稱" required>' +
             '</div>' +
@@ -285,15 +271,14 @@
             '<i class="fas fa-minus"></i>' +
             '</button>' +
             '</div>' +
-            '</div>' +
-            '<br>';
+            '</div>';
         $(".add").click(function () {
             $("#addItem").append(html);
             del();
         })
 
         $(".add2").click(function () {
-            $("#addItem2").append(html);
+            $("#addItem2").prepend(html);
             del();
         })
 
@@ -308,7 +293,7 @@
         }
 
         $('.btn_addMenu').click(function () {
-
+            $("#addItem2").children().remove();
             var id = $(this).attr('value');
             $('#addMenu_id').val(id);
             $.ajax({
@@ -326,7 +311,7 @@
                     $('#addMenu_storeType').val(data[0].type);
                     if (typeof (data[0].mname) != 'undefined') {
                         for (var i = 0; i < data.length; i++) {
-                            var html2 = '<div class="row">' +
+                            var html2 = '<div class="row top-buffer">' +
                                 '<div class="col-5">' +
                                 '<input value="' + data[i].mname +
                                 '" type="text" class="form-control" placeholder="品項名稱" disabled>' +
@@ -345,14 +330,13 @@
                                 '</div>' +
                                 '<div class="col-1">' +
                                 '</div>' +
-                                '</div>' +
-                                '<br>';
+                                '</div>';
 
                             $("#addItem2").append(html2);
                         }
                     }
 
-                    $("#addItem2").append(html);
+                    $("#addItem2").prepend(html);
                     $('#addMenuModal').modal('show');
                     $('#addMenu_submit').click(function () {
 
