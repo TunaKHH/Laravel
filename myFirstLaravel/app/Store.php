@@ -20,7 +20,8 @@ class Store extends Model
     }
 
     static function setNewStore($name, $tel, $type){
-        DB::insert('insert into stores (name,telphone,type) values (?, ?, ?)', array($name, $tel, $type));
+        // DB::insert('insert into stores (name,telphone,type) values (?, ?, ?)', array($name, $tel, $type));
+        return DB::table('stores')->insertGetId(['name' => $name, 'telphone' => $tel, 'type' => $type]);
     }
 
     static function setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $tel){
@@ -36,7 +37,18 @@ class Store extends Model
         return $results;        
     }
 
+    static function getOneStoreIdUseTel($tel){
+        $results = DB::select('select id from stores where telphone=?', array($tel));
+        
+        return $results;        
+    }
+
     static function setEditStore($data){
 
+    }
+
+    static function delStoreAndTheMenu($id){
+        DB::table('stores')->where('id', '=', $id)->delete();
+        return DB::table('menus')->where('store_id', '=', $id)->delete();
     }
 }

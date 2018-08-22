@@ -9,7 +9,7 @@
                             店家管理
                         </div>
                         <div class="col" style="text-align: end;">
-                            <button data-toggle="modal" data-target="#addStoreModal" type="button" class="btn btn-primary">新增</button>
+                            <button data-toggle="modal" data-target="#addStoreModal" type="button" class="btn-showStoreModal btn btn-primary">新增</button>
                         </div>
                     </div>
                 </div>
@@ -49,13 +49,9 @@
                                             <td class="col-5">{{ $store->name }}</td>
                                             <td class="col-2">{{ $store->telphone }}</td>
                                             <td class="col-1">
-                                                @if($store->type == 0)
-                                                飲料
-                                                @elseif($store->type == 1)
-                                                便當
-                                                @endif
+                                                @if($store->type == 0) 飲料 @elseif($store->type == 1) 便當 @endif
                                             </td>
-                                            
+
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -82,7 +78,7 @@
                                     <form>
                                         <div class="form-group">
                                             <label for="store-name" class="control-label">店家名稱:</label>
-                                            <input type="text" class="form-control" id="store-name" name="setStoreName" value="test" required>
+                                            <input type="text" class="form-control" id="addStore_storeName" name="setStoreName" data-focus="false" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="store-tel" class="control-label">店家電話:</label>
@@ -180,12 +176,12 @@
                                                         <td class="col-1"></td>
                                                         <td class="col-3">
                                                             <div class="row">
-                                                                <label class="switch">          
+                                                                <label class="switch">
                                                                     <input type="checkbox">
                                                                     <span class="slider round"></span>
                                                                 </label>
                                                             </div>
-                                                            
+
                                                         </td>
                                                         <td class="col-4">
                                                             <label for="store-tel" class="control-label h3 ">菜單管理</label>
@@ -211,7 +207,7 @@
                     </div>
                     {{ Form::close() }}
                     <!--Edit Menu Modal -->
-                    <div class="modal fade " id="editMenuModal" tabindex="-1" role="dialog" aria-labelledby="editMenuModalLabel" aria-hidden="true">
+                    <!-- <div class="modal fade " id="editMenuModal" tabindex="-1" role="dialog" aria-labelledby="editMenuModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -239,7 +235,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -292,6 +288,50 @@
             })
         }
 
+        $('.btn_delStore').click(function () {
+
+            var id = $(this).attr('value');
+            swal({
+                    title: "Are you sure?",
+                    text: "刪除後，您將無法回復此操作！",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: 'delStoreAndTheMenu',
+                            method: 'POST',
+                            data: {
+                                id: id
+                            },
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (data) {
+                                swal("刪除成功！", {
+                                        icon: "success",
+                                        button: "OK",
+                                    })
+                                    .then((willDelete) => {
+                                            location.reload()
+                                        }
+
+                                    );
+                            },
+                            error: function (data) {
+                                console.log('error');
+                            }
+                        })
+
+                    } else {
+                        swal("刪除取消，您的操作未被執行!", {
+                            icon: "error",
+                        });
+                    }
+                });
+        });
+
         $('.btn_addMenu').click(function () {
             $("#addItem2").children().remove();
             var id = $(this).attr('value');
@@ -305,7 +345,6 @@
                 type: 'POST',
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
                     $('#addMenu_storeName').val(data[0].name);
                     $('#addMenu_storeTel').val(data[0].telphone);
                     $('#addMenu_storeType').val(data[0].type);
@@ -351,9 +390,17 @@
             })
         });
 
-        $('#addMenuModal').blur(function(){
-            // window.location.reload();
-        });
+        // $('.btn-showStoreModal').click(function(){
+        //     if($('#addStoreModal').css("display") == "block"){
+        //         $('#addStore_storeName').focus();
+        //         console.log(1)
+        //     }
+        //     console.log($('#addStoreModal').css("display"));
+        // })
+
+        $('#addStoreModal').on('shown.bs.modal', function (e) {
+            $('#addStore_storeName').focus();
+        })
 
         $('.btn_editStore').click(function () {
             var id = $(this).attr('value');

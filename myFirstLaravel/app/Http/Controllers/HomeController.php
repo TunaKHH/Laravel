@@ -61,25 +61,25 @@ class HomeController extends Controller
     }
 
     public function setNewStore(){
-        if (Request::has('setStoreName') && Request::has('setStoreTel') && Request::input('setStoreType') != "請選擇商店類型" && Request::has('setProductName'))
+        if (Request::has('setStoreName') && Request::has('setStoreTel'))
         {            
             $name = Request::input('setStoreName');
             $tel = Request::input('setStoreTel');
             $type = Request::input('setStoreType');
+            $store_id = Store::setNewStore($name, $tel, $type);
             
-            $ProductName = Request::input('setProductName');            
-            $PriceS = Request::input('setPriceS');
-            $PriceM = Request::input('setPriceM');
-            $PriceL = Request::input('setPriceL');
-
-            Store::setNewStore($name, $tel, $type);
-            Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $store_id);
-
+            if(Request::has('setProductName')){
+                $ProductName = Request::input('setProductName');            
+                $PriceS = Request::input('setPriceS');
+                $PriceM = Request::input('setPriceM');
+                $PriceL = Request::input('setPriceL');
+                Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $store_id);
+            }
+            
             return Redirect::route('store');
         }else{
             return "新增店家失敗";
-        }
-        
+        }        
     }
 
     public function setNewMenu(){
@@ -99,12 +99,20 @@ class HomeController extends Controller
         
     }
 
-    public function setAddMenu(){
-
-    }
 
     public function setEditStore(){
         
     }
+
+    public function delStoreAndTheMenu(){
+        $id = $_POST['id'];
+        // Store::delStoreAndTheMenu($id);
+        // return Redirect::route('store');
+        return Store::delStoreAndTheMenu($id);
+    }
     
+    public function delMenu(){
+        $id = $_POST['id'];
+        Store::delMenu($id);
+    }
 }
