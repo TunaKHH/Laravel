@@ -82,7 +82,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="store-tel" class="control-label">店家電話:</label>
-                                            <input type="text" class="form-control" id="store-tel" name="setStoreTel" value="test" required>
+                                            <input type="text" class="form-control" id="store-tel" name="setStoreTel" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="setStoreType" class="control-label">商店類型</label>
@@ -94,14 +94,23 @@
                                         </div>
                                         <br>
                                         <div class="form-group" style="text-align: center;">
-                                            <table class="table table-borderless">
+                                        <table class="table table-borderless">
                                                 <tbody>
                                                     <tr class="row">
-                                                        <td class="col-2"></td>
-                                                        <td class="col-8">
+                                                        <td class="col-1"></td>
+                                                        <td class="col-3">
+                                                            <div class="row">
+                                                                <label class="switch">
+                                                                    <input type="checkbox">
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                            </div>
+
+                                                        </td>
+                                                        <td class="col-4">
                                                             <label for="store-tel" class="control-label h3 ">菜單管理</label>
                                                         </td>
-                                                        <td class="col-2">
+                                                        <td class="col-4" style="text-align:end;">
                                                             <button type="button" class="add btn btn-primary">
                                                                 <i class="fas fa-plus"></i>
                                                             </button>
@@ -109,23 +118,6 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-
-                                            <div class="row">
-                                                <div class="col-5">
-                                                    <input value="111" name="setProductName[]" type="text" class="form-control" placeholder="品項名稱" required>
-                                                </div>
-                                                <div class="col-2">
-                                                    <input value="111" name="setPriceS[]" type="number" class="form-control" placeholder="價格(小)" required>
-                                                </div>
-                                                <div class="col-2">
-                                                    <input value="111" name="setPriceM[]" type="number" class="form-control" placeholder="價格(中)" required>
-                                                </div>
-                                                <div class="col-2">
-                                                    <input value="111" name="setPriceL[]" type="number" class="form-control" placeholder="價格(大)" required>
-                                                </div>
-                                            </div>
-                                            <br>
-
                                             <div id="addItem"></div>
                                         </div>
                                     </form>
@@ -263,13 +255,13 @@
             '<input name="setPriceL[]" type="number" class="form-control" placeholder="價格(大)" required>' +
             '</div>' +
             '<div class="col-1">' +
-            '<button class="del btn btn-danger">' +
+            '<button type="button" class="del btn btn-danger">' +
             '<i class="fas fa-minus"></i>' +
             '</button>' +
             '</div>' +
             '</div>';
         $(".add").click(function () {
-            $("#addItem").append(html);
+            $("#addItem").prepend(html);
             del();
         })
 
@@ -390,13 +382,10 @@
             })
         });
 
-        // $('.btn-showStoreModal').click(function(){
-        //     if($('#addStoreModal').css("display") == "block"){
-        //         $('#addStore_storeName').focus();
-        //         console.log(1)
-        //     }
-        //     console.log($('#addStoreModal').css("display"));
-        // })
+        $('.btn-showStoreModal').click(function(){
+            $("#addItem").children().remove();
+            $("#addItem").prepend(html);
+        })
 
         $('#addStoreModal').on('shown.bs.modal', function (e) {
             $('#addStore_storeName').focus();

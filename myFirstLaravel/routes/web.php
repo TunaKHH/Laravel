@@ -32,7 +32,11 @@ Route::post('/setNewStore', 'HomeController@setNewStore');
 
 Route::post('/setNewMenu', 'HomeController@setNewMenu');
 
+Route::post('/setNewOrder', 'HomeController@setNewOrder');
+
 Route::post('/editStore', 'HomeController@editStore');
 
 Route::post('/delStoreAndTheMenu', 'HomeController@delStoreAndTheMenu');
+
+
 

@@ -69,10 +69,31 @@ class HomeController extends Controller
             $store_id = Store::setNewStore($name, $tel, $type);
             
             if(Request::has('setProductName')){
-                $ProductName = Request::input('setProductName');            
+                $ProductName = Request::input('setProductName');  
                 $PriceS = Request::input('setPriceS');
                 $PriceM = Request::input('setPriceM');
                 $PriceL = Request::input('setPriceL');
+                // if(Request::has('setPriceS') && Request::has('setPriceM') && Request::has('setPriceL')){
+                    
+                //     Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $store_id);
+                // }else if(Request::has('setPriceS') && Request::has('setPriceM')){
+                //     Store::setNewMenu($ProductName, $PriceS, $PriceM, $store_id);
+
+                // }else if(Request::has('setPriceM') && Request::has('setPriceL')){
+                //     Store::setNewMenu($ProductName, $PriceM, $PriceL, $store_id);
+
+                // }else if(Request::has('setPriceS') && Request::has('setPriceL')){
+                //     Store::setNewMenu($ProductName, $PriceS, $PriceL, $store_id);
+
+                // }else if(Request::has('setPriceS') || Request::has('setPriceM') || Request::has('setPriceL')){
+                //     if(!Store::setNewMenu($ProductName, $PriceS, $store_id)){
+                //         if(!Store::setNewMenu($ProductName, $PriceM, $store_id)){
+                //             if(!Store::setNewMenu($ProductName, $PriceL, $store_id)){return "新增菜單失敗";}
+                //         }
+                //     }
+                // }else{
+                //     return "新增菜單失敗";
+                // }
                 Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $store_id);
             }
             
@@ -99,8 +120,13 @@ class HomeController extends Controller
         
     }
 
-
     public function setEditStore(){
+        
+    }
+
+    public function setNewOrder(){
+        $name = $_POST['name'];
+        $store = $_POST['store'];
         
     }
 

@@ -24,21 +24,15 @@ class Store extends Model
         return DB::table('stores')->insertGetId(['name' => $name, 'telphone' => $tel, 'type' => $type]);
     }
 
-    static function setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $tel){
+    static function setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $id){
         for($i = count($ProductName)-1; $i>=0; $i--){
-            DB::insert('insert into menus (name,price_s,price_m,price_l,store_id) values (?, ?, ?, ?, ?)', array($ProductName[$i], $PriceS[$i], $PriceM[$i], $PriceL[$i], $tel));
+            DB::insert('insert into menus (name,price_s,price_m,price_l,store_id) values (?, ?, ?, ?, ?)', array($ProductName[$i], $PriceS[$i], $PriceM[$i], $PriceL[$i], $id));
         }
         
     }
 
     static function getOneStore($id){
         $results = DB::select('select * from stores where id=?', array($id));
-        
-        return $results;        
-    }
-
-    static function getOneStoreIdUseTel($tel){
-        $results = DB::select('select id from stores where telphone=?', array($tel));
         
         return $results;        
     }
