@@ -169,7 +169,7 @@
                                                         <td class="col-3">
                                                             <div class="row">
                                                                 <label class="switch">
-                                                                    <input type="checkbox">
+                                                                    <input type="checkbox" id="switch">
                                                                     <span class="slider round"></span>
                                                                 </label>
                                                             </div>
@@ -198,36 +198,6 @@
                         </div>
                     </div>
                     {{ Form::close() }}
-                    <!--Edit Menu Modal -->
-                    <!-- <div class="modal fade " id="editMenuModal" tabindex="-1" role="dialog" aria-labelledby="editMenuModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">修改菜單</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <div class="form-group">
-                                            <label for="store-name" class="control-label">店家名稱:</label>
-                                            <input type="text" class="form-control" id="store-name">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="store-tel" class="control-label">店家電話:</label>
-                                            <input type="text" class="form-control" id="store-tel">
-                                        </div>
-
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                                    <button type="button" class="btn btn-danger" id="submit">送出</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -236,6 +206,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        var switch_type = 0;
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -344,20 +315,20 @@
                         for (var i = 0; i < data.length; i++) {
                             var html2 = '<div class="row top-buffer">' +
                                 '<div class="col-5">' +
-                                '<input value="' + data[i].mname +
-                                '" type="text" class="form-control" placeholder="品項名稱" disabled>' +
+                                '<input name="edit_mname[]" value="' + data[i].mname +
+                                '" type="text" class="edit_mname form-control" placeholder="品項名稱" disabled>' +
                                 '</div>' +
                                 '<div class="col-2">' +
-                                '<input value="' + data[i].price_s +
-                                '" type="number" class="form-control" placeholder="價格(小)" disabled>' +
+                                '<input name="edit_price_s[]" value="' + data[i].price_s +
+                                '" type="number" class="edit_price_s form-control" placeholder="價格(小)" disabled>' +
                                 '</div>' +
                                 '<div class="col-2">' +
-                                '<input value="' + data[i].price_m +
-                                '" type="number" class="form-control" placeholder="價格(中)" disabled>' +
+                                '<input name="edit_price_m[]" value="' + data[i].price_m +
+                                '" type="number" class="edit_price_m form-control" placeholder="價格(中)" disabled>' +
                                 '</div>' +
                                 '<div class="col-2">' +
-                                '<input value="' + data[i].price_l +
-                                '" type="number" class="form-control" placeholder="價格(大)" disabled>' +
+                                '<input name="edit_price_l[]" value="' + data[i].price_l +
+                                '" type="number" class="edit_price_l form-control" placeholder="價格(大)" disabled>' +
                                 '</div>' +
                                 '<div class="col-1">' +
                                 '</div>' +
@@ -370,10 +341,15 @@
                     $("#addItem2").prepend(html);
                     $('#addMenuModal').modal('show');
                     $('#addMenu_submit').click(function () {
+                        
 
-                        if (confirm("確定要新增嗎?")) {
-                            $('#addMenuForm').submit();
-                        }
+                        swal("新增成功！", {
+                            icon: "success",
+                            button: "OK",
+                        })
+                        .then((willDoSomething) => {
+                            $('#addMenuForm').submit();                                
+                        });                        
                     });
                 },
                 error: function (data) {
@@ -390,6 +366,33 @@
         $('#addStoreModal').on('shown.bs.modal', function (e) {
             $('#addStore_storeName').focus();
         })
+
+        $('#switch').click(function () {
+            if(switch_type == 1)
+                switch_type = 0;
+            else
+                switch_type = 1;
+            
+            if(switch_type){//switch_type = 1為進入編輯模式                
+                $('#addMenu_storeName').attr("disabled",false);
+                $('#addMenu_storeTel').attr("disabled",false);
+                $('#addMenu_storeType').attr("disabled",false);
+                $('.edit_mname').attr("disabled",false);
+                $('.edit_price_s').attr("disabled",false);
+                $('.edit_price_m').attr("disabled",false);
+                $('.edit_price_l').attr("disabled",false);
+            }else{
+                $('#addMenu_storeName').attr("disabled",true);
+                $('#addMenu_storeTel').attr("disabled",true);
+                $('#addMenu_storeType').attr("disabled",true);
+                $('.edit_mname').attr("disabled",true);
+                $('.edit_price_m').attr("disabled",true);
+                $('.edit_price_l').attr("disabled",true);
+                $('.edit_price_s').attr("disabled",true);
+            }
+            
+
+        });
 
         $('.btn_editStore').click(function () {
             var id = $(this).attr('value');
