@@ -20,13 +20,13 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/order', 'HomeController@index')->name('store');
+Route::get('/order', 'HomeController@order')->name('order');
 
 Route::get('/store', 'HomeController@store')->name('store');
 
 Route::post('/getTheStoreAndMenuListByTheStore', 'HomeController@getTheStoreAndMenuListByTheStore');
 
-Route::post('/setEditStore', 'HomeController@setEditStore');
+Route::post('/setEditStoreAndMenu', 'HomeController@setEditStoreAndMenu');
 
 Route::post('/setNewStore', 'HomeController@setNewStore');
 
@@ -38,5 +38,5 @@ Route::post('/editStore', 'HomeController@editStore');
 
 Route::post('/delStoreAndTheMenu', 'HomeController@delStoreAndTheMenu');
 
-
+Route::post('/delOrder', 'HomeController@delOrder');
 

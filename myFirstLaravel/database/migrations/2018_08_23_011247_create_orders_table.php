@@ -16,9 +16,9 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');//訂單名稱
-            $table->string('initiator');//主揪
+            $table->string('user_id');//主揪
             $table->integer('store_id');//外部索引
-            $table->char('lock', 1);//0:close 1:open 訂單狀態
+            $table->char('lock_type', 1);//0:close 1:open 訂單狀態
             $table->timestamps();
         });
     }

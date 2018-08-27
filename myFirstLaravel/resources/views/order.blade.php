@@ -56,29 +56,35 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    @foreach($orders as $order)
                                         <tr>
-                                            <td scope="row">
-                                                <button class="btn btn-danger btn-sm" id="btn_delOrder">
+                                            <td scope="col">
+                                                <button value="{{$order->orderId}}" type="button" class="btn_delOrder btn btn-danger btn-sm">
                                                     <i class="far fa-trash-alt fa-xs"></i>
                                                 </button>
                                             </td>
                                             <td>
-                                                <button class="btn btn-success btn-sm">
+                                                <button value="{{$order->orderId}}" type="button" class="btn_addOrderDetail btn btn-success btn-sm">
                                                     <i class="fas fa-plus fa-xs"></i>
                                                 </button>
                                             </td>
                                             <td>
-                                                <button class="btn btn-dark btn-sm">
+                                                <button value="{{$order->orderId}}" type="button" class="btn_setLock btn btn-dark btn-sm">
                                                     <i class="fas fa-lock fa-xs"></i>
                                                 </button>
                                             </td>
-                                            <td>0808父親節快樂</td>
-                                            <td>林幼晴</td>
-                                            <td>古早湯飯</td>
-                                            <td>飲料</td>
-                                            <td>2018-08-08 09:13:53</td>
-                                            <td>0915251335</td>
+                                            <td>{{ $order->orderName }}</td>
+                                            <td>{{ $order->userName }}</td>
+                                            <td>{{ $order->storeName }}</td>
+                                            <td>
+                                                @if($order->type == 0) 飲料 @elseif($order->type == 1) 便當 @endif
+                                            </td>                                            
+                                            <td>{{ $order->updated_at }}</td>
+                                            <td>{{ $order->telphone }}</td>
+                                            
+
                                         </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -159,29 +165,44 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $(".btn-addOrder").click(function () {            
+        var NowDate = new Date();
+        var Today = NowDate.getFullYear() + '-' + (NowDate.getMonth()+1) + '-' + NowDate.getDate() ;
+        $('#order_name').val(Today);
+        
+        var userId = "<?php echo $userId?>";
+        console.log(userId);
+        $(".btn-addOrder").click(function () {
             var order_name = $("#order_name").val();
             var order_store = $("#order_store").val();
-            console.log(order_store);
             $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
                 type: "POST",
                 url: "setNewOrder",
                 data: {
+                    userId: userId,
                     name: order_name,
                     store: order_store
                 },
                 dataType: "json",
                 success: function (response) {
-                    if(response == 1){
+                    if(response == true){
                         swal("新增訂單成功！", {
                             icon: "success",
                             button: "OK",
+                        })
+                        .then((willDoSomething)=>{
+                            location.reload()
                         });
+                    }else{
+                        console.log('error');
+                        console.log(response);
                     }
                 },
                 error: function (response){
-                    // console.log(response);
-                    console.log('error');
+                    console.log(response);
+                    // console.log('error');
                 }
             });
 
@@ -191,29 +212,57 @@
             var id = $(this).attr('value');
         });
 
+        $('.btn_delOrder').click(function(){
+            var id  = $(this).attr('value');
+            swal("確認要刪除訂單？", {
+                            title: "Are you sure?",
+                            text: "刪除後，您將無法回復此操作！",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                        })
+                        .then((willDoSomething)=>{
+                            if(willDoSomething){
+                                $.ajax({
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    type: "POST",
+                                    url: "delOrder",
+                                    data: {
+                                        id: id
+                                    },
+                                    dataType: "json",
+                                    success: function (response) {
+                                        if(response == true){
+                                            swal("新增訂單成功！", {
+                                                icon: "success",
+                                                button: "OK",
+                                            })
+                                            .then((willDoSomething)=>{
+                                                location.reload()
+                                            });
+                                        }else{
+                                            console.log('error');
+                                            console.log(response);
+                                        }
+                                    },
+                                    error: function (response){
+                                        console.log(response);
+                                        // console.log('error');
+                                    }
+                                });
+
+                            }else{
+                                swal("刪除取消，您的操作未被執行！", {
+                                    icon: "error",
+                                })
+                            }
+                        });
+            
+        });
+
 
     });
-    // $(document).ready(function () {
-    //             $(".view_news").click(function () {
-    //                 var id = $(this).attr('id');
-    //                 // console.log(id);
-    //                 $.ajax({ //傳值給news.php
-    //                     url: './news.php',
-    //                     method: 'POST', //資料'傳遞'的送出方式
-    //                     data: { //送出的資料
-    //                         action: 'get_news_detail',
-    //                         id: id
-    //                     },
-    //                     type: "POST", //資料'傳遞'的接收方式
-    //                     dataType: 'json', //資料內容型態
-    //                     success: function (data) {
-    //                         $(".modal-title").text(data.title);
-    //                         $(".modal-body").html(data.content);
-    //                         $("#myModal").modal();
-    //                     }
-    //                 })
-    //             });
-    //         });
-
 </script>
 @endsection

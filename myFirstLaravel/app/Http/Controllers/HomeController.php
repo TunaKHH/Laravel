@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Request;
 use Redirect;
+use Socialize;
+use Auth;
 use App\Store;
 
 
@@ -27,13 +29,27 @@ class HomeController extends Controller
     public function index()
     {
         $stores = $this->getAllStores();
-        return view('order')->with('stores',$stores);        
+        return view('store')->with('stores',$stores);        
     }
 
     public function store()
     {
         $stores = $this->getAllStores();
-        return view('store')->with('stores',$stores);        
+
+        return view('store')->with('stores',$stores);
+    }
+
+    public function order()
+    {
+        $stores = $this->getAllStores();
+        $orders = $this->getAllOrders();
+        if(Auth::check()){
+            $id = Auth::user()->id;
+        }else{
+            Redirect::route('home');
+        }
+        
+        return view('order')->with('orders',$orders)->with('stores',$stores)->with('userId',$id);        
     }
 
     static private function getAllStores(){
@@ -42,6 +58,11 @@ class HomeController extends Controller
         return $results;
     }
 
+    static private function getAllOrders(){
+        $results = Store::getAllOrders();
+
+        return $results;
+    }
     
     public function getTheStoreAndMenuListByTheStore(){
         $result = Store::getMenuListByTheStore($_POST['id']);
@@ -120,13 +141,21 @@ class HomeController extends Controller
         
     }
 
-    public function setEditStore(){
+    public function setEditStoreAndMenu(){
         
     }
 
     public function setNewOrder(){
+        $id = $_POST['userId'];
         $name = $_POST['name'];
         $store = $_POST['store'];
+        
+        if(Store::setNewOrder($id,$name,$store)){
+            return 1;
+        }else
+        {
+            return 0;
+        }
         
     }
 
@@ -141,4 +170,10 @@ class HomeController extends Controller
         $id = $_POST['id'];
         Store::delMenu($id);
     }
+
+    public function delOrder(){
+        $id = $_POST['id'];
+        return Store::delOrder($id);
+    }
+
 }

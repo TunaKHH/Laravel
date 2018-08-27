@@ -192,7 +192,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                                    <button type="button" class="btn btn-danger" id="addMenu_submit">送出</button>
+                                    <button type="submit" class="btn btn-danger" id="addMenu_submit">送出</button>
                                 </div>
                             </div>
                         </div>
@@ -217,13 +217,13 @@
             '<input name="setProductName[]" type="text" class="form-control" placeholder="品項名稱" required>' +
             '</div>' +
             '<div class="col-2">' +
-            '<input name="setPriceS[]" type="number" class="form-control" placeholder="價格(小)" required>' +
+            '<input name="setPriceS[]" type="number" class="form-control" placeholder="價格(小)" >' +
             '</div>' +
             '<div class="col-2">' +
-            '<input name="setPriceM[]" type="number" class="form-control" placeholder="價格(中)" required>' +
+            '<input name="setPriceM[]" type="number" class="form-control" placeholder="價格(中)" >' +
             '</div>' +
             '<div class="col-2">' +
-            '<input name="setPriceL[]" type="number" class="form-control" placeholder="價格(大)" required>' +
+            '<input name="setPriceL[]" type="number" class="form-control" placeholder="價格(大)" >' +
             '</div>' +
             '<div class="col-1">' +
             '<button type="button" class="del btn btn-danger">' +
@@ -340,17 +340,21 @@
 
                     $("#addItem2").prepend(html);
                     $('#addMenuModal').modal('show');
-                    $('#addMenu_submit').click(function () {
+
+                    //當使用jqury送出時無法彈出swal視窗 button送出時亦同
+
+                    // $('#addMenu_submit').find('[type="submit"]').trigger('click');
+                    // $('#addMenu_submit').click(function () {
                         
 
-                        swal("新增成功！", {
-                            icon: "success",
-                            button: "OK",
-                        })
-                        .then((willDoSomething) => {
-                            $('#addMenuForm').submit();                                
-                        });                        
-                    });
+                    //     swal("新增成功！", {
+                    //         icon: "success",
+                    //         button: "OK",
+                    //     })
+                    //     .then((willDoSomething) => {
+                    //         $('#addMenuForm').submit();                                
+                    //     });                        
+                    // });
                 },
                 error: function (data) {
                     console.log('error');
@@ -373,7 +377,8 @@
             else
                 switch_type = 1;
             
-            if(switch_type){//switch_type = 1為進入編輯模式                
+            if(switch_type){//switch_type = 1為進入編輯模式        
+                $('#addMenuForm').attr("action","setEditStoreAndMenu");     
                 $('#addMenu_storeName').attr("disabled",false);
                 $('#addMenu_storeTel').attr("disabled",false);
                 $('#addMenu_storeType').attr("disabled",false);
@@ -382,6 +387,7 @@
                 $('.edit_price_m').attr("disabled",false);
                 $('.edit_price_l').attr("disabled",false);
             }else{
+                $('#addMenuForm').attr("action","setNewMenu");
                 $('#addMenu_storeName').attr("disabled",true);
                 $('#addMenu_storeTel').attr("disabled",true);
                 $('#addMenu_storeType').attr("disabled",true);
