@@ -141,10 +141,6 @@ class HomeController extends Controller
         
     }
 
-    public function setEditStoreAndMenu(){
-        
-    }
-
     public function setNewOrder(){
         $id = $_POST['userId'];
         $name = $_POST['name'];
@@ -157,6 +153,20 @@ class HomeController extends Controller
             return 0;
         }
         
+    }
+
+    public function setOrderLock(){
+        $id = $_POST['id'];
+        $lock_type = $_POST['lock_type'];
+
+        if($lock_type){
+            $lock_type = 0;
+        }else{
+            $lock_type = 1;
+        }
+            
+
+        return Store::setOrderLock($id, $lock_type);
     }
 
     public function delStoreAndTheMenu(){

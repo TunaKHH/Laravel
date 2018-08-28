@@ -59,9 +59,6 @@
                             </div>
 
                         </div>
-                        <div class="tab-pane fade" id="pills-menu" role="tabpanel" aria-labelledby="pills-menu-tab">menuPage</div>
-                        <div class="tab-pane fade" id="pills-authority" role="tabpanel" aria-labelledby="pills-authority-tab">authorityPage</div>
-                        <div class="tab-pane fade" id="pills-track" role="tabpanel" aria-labelledby="pills-track-tab">trackPage</div>
                     </div>
                     <!--Add Store Modal -->
                     <?php echo Form::open(array('action' => 'HomeController@setNewStore', 'id' => 'addStoreForm'))?>

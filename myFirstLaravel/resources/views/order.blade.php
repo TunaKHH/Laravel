@@ -12,10 +12,7 @@
                     </div>
                     @endif
                     <div class="tab-content" id="pills-tabContent">
-                        <div class="tab-pane fade show active" id="pills-order" role="tabpanel" aria-labelledby="pills-order-tab">
-                            <!-- <button class="btn btn-success" type="button" data-toggle="modal" data-target="#addOrderModal">
-                                新增訂單
-                            </button>   -->
+                        <div class="tab-pane fade show active" id="pills-order" role="tabpanel" aria-labelledby="order-tab">
                             <?php echo Form::open(array('action' => 'HomeController@setNewOrder', 'id' => 'setNewOrder'))?>
                             <div class="row">
                                 <div class="col">
@@ -56,7 +53,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($orders as $order)
+                                        @foreach($orders as $order)
                                         <tr>
                                             <td scope="col">
                                                 <button value="{{$order->orderId}}" type="button" class="btn_delOrder btn btn-danger btn-sm">
@@ -64,13 +61,18 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <button value="{{$order->orderId}}" type="button" class="btn_addOrderDetail btn btn-success btn-sm">
+                                                <button data-target="#addOrderModal" value="{{$order->orderId}}" type="button" data-toggle="modal" class="btn_addOrderDetail btn btn-success btn-sm">
                                                     <i class="fas fa-plus fa-xs"></i>
                                                 </button>
                                             </td>
                                             <td>
                                                 <button value="{{$order->orderId}}" type="button" class="btn_setLock btn btn-dark btn-sm">
+                                                    @if($order->lock_type)
                                                     <i class="fas fa-lock fa-xs"></i>
+                                                    @else
+                                                    <i class="fas fa-lock-open fa-xs"></i>
+                                                    @endif
+                                                    <input value="{{$order->lock_type}}" type="hidden">
                                                 </button>
                                             </td>
                                             <td>{{ $order->orderName }}</td>
@@ -78,81 +80,80 @@
                                             <td>{{ $order->storeName }}</td>
                                             <td>
                                                 @if($order->type == 0) 飲料 @elseif($order->type == 1) 便當 @endif
-                                            </td>                                            
+                                            </td>
                                             <td>{{ $order->updated_at }}</td>
                                             <td>{{ $order->telphone }}</td>
-                                            
+
 
                                         </tr>
-                                    @endforeach
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="pills-menu" role="tabpanel" aria-labelledby="pills-menu-tab">menuPage</div>
-                        <div class="tab-pane fade" id="pills-authority" role="tabpanel" aria-labelledby="pills-authority-tab">authorityPage</div>
-                        <div class="tab-pane fade" id="pills-track" role="tabpanel" aria-labelledby="pills-track-tab">trackPage</div>
-
                     </div>
 
-
-
-
-                    <!--Add Order Modal -->
+                    <!--add Order Modal-->
                     <div class="modal fade" id="addOrderModal" tabindex="-1" role="dialog" aria-labelledby="addOrderModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">新增訂單</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group row">
-                                        <input name="order_name" class="form-control form-control-lg" type="text" placeholder="請輸入訂單名稱">
-                                    </div>
-                                    <div class="form-group row">
-                                        <select name="store" class="form-control form-control-lg">
-                                            <option>請選擇店家</option>
-                                        </select>
-                                    </div>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                                    <button type="button" class="btn btn-danger">送出</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Edit Menu Modal -->
-                    <div class="modal fade " id="editMenuModal" tabindex="-1" role="dialog" aria-labelledby="editMenuModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">管理菜單</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <div class="modal-header bg-primary" style="color: #ffffff">
+                                    <h5 class="modal-title" id="exampleModalLabel">Order點餐介面</h5>
+                                    <button style="color: #ffffff" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
                                     <form>
+                                        <input type="hidden" name="id" id="addMenu_id">
                                         <div class="form-group">
                                             <label for="store-name" class="control-label">店家名稱:</label>
-                                            <input type="text" class="form-control" id="store-name">
+                                            <input type="text" class="form-control" id="addMenu_storeName" disabled>
                                         </div>
                                         <div class="form-group">
                                             <label for="store-tel" class="control-label">店家電話:</label>
-                                            <input type="text" class="form-control" id="store-tel">
-                                            </textarea>
+                                            <input type="text" name="setStoreTel2" class="form-control" id="addMenu_storeTel" disabled>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="setStoreType" class="control-label">商店類型</label>
+                                            <select id="addMenu_storeType" class="form-control" disabled>
+                                                <option value="0">飲料店</option>
+                                                <option value="1" selected>便當店</option>
+                                            </select>
+                                        </div>
+                                        <br>
+                                        <div class="form-group" style="text-align: center;">
+                                            <table class="table table-borderless">
+                                                <tbody>
+                                                    <tr class="row">
+                                                        <td class="col-1"></td>
+                                                        <td class="col-3">
+                                                            <div class="row">
+                                                                <label class="switch">
+                                                                    <input type="checkbox" id="switch">
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                            </div>
 
+                                                        </td>
+                                                        <td class="col-4">
+                                                            <label for="store-tel" class="control-label h3 ">菜單管理</label>
+                                                        </td>
+                                                        <td class="col-4" style="text-align:end;">
+                                                            <button type="button" class="add2 btn btn-primary">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div id="addItem2"></div>
+                                        </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                                    <button type="button" class="btn btn-danger">送出</button>
+                                    <button type="submit" class="btn btn-danger" id="addMenu_submit">送出</button>
                                 </div>
                             </div>
                         </div>
@@ -166,11 +167,10 @@
 <script type="text/javascript">
     $(document).ready(function () {
         var NowDate = new Date();
-        var Today = NowDate.getFullYear() + '-' + (NowDate.getMonth()+1) + '-' + NowDate.getDate() ;
+        var Today = NowDate.getFullYear() + '-' + (NowDate.getMonth() + 1) + '-' + NowDate.getDate();
         $('#order_name').val(Today);
-        
+
         var userId = "<?php echo $userId?>";
-        console.log(userId);
         $(".btn-addOrder").click(function () {
             var order_name = $("#order_name").val();
             var order_store = $("#order_store").val();
@@ -187,20 +187,20 @@
                 },
                 dataType: "json",
                 success: function (response) {
-                    if(response == true){
+                    if (response == true) {
                         swal("新增訂單成功！", {
-                            icon: "success",
-                            button: "OK",
-                        })
-                        .then((willDoSomething)=>{
-                            location.reload()
-                        });
-                    }else{
+                                icon: "success",
+                                button: "OK",
+                            })
+                            .then((willDoSomething) => {
+                                location.reload()
+                            });
+                    } else {
                         console.log('error');
                         console.log(response);
                     }
                 },
-                error: function (response){
+                error: function (response) {
                     console.log(response);
                     // console.log('error');
                 }
@@ -212,57 +212,92 @@
             var id = $(this).attr('value');
         });
 
-        $('.btn_delOrder').click(function(){
-            var id  = $(this).attr('value');
+        $('.btn_delOrder').click(function () {
+            var id = $(this).attr('value');
             swal("確認要刪除訂單？", {
-                            title: "Are you sure?",
-                            text: "刪除後，您將無法回復此操作！",
-                            icon: "warning",
-                            buttons: true,
-                            dangerMode: true,
-                        })
-                        .then((willDoSomething)=>{
-                            if(willDoSomething){
-                                $.ajax({
-                                    headers: {
-                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                    },
-                                    type: "POST",
-                                    url: "delOrder",
-                                    data: {
-                                        id: id
-                                    },
-                                    dataType: "json",
-                                    success: function (response) {
-                                        if(response == true){
-                                            swal("新增訂單成功！", {
-                                                icon: "success",
-                                                button: "OK",
-                                            })
-                                            .then((willDoSomething)=>{
-                                                location.reload()
-                                            });
-                                        }else{
-                                            console.log('error');
-                                            console.log(response);
-                                        }
-                                    },
-                                    error: function (response){
-                                        console.log(response);
-                                        // console.log('error');
-                                    }
-                                });
-
-                            }else{
-                                swal("刪除取消，您的操作未被執行！", {
-                                    icon: "error",
-                                })
+                    title: "Are you sure?",
+                    text: "刪除後，您將無法回復此操作！",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDoSomething) => {
+                    if (willDoSomething) {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: "POST",
+                            url: "delOrder",
+                            data: {
+                                id: id
+                            },
+                            dataType: "json",
+                            success: function (response) {
+                                if (response == true) {
+                                    swal("刪除成功！", {
+                                            icon: "success",
+                                            button: "OK",
+                                        })
+                                        .then((willDoSomething) => {
+                                            location.reload()
+                                        });
+                                } else {
+                                    console.log('error');
+                                    console.log(response);
+                                }
+                            },
+                            error: function (response) {
+                                console.log(response);
+                                // console.log('error');
                             }
                         });
-            
+
+                    } else {
+                        swal("刪除取消，您的操作未被執行！", {
+                            icon: "error",
+                        })
+                    }
+                });
+
+        });
+
+        $('.btn_addOrderDetail').click(function () {
+            // var name = $(this).parent().parent().children('td')[4].val();
+            var name = $(this).parent().parent().children("td")[4].textContent;
+            console.log(name);
+            $('#addOrderModal').show();
+        });
+
+        $(".btn_setLock").click(function () {
+            var id = $(this).attr('value');
+            var lock_type = $(this).children('input').attr('value');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "setOrderLock",
+                method: "post",
+                data: {
+                    id: id,
+                    lock_type: lock_type
+                },
+                type: "post",
+                dataType: "json",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (response) {
+
+                }
+            });
+
         });
 
 
+
+
     });
+
 </script>
 @endsection

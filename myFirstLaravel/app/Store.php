@@ -49,6 +49,13 @@ class Store extends Model
         
     }
 
+    static function setOrderLock($id, $type){
+        return DB::table('orders')
+                            ->where('id',$id)
+                            ->update(['lock_type' => $type ]);
+        
+    }
+
     static function getOneStore($id){
         $results = DB::select('select * from stores where id=?', array($id));
         

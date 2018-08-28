@@ -131,26 +131,6 @@
                         <li class="nav-item">
                             <a class="nav-link" id="pills-track-tab" href="#pills-track" role="tab" aria-controls="pills-track" aria-selected="false">訂購紀錄</a>
                         </li>
-                        <!-- <li class="nav-item">
-                            <a class="nav-link active" id="pills-order-tab" data-toggle="pill" href="#pills-order" role="tab" aria-controls="pills-order"
-                                aria-selected="true">訂單管理</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-store-tab" data-toggle="pill" href="#pills-store" role="tab" aria-controls="pills-store"
-                                aria-selected="false">店家管理</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-menu-tab" data-toggle="pill" href="#pills-menu" role="tab" aria-controls="pills-menu"
-                                aria-selected="false">菜單管理</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-authority-tab" data-toggle="pill" href="#pills-authority" role="tab" aria-controls="pills-authority"
-                                aria-selected="false">權限管理</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-track-tab" data-toggle="pill" href="#pills-track" role="tab" aria-controls="pills-track"
-                                aria-selected="false">訂購紀錄</a>
-                        </li> -->
                         @endguest
                     </ul>
 
@@ -192,6 +172,13 @@
         <main class="py-4">
             @yield('content')
         </main>
+        <script>
+            
+            $('.nav_btn').click(function (e) { 
+                e.preventDefault();
+                console.log(1);    
+            });
+        </script>
     </div>
 </body>
 
