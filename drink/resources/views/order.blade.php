@@ -16,8 +16,7 @@
                             <?php echo Form::open(array('action' => 'HomeController@setNewOrder', 'id' => 'setNewOrder'))?>
                             <div class="row">
                                 <div class="col">
-                                    <input name="order_name" id="order_name" type="text" class="form-control"
-                                        placeholder="訂單名稱">
+                                    <input name="order_name" id="order_name" type="text" class="form-control" placeholder="訂單名稱">
                                 </div>
                                 <div class="col">
                                     <select name="order_store" id="order_store" class="form-control">
@@ -37,7 +36,7 @@
                             </div>
                             {{ Form::close() }}
 
-                            <br />
+                            <br/>
                             <div class="row">
                                 <table class="table table-striped">
                                     <thead class="thead-dark">
@@ -62,10 +61,8 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <button data-target="#addOrderModal" value="{{$order->orderId}}" type="button"
-                                                    data-toggle="modal" class="btn_addOrderDetail btn btn-success btn-sm">
+                                                <button data-target="#addOrderModal" value="{{$order->orderId}}" type="button" data-toggle="modal" class="btn_addOrderDetail btn btn-success btn-sm">
                                                     <i class="fas fa-plus fa-xs"></i>
-                                                    <input value="{{$order}}" hidden>
                                                 </button>
                                             </td>
                                             <td>
@@ -97,14 +94,12 @@
                     </div>
 
                     <!--add Order Modal-->
-                    <div class="modal fade" id="addOrderModal" tabindex="-1" role="dialog" aria-labelledby="addOrderModalLabel"
-                        aria-hidden="true">
+                    <div class="modal fade" id="addOrderModal" tabindex="-1" role="dialog" aria-labelledby="addOrderModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-primary" style="color: #ffffff">
                                     <h5 class="modal-title" id="exampleModalLabel">Order點餐介面</h5>
-                                    <button style="color: #ffffff" type="button" class="close" data-dismiss="modal"
-                                        aria-label="Close">
+                                    <button style="color: #ffffff" type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -114,88 +109,40 @@
                                             <div class="card">
                                                 <div class="card-header" id="headingOne">
                                                     <h5 class="mb-0">
-                                                        <button class="btn btn-link" type="button" data-toggle="collapse"
-                                                            data-target="#collapseOne" aria-expanded="true"
-                                                            aria-controls="collapseOne">
+                                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                             尚未分類
                                                         </button>
                                                     </h5>
                                                 </div>
 
-                                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                                    data-parent="#accordionExample">
+                                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                                                     <div class="card-body">
-                                                        <table class="table table-striped table-dark">
+                                                        <table class="table table-hover">
                                                             <thead>
                                                                 <tr>
-                                                                    <th scope="col" rowspan="2">餐點品項</th>
-                                                                    <th scope="col" colspan="3" style="text-align:center;">價格</th>
-                                                                    <th scope="col" rowspan="2">數量</th>
-                                                                    <th scope="col" rowspan="2">備註</th>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th scope="col">小</th>
-                                                                    <th scope="col">中</th>
-                                                                    <th scope="col">大</th>
+                                                                    <th scope="col">品</th>
+                                                                    <th scope="col">First</th>
+                                                                    <th scope="col">Last</th>
+                                                                    <th scope="col">Handle</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 <tr>
-                                                                    <td>滷肉飯</td>
-                                                                    <td>50</td>
-                                                                    <td>80</td>
-                                                                    <td>100</td>
-                                                                    <td>
-                                                                        <div class="input-group">
-                                                                            <input type="number" aria-label="Last name"
-                                                                                class="form-control">
-                                                                        </div>
-
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="input-group">
-                                                                            <input type="text" aria-label="Last name"
-                                                                                class="form-control">
-                                                                        </div>
-                                                                    </td>
+                                                                    <th scope="row">1</th>
+                                                                    <td>Mark</td>
+                                                                    <td>Otto</td>
+                                                                    <td>@mdo</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>滷肉飯</td>
-                                                                    <td>50</td>
-                                                                    <td>80</td>
-                                                                    <td>100</td>
-                                                                    <td>
-                                                                        <div class="input-group">
-                                                                            <input type="number" aria-label="Last name"
-                                                                                class="form-control">
-                                                                        </div>
-
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="input-group">
-                                                                            <input type="text" aria-label="Last name"
-                                                                                class="form-control">
-                                                                        </div>
-                                                                    </td>
+                                                                    <th scope="row">2</th>
+                                                                    <td>Jacob</td>
+                                                                    <td>Thornton</td>
+                                                                    <td>@fat</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>滷肉飯</td>
-                                                                    <td>50</td>
-                                                                    <td>80</td>
-                                                                    <td>100</td>
-                                                                    <td>
-                                                                        <div class="input-group">
-                                                                            <input type="number" aria-label="Last name"
-                                                                                class="form-control">
-                                                                        </div>
-
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="input-group">
-                                                                            <input type="text" aria-label="Last name"
-                                                                                class="form-control">
-                                                                        </div>
-                                                                    </td>
+                                                                    <th scope="row">3</th>
+                                                                    <td colspan="2">Larry the Bird</td>
+                                                                    <td>@twitter</td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -319,30 +266,10 @@
 
         $('.btn_addOrderDetail').click(function () {
             // var name = $(this).parent().parent().children('td')[4].val();
-            var id = $(this).attr('value');
             var day = $(this).parent().parent().children("td")[3].textContent;
             var store_name = $(this).parent().parent().children("td")[5].textContent;
+
             $('.modal-title').text(day + store_name);
-
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: "post",
-                url: "getTheStoreAndMenuListByTheStore",
-                data: {
-                    id: id
-                },
-                dataType: "json",
-                success: function (response) {
-                    console.log(response);
-                },
-                error: function (response) {
-                    console.log(response);
-                }
-            });
-
-
             $('#addOrderModal').show();
         });
 

@@ -479,8 +479,48 @@
                 $('.edit_price_l').attr("disabled", true);
                 $('.edit_price_s').attr("disabled", true);
             }
-        });        
-        
+
+
+        });
+
+        $('.btn_editStore').click(function () {
+            var id = $(this).attr('value');
+            $.ajax({
+                url: 'getOneStore',
+                method: 'POST',
+                data: {
+                    id: id
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    $('#store-name').val(data.name);
+                    $('#store-tel').val(data.tel);
+                    $('#submit').click(function () {
+                        $.ajax({
+                            url: 'setEditStore',
+                            method: 'POST',
+                            data: {
+                                id: id
+                            },
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (data) {
+                                $('#store-name').val(data.name);
+                                $('#store-tel').val(data.tel);
+
+                            },
+                            error: function (data) {
+                                console.log('error');
+                            }
+                        })
+                    });
+                },
+                error: function (data) {
+                    console.log('error');
+                }
+            })
+        });
     });
 
 </script>

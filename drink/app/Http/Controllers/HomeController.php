@@ -65,19 +65,14 @@ class HomeController extends Controller
     }
     
     public function getTheStoreAndMenuListByTheStore(){
-
         $result = Store::getMenuListByTheStore($_POST['id']);
 
         if(!count($result)>0){
             $result = $this->getOneStore($_POST['id']);
         }       
-        // $result = json_encode($result); 
+
         return $result;
     }
-
-    // public function getOneOrderList($id){
-    //     return Store::getOneOrderList();
-    // }
 
     public function getOneStore($id){
 
