@@ -123,9 +123,6 @@
                             <a class="nav-link" id="pills-store-tab" href="store" role="tab" aria-controls="pills-store" aria-selected="false">店家管理</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="pills-menu-tab" href="#pills-menu" role="tab" aria-controls="pills-menu" aria-selected="false">菜單管理</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" id="pills-authority-tab" href="#pills-authority" role="tab" aria-controls="pills-authority" aria-selected="false">權限管理</a>
                         </li>
                         <li class="nav-item">

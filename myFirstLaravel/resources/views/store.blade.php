@@ -43,7 +43,7 @@
                                             </td>
                                             <td class="col-2">
                                                 <button value="{{$store->id}}" type="button" class="btn_addMenu btn btn-primary btn-sm">
-                                                    <i class="fas fa-archway"></i>
+                                                    <i class="fas fa-wrench fa-xs"></i>
                                                 </button>
                                             </td>
                                             <td class="col-5">{{ $store->name }}</td>
@@ -79,11 +79,23 @@
                                             <label for="store-name" class="control-label">店家名稱:</label>
                                             <input type="text" class="form-control" id="addStore_storeName" name="setStoreName"
                                                 data-focus="false" required>
+                                            <div class="valid-feedback">
+                                                Looks good!店家名稱沒重複!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Oops!店家名稱重複囉!
+                                            </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="store-tel" class="control-label">店家電話:</label>
-                                            <input type="text" class="form-control" id="store-tel" name="setStoreTel"
+                                            <label for="addStore_storeTel" class="control-label">店家電話:</label>
+                                            <input type="text" class="form-control" id="addStore_storeTel" name="setStoreTel"
                                                 required>
+                                            <div class="valid-feedback">
+                                                Looks good!店家電話沒重複!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Oops!店家電話重複囉!
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="setStoreType" class="control-label">商店類型</label>
@@ -137,7 +149,7 @@
                     </div>
                     {{ Form::close() }}
 
-                    <!--Add Menu Modal -->
+                    <!--Edit Modal -->
                     <?php echo Form::open(array('action' => 'HomeController@setNewMenu', 'id' =>'addMenuForm'))?>
                     <div class="modal fade" id="addMenuModal" tabindex="-1" role="dialog" aria-labelledby="addMenuModalLabel"
                         aria-hidden="true">
@@ -158,7 +170,7 @@
                                             <input type="text" class="form-control" id="addMenu_storeName" disabled>
                                         </div>
                                         <div class="form-group">
-                                            <label for="store-tel" class="control-label">店家電話:</label>
+                                            <label class="control-label">店家電話:</label>
                                             <input type="text" name="setStoreTel2" class="form-control" id="addMenu_storeTel"
                                                 disabled>
                                         </div>
@@ -170,6 +182,43 @@
                                             </select>
                                         </div>
                                         <br>
+                                        <div class="form-group" style="text-align: center;">
+                                            <table class="table table-borderless">
+                                                <tbody>
+                                                    <tr class="row">
+                                                        <td class="col-1"></td>
+                                                        <td class="col-3">
+                                                            <!-- <div class="row">
+                                                                <label class="switch">
+                                                                    <input type="checkbox" id="switch">
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                            </div> -->
+                                                        </td>
+                                                        <td class="col-4">
+                                                            <label class="control-label h3">分類管理</label>
+                                                        </td>
+                                                        <td class="col-4" style="text-align:end;">
+                                                            <button type="button" class="add3 btn btn-primary">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="row top-buffer">
+                                                    <div class="col">
+                                                        <input type="text" value="123" id="setClassifyName" class="setClassifyName form-control" placeholder="分類名稱" >
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="text" class="setClassifyName form-control" placeholder="分類名稱" >
+                                                    </div>
+                                                    <div class="col">
+                                                        <input type="text" class="setClassifyName form-control" placeholder="分類名稱" >
+                                                    </div>
+                                                </div>
+                                            <div id="addItem3"></div>
+                                        </div>
                                         <div class="form-group" style="text-align: center;">
                                             <table class="table table-borderless">
                                                 <tbody>
@@ -240,15 +289,27 @@
             '</button>' +
             '</div>' +
             '</div>';
+        
+        var html_classify = '<div class="row top-buffer">' +
+                                '<div class="col">' +
+                                    '<input type="text" value="123" id="setClassifyName" class="setClassifyName form-control" placeholder="分類名稱" >' +
+                                '</div>' +
+                                '<div class="col">' +
+                                    '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
+                                '</div>' +
+                                '<div class="col">' +
+                                    '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
+                                '</div>' +
+                            '</div>';
+
         $(".add").click(function () {
-            
             $("#addItem").prepend(html);
             del();
         })
 
         $(".add_100").click(function () {
-            for(var i = 0; i<100; i++){
-                $("#addItem").prepend(html);    
+            for (var i = 0; i < 100; i++) {
+                $("#addItem").prepend(html);
             }
             del();
         })
@@ -258,11 +319,28 @@
             del();
         })
 
+        $(".add3").click(function () {
+            $("#addItem3").prepend(html_classify);
+            del();
+        })
+
         $(".addStoreForm_submit").click(function () {
             $("#addStoreForm").submit();
         })
 
-        $('#store-tel').blur(function () {
+        $(document).on('blur', '.setClassifyName', function () {
+            console.log(222);
+        });
+
+        $('.setClassifyName').blur(function () {
+            console.log(11111);
+        })
+
+        $('#setClassifyName').blur(function () {
+            console.log(11111);
+        })
+
+        $('#addStore_storeTel').blur(function () {
             var tel = $(this).val();
             $.ajax({
                 type: "post",
@@ -272,22 +350,15 @@
                 },
                 dataType: "json",
                 success: function (data) {
-                    console.log(data);
-                    if(data){
-                        $('.addStoreForm_submit').attr('disabled',true);
-                        swal("電話重複！", {
-                            icon: "error",
-                            button: "OK",
-                        });
-                    }else{
-                        $('.addStoreForm_submit').attr('disabled',false);
-                        swal("電話未重複，請安心新增菜單！", {
-                            icon: "success",
-                            button: "OK",
-                        });
+                    if (data) {
+                        $('#addStore_storeTel').removeClass('is-valid');
+                        $('#addStore_storeTel').addClass('is-invalid');
+                        $('.addStoreForm_submit').attr('disabled', true);
+                    } else {
+                        $('#addStore_storeTel').removeClass('is-invalid');
+                        $('#addStore_storeTel').addClass('is-valid');
+                        $('.addStoreForm_submit').attr('disabled', false);
                     }
-                    
-
                 },
                 error: function (data) {
 
@@ -305,22 +376,15 @@
                 },
                 dataType: "json",
                 success: function (data) {
-                    console.log(data);
-                    if(data){
-                        $('.addStoreForm_submit').attr('disabled',true);
-                        swal("店家名稱重複！", {
-                            icon: "error",
-                            button: "OK",
-                        });
-                    }else{
-                        $('.addStoreForm_submit').attr('disabled',false);
-                        swal("店家名稱未重複，請安心新增菜單！", {
-                            icon: "success",
-                            button: "OK",
-                        });
+                    if (data) {
+                        $('#addStore_storeName').removeClass('is-valid');
+                        $('#addStore_storeName').addClass('is-invalid');
+                        $('.addStoreForm_submit').attr('disabled', true);
+                    } else {
+                        $('#addStore_storeName').removeClass('is-invalid');
+                        $('#addStore_storeName').addClass('is-valid');
+                        $('.addStoreForm_submit').attr('disabled', false);
                     }
-                    
-
                 },
                 error: function (data) {
 
@@ -338,48 +402,49 @@
 
             var id = $(this).attr('value');
             swal({
-                title: "Are you sure?",
-                text: "刪除後，您將無法回復此操作！",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-            .then((willDelete) => {
-                if (willDelete) {
-                    $.ajax({
-                        url: 'delStoreAndTheMenu',
-                        method: 'POST',
-                        data: {
-                            id: id
-                        },
-                        type: 'POST',
-                        dataType: 'json',
-                        success: function (data) {
-                            swal("刪除成功！", {
-                                    icon: "success",
-                                    button: "OK",
-                                })
-                                .then((willDelete) => {
-                                        location.reload()
-                                    }
+                    title: "Are you sure?",
+                    text: "刪除後，您將無法回復此操作！",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: 'delStoreAndTheMenu',
+                            method: 'POST',
+                            data: {
+                                id: id
+                            },
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (data) {
+                                swal("刪除成功！", {
+                                        icon: "success",
+                                        button: "OK",
+                                    })
+                                    .then((willDelete) => {
+                                            location.reload()
+                                        }
 
-                                );
-                        },
-                        error: function (data) {
-                            console.log('error');
-                        }
-                    })
+                                    );
+                            },
+                            error: function (data) {
+                                console.log('error');
+                            }
+                        })
 
-                } else {
-                    swal("刪除取消，您的操作未被執行!", {
-                        icon: "error",
-                    });
-                }
-            });
+                    } else {
+                        swal("刪除取消，您的操作未被執行!", {
+                            icon: "error",
+                        });
+                    }
+                });
         });
 
         $('.btn_addMenu').click(function () {
             $("#addItem2").children().remove();
+            $("#addItem3").children().remove();
             var id = $(this).attr('value');
             $('#addMenu_id').val(id);
             $.ajax({
@@ -422,6 +487,7 @@
                     }
 
                     $("#addItem2").prepend(html);
+                    $("#addItem3").append(html_classify);
                     $('#addMenuModal').modal('show');
 
                     //當使用jqury送出時無法彈出swal視窗 button送出時亦同
@@ -479,8 +545,8 @@
                 $('.edit_price_l').attr("disabled", true);
                 $('.edit_price_s').attr("disabled", true);
             }
-        });        
-        
+        });
+
     });
 
 </script>

@@ -62,10 +62,10 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <button data-target="#addOrderModal" value="{{$order->orderId}}" type="button"
+                                                <button  value="{{$order->orderId}}" type="button"
                                                     data-toggle="modal" class="btn_addOrderDetail btn btn-success btn-sm">
                                                     <i class="fas fa-plus fa-xs"></i>
-                                                    <input value="{{$order}}" hidden>
+                                                    <input value="{{$order->store_id}}" hidden>
                                                 </button>
                                             </td>
                                             <td>
@@ -139,70 +139,12 @@
                                                                     <th scope="col">大</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>滷肉飯</td>
-                                                                    <td>50</td>
-                                                                    <td>80</td>
-                                                                    <td>100</td>
-                                                                    <td>
-                                                                        <div class="input-group">
-                                                                            <input type="number" aria-label="Last name"
-                                                                                class="form-control">
-                                                                        </div>
-
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="input-group">
-                                                                            <input type="text" aria-label="Last name"
-                                                                                class="form-control">
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>滷肉飯</td>
-                                                                    <td>50</td>
-                                                                    <td>80</td>
-                                                                    <td>100</td>
-                                                                    <td>
-                                                                        <div class="input-group">
-                                                                            <input type="number" aria-label="Last name"
-                                                                                class="form-control">
-                                                                        </div>
-
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="input-group">
-                                                                            <input type="text" aria-label="Last name"
-                                                                                class="form-control">
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>滷肉飯</td>
-                                                                    <td>50</td>
-                                                                    <td>80</td>
-                                                                    <td>100</td>
-                                                                    <td>
-                                                                        <div class="input-group">
-                                                                            <input type="number" aria-label="Last name"
-                                                                                class="form-control">
-                                                                        </div>
-
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="input-group">
-                                                                            <input type="text" aria-label="Last name"
-                                                                                class="form-control">
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
+                                                            <tbody id ="add_menu_item">                                                                
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </form>
                                 </div>
@@ -317,9 +259,9 @@
 
         });
 
-        $('.btn_addOrderDetail').click(function () {
+        $('.btn_addOrderDetail').click(function () {//加訂按鈕被點擊
             // var name = $(this).parent().parent().children('td')[4].val();
-            var id = $(this).attr('value');
+            var store_id = $(this).children('input').attr('value');
             var day = $(this).parent().parent().children("td")[3].textContent;
             var store_name = $(this).parent().parent().children("td")[5].textContent;
             $('.modal-title').text(day + store_name);
@@ -331,11 +273,33 @@
                 type: "post",
                 url: "getTheStoreAndMenuListByTheStore",
                 data: {
-                    id: id
+                    id: store_id
                 },
                 dataType: "json",
                 success: function (response) {
-                    console.log(response);
+                    var html = '';
+                    response.forEach(function(item, index) {
+                        html = '<tr>'+
+                                    '<td>'+item['mname']+'</td>'+
+                                    '<td>'+item['price_s']+'</td>'+
+                                    '<td>'+item['price_m']+'</td>'+
+                                    '<td>'+item['price_l']+'</td>'+
+                                    '<td>'+
+                                        '<div class="input-group">'+
+                                            '<input type="number" aria-label="Last name"                                                class="form-control">'+
+                                        '</div>'+
+                                    '</td>'+
+                                    '<td>'+
+                                    '<div class="input-group">'+
+                                    ' <input type="text" aria-label="Last name" class="form-control">'+
+                                    '</div>'+
+                                '</td>';
+                        $('#add_menu_item').append(html);
+                        console.log(item);
+                        $('#addOrderModal').modal('show');
+                        // del();
+                    });
+                    
                 },
                 error: function (response) {
                     console.log(response);
@@ -343,7 +307,7 @@
             });
 
 
-            $('#addOrderModal').show();
+            
         });
 
         $(".btn_setLock").click(function () {
@@ -370,6 +334,12 @@
             });
 
         });
+
+        function del() {
+            $(".del").click(function () {
+                $(this).parent().parent().remove();
+            })
+        }
 
 
 

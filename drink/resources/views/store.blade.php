@@ -79,11 +79,23 @@
                                             <label for="store-name" class="control-label">店家名稱:</label>
                                             <input type="text" class="form-control" id="addStore_storeName" name="setStoreName"
                                                 data-focus="false" required>
+                                            <div class="valid-feedback">
+                                                Looks good!店家名稱沒重複!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Oops!店家名稱重複囉!
+                                            </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="store-tel" class="control-label">店家電話:</label>
-                                            <input type="text" class="form-control" id="store-tel" name="setStoreTel"
+                                            <label for="addStore_storeTel" class="control-label">店家電話:</label>
+                                            <input type="text" class="form-control" id="addStore_storeTel" name="setStoreTel"
                                                 required>
+                                            <div class="valid-feedback">
+                                                Looks good!店家電話沒重複!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Oops!店家電話重複囉!
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="setStoreType" class="control-label">商店類型</label>
@@ -158,7 +170,7 @@
                                             <input type="text" class="form-control" id="addMenu_storeName" disabled>
                                         </div>
                                         <div class="form-group">
-                                            <label for="store-tel" class="control-label">店家電話:</label>
+                                            <label class="control-label">店家電話:</label>
                                             <input type="text" name="setStoreTel2" class="form-control" id="addMenu_storeTel"
                                                 disabled>
                                         </div>
@@ -241,14 +253,14 @@
             '</div>' +
             '</div>';
         $(".add").click(function () {
-            
+
             $("#addItem").prepend(html);
             del();
         })
 
         $(".add_100").click(function () {
-            for(var i = 0; i<100; i++){
-                $("#addItem").prepend(html);    
+            for (var i = 0; i < 100; i++) {
+                $("#addItem").prepend(html);
             }
             del();
         })
@@ -262,7 +274,7 @@
             $("#addStoreForm").submit();
         })
 
-        $('#store-tel').blur(function () {
+        $('#addStore_storeTel').blur(function () {
             var tel = $(this).val();
             $.ajax({
                 type: "post",
@@ -273,20 +285,16 @@
                 dataType: "json",
                 success: function (data) {
                     console.log(data);
-                    if(data){
-                        $('.addStoreForm_submit').attr('disabled',true);
-                        swal("電話重複！", {
-                            icon: "error",
-                            button: "OK",
-                        });
-                    }else{
-                        $('.addStoreForm_submit').attr('disabled',false);
-                        swal("電話未重複，請安心新增菜單！", {
-                            icon: "success",
-                            button: "OK",
-                        });
+                    if (data) {
+                        $('#addStore_storeTel').removeClass('is-valid');
+                        $('#addStore_storeTel').addClass('is-invalid');
+                        $('.addStoreForm_submit').attr('disabled', true);
+                    } else {
+                        $('#addStore_storeTel').removeClass('is-invalid');
+                        $('#addStore_storeTel').addClass('is-valid');
+                        $('.addStoreForm_submit').attr('disabled', false);
                     }
-                    
+
 
                 },
                 error: function (data) {
@@ -306,20 +314,16 @@
                 dataType: "json",
                 success: function (data) {
                     console.log(data);
-                    if(data){
-                        $('.addStoreForm_submit').attr('disabled',true);
-                        swal("店家名稱重複！", {
-                            icon: "error",
-                            button: "OK",
-                        });
-                    }else{
-                        $('.addStoreForm_submit').attr('disabled',false);
-                        swal("店家名稱未重複，請安心新增菜單！", {
-                            icon: "success",
-                            button: "OK",
-                        });
+                    if (data) {
+                        $('#addStore_storeName').removeClass('is-valid');
+                        $('#addStore_storeName').addClass('is-invalid');
+                        $('.addStoreForm_submit').attr('disabled', true);
+                    } else {
+                        $('#addStore_storeName').removeClass('is-invalid');
+                        $('#addStore_storeName').addClass('is-valid');
+                        $('.addStoreForm_submit').attr('disabled', false);
                     }
-                    
+
 
                 },
                 error: function (data) {
@@ -338,44 +342,44 @@
 
             var id = $(this).attr('value');
             swal({
-                title: "Are you sure?",
-                text: "刪除後，您將無法回復此操作！",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-            .then((willDelete) => {
-                if (willDelete) {
-                    $.ajax({
-                        url: 'delStoreAndTheMenu',
-                        method: 'POST',
-                        data: {
-                            id: id
-                        },
-                        type: 'POST',
-                        dataType: 'json',
-                        success: function (data) {
-                            swal("刪除成功！", {
-                                    icon: "success",
-                                    button: "OK",
-                                })
-                                .then((willDelete) => {
-                                        location.reload()
-                                    }
+                    title: "Are you sure?",
+                    text: "刪除後，您將無法回復此操作！",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: 'delStoreAndTheMenu',
+                            method: 'POST',
+                            data: {
+                                id: id
+                            },
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (data) {
+                                swal("刪除成功！", {
+                                        icon: "success",
+                                        button: "OK",
+                                    })
+                                    .then((willDelete) => {
+                                            location.reload()
+                                        }
 
-                                );
-                        },
-                        error: function (data) {
-                            console.log('error');
-                        }
-                    })
+                                    );
+                            },
+                            error: function (data) {
+                                console.log('error');
+                            }
+                        })
 
-                } else {
-                    swal("刪除取消，您的操作未被執行!", {
-                        icon: "error",
-                    });
-                }
-            });
+                    } else {
+                        swal("刪除取消，您的操作未被執行!", {
+                            icon: "error",
+                        });
+                    }
+                });
         });
 
         $('.btn_addMenu').click(function () {
@@ -479,48 +483,8 @@
                 $('.edit_price_l').attr("disabled", true);
                 $('.edit_price_s').attr("disabled", true);
             }
-
-
         });
 
-        $('.btn_editStore').click(function () {
-            var id = $(this).attr('value');
-            $.ajax({
-                url: 'getOneStore',
-                method: 'POST',
-                data: {
-                    id: id
-                },
-                type: 'POST',
-                dataType: 'json',
-                success: function (data) {
-                    $('#store-name').val(data.name);
-                    $('#store-tel').val(data.tel);
-                    $('#submit').click(function () {
-                        $.ajax({
-                            url: 'setEditStore',
-                            method: 'POST',
-                            data: {
-                                id: id
-                            },
-                            type: 'POST',
-                            dataType: 'json',
-                            success: function (data) {
-                                $('#store-name').val(data.name);
-                                $('#store-tel').val(data.tel);
-
-                            },
-                            error: function (data) {
-                                console.log('error');
-                            }
-                        })
-                    });
-                },
-                error: function (data) {
-                    console.log('error');
-                }
-            })
-        });
     });
 
 </script>

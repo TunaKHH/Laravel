@@ -14,7 +14,7 @@ class Store extends Model
     }
 
     static function getAllOrders(){
-        $results = DB::select('select orders.id as orderId, orders.name as orderName, users.name as userName, stores.name as storeName,stores.telphone, stores.type, lock_type, orders.updated_at from orders, stores, users where orders.store_id = stores.id and orders.user_id = users.id Order By 1 DESC');
+        $results = DB::select('select stores.id as store_id, orders.id as orderId, orders.name as orderName, users.name as userName, stores.name as storeName,stores.telphone, stores.type, lock_type, orders.updated_at from orders, stores, users where orders.store_id = stores.id and orders.user_id = users.id Order By 1 DESC');
         return $results;
     }
 
@@ -39,7 +39,7 @@ class Store extends Model
     static function setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $id){
         for($i = count($ProductName)-1; $i>=0; $i--){
             if(isset($ProductName[$i])){
-                DB::insert('insert into menus (name,price_s,price_m,price_l,store_id) values (?, ?, ?, ?, ?)', array(isset($ProductName[$i])?$ProductName[$i]:'',isset($PriceS[$i])? $PriceS[$i] : '', isset($PriceM[$i])? $PriceM[$i] : '', isset($PriceL[$i])? $PriceL[$i] : '', $id));    
+                DB::insert('insert into menus (name,price_s,price_m,price_l,store_id) values (?, ?, ?, ?, ?)', array(isset($ProductName[$i]) ? $ProductName[$i] : '0', isset($PriceS[$i]) ? $PriceS[$i] : '0', isset($PriceM[$i]) ? $PriceM[$i] : '0', isset($PriceL[$i]) ? $PriceL[$i] : '0', $id));    
             }
         }
         
