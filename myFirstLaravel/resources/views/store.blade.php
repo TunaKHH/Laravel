@@ -206,17 +206,6 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            <div class="row top-buffer">
-                                                    <div class="col">
-                                                        <input type="text" value="123" id="setClassifyName" class="setClassifyName form-control" placeholder="分類名稱" >
-                                                    </div>
-                                                    <div class="col">
-                                                        <input type="text" class="setClassifyName form-control" placeholder="分類名稱" >
-                                                    </div>
-                                                    <div class="col">
-                                                        <input type="text" class="setClassifyName form-control" placeholder="分類名稱" >
-                                                    </div>
-                                                </div>
                                             <div id="addItem3"></div>
                                         </div>
                                         <div class="form-group" style="text-align: center;">
@@ -292,7 +281,7 @@
         
         var html_classify = '<div class="row top-buffer">' +
                                 '<div class="col">' +
-                                    '<input type="text" value="123" id="setClassifyName" class="setClassifyName form-control" placeholder="分類名稱" >' +
+                                    '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
                                 '</div>' +
                                 '<div class="col">' +
                                     '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
@@ -328,17 +317,7 @@
             $("#addStoreForm").submit();
         })
 
-        $(document).on('blur', '.setClassifyName', function () {
-            console.log(222);
-        });
-
-        $('.setClassifyName').blur(function () {
-            console.log(11111);
-        })
-
-        $('#setClassifyName').blur(function () {
-            console.log(11111);
-        })
+        
 
         $('#addStore_storeTel').blur(function () {
             var tel = $(this).val();
@@ -488,7 +467,15 @@
 
                     $("#addItem2").prepend(html);
                     $("#addItem3").append(html_classify);
+                    
                     $('#addMenuModal').modal('show');
+                    
+                    $(document).on('blur', '.setClassifyName', function () {
+                        var name = $(this).val();
+                        if(name != ""){
+                            console.log(name);
+                        }
+                    })
 
                     //當使用jqury送出時無法彈出swal視窗 button送出時亦同
 
