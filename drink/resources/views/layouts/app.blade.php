@@ -92,6 +92,99 @@
         }
         /* switch相關CSS樣板結束 */
 
+        /*以下參考 https://bootsnipp.com/snippets/gv6Pe*/
+        /*
+            "bootstrap4 table #table #checkbox #pagination #bootstrap4 #responsive-table #material-checkbox"
+        */
+
+        .table {
+            border: none;
+        }
+
+        .table-definition thead th:first-child {
+            pointer-events: none;
+            background: white;
+            border: none;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .page-item > * {
+            border: none;
+        }
+
+        .custom-checkbox {
+        min-height: 1rem;
+        padding-left: 0;
+        margin-right: 0;
+        cursor: pointer; 
+        }
+        .custom-checkbox .custom-control-indicator {
+            content: "";
+            display: inline-block;
+            position: relative;
+            width: 30px;
+            height: 10px;
+            background-color: #818181;
+            border-radius: 15px;
+            margin-right: 10px;
+            -webkit-transition: background .3s ease;
+            transition: background .3s ease;
+            vertical-align: middle;
+            margin: 0 16px;
+            box-shadow: none; 
+        }
+        .custom-checkbox .custom-control-indicator:after {
+            content: "";
+            position: absolute;
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background-color: #f1f1f1;
+            border-radius: 21px;
+            box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.4);
+            left: -2px;
+            top: -4px;
+            -webkit-transition: left .3s ease, background .3s ease, box-shadow .1s ease;
+            transition: left .3s ease, background .3s ease, box-shadow .1s ease; 
+        }
+        .custom-checkbox .custom-control-input:checked ~ .custom-control-indicator {
+            background-color: #84c7c1;
+            background-image: none;
+            box-shadow: none !important; 
+        }
+        .custom-checkbox .custom-control-input:checked ~ .custom-control-indicator:after {
+            background-color: #84c7c1;
+            left: 15px; 
+            }
+        .custom-checkbox .custom-control-input:focus ~ .custom-control-indicator {
+            box-shadow: none !important; 
+        }
+        /*以上參考 https://bootsnipp.com/snippets/gv6Pe*/
+
+        /*以下 https://bootsnipp.com/snippets/featured/multi-select-tiled-layout */
+        .searchable-container{margin:20px 0 0 0}
+        .searchable-container label.btn-default.active{background-color:#007ba7;color:#FFF}
+        .searchable-container label.btn-default{width:90%;border:1px solid #efefef;margin:5px; box-shadow:5px 8px 8px 0 #ccc;}
+        .searchable-container label .bizcontent{width:100%;}
+        .searchable-container .btn-group{width:90%}
+        .searchable-container .btn span.glyphicon{
+            opacity: 0;
+        }
+        .searchable-container .btn.active span.glyphicon {
+            opacity: 1;
+        }
+        /*以上 https://bootsnipp.com/snippets/featured/multi-select-tiled-layout */
+
+        /* 以下Radio CSS 參考https://bootsnipp.com/snippets/featured/sexy-radio-butons */
+        .radioBtn .notActive{
+            color: #3276b1;
+            background-color: #fff;
+        }
+        /* 以上Radio CSS 參考https://bootsnipp.com/snippets/featured/sexy-radio-butons */
+
     </style>
 
 
@@ -104,8 +197,8 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Drink') }}
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -117,19 +210,20 @@
                     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                         @guest @else
                         <li class="nav-item">
-                            <a class="nav-link" id="pills-order-tab" href="order" role="tab" aria-controls="pills-order" aria-selected="true">訂單管理</a>
+                            <a class="nav-link" id="pills-order-tab" href="order" role="tab" aria-controls="pills-order"
+                                aria-selected="true">訂單管理</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="pills-store-tab" href="store" role="tab" aria-controls="pills-store" aria-selected="false">店家管理</a>
+                            <a class="nav-link" id="pills-store-tab" href="store" role="tab" aria-controls="pills-store"
+                                aria-selected="false">店家管理</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="pills-menu-tab" href="#pills-menu" role="tab" aria-controls="pills-menu" aria-selected="false">菜單管理</a>
+                            <a class="nav-link" id="pills-authority-tab" href="#pills-authority" role="tab"
+                                aria-controls="pills-authority" aria-selected="false">權限管理</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="pills-authority-tab" href="#pills-authority" role="tab" aria-controls="pills-authority" aria-selected="false">權限管理</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-track-tab" href="#pills-track" role="tab" aria-controls="pills-track" aria-selected="false">訂購紀錄</a>
+                            <a class="nav-link" id="pills-track-tab" href="#pills-track" role="tab" aria-controls="pills-track"
+                                aria-selected="false">訂購紀錄</a>
                         </li>
                         @endguest
                     </ul>
@@ -146,8 +240,8 @@
                         </li>
                         @else
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false" v-pre>
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->name }}
                                 <span class="caret"></span>
                             </a>
@@ -173,11 +267,19 @@
             @yield('content')
         </main>
         <script>
-            
-            $('.nav_btn').click(function (e) { 
+            $('.nav_btn').click(function (e) {
                 e.preventDefault();
-                console.log(1);    
+                console.log(1);
             });
+
+            $('.radioBtn a').on('click', function(){
+                var sel = $(this).data('title');
+                var tog = $(this).data('toggle');
+                $('#'+tog).prop('value', sel);
+                
+                $('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
+                $('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
+            })
         </script>
     </div>
 </body>

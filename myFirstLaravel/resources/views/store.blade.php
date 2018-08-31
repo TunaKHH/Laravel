@@ -9,7 +9,7 @@
                             店家管理
                         </div>
                         <div class="col" style="text-align: end;">
-                            <button data-toggle="modal" data-target="#addStoreModal" type="button" class="btn-showStoreModal btn btn-primary">新增</button>
+                            <button data-toggle="modal" data-target="#addStoreModal" data-backdrop="static" data-keyboard="false" type="button" class="btn-showStoreModal btn btn-primary">新增</button>
                         </div>
                     </div>
                 </div>
@@ -467,9 +467,9 @@
 
                     $("#addItem2").prepend(html);
                     $("#addItem3").append(html_classify);
-                    
+                    $('#addMenuModal').modal({backdrop: 'static', keyboard: false})  
                     $('#addMenuModal').modal('show');
-                    
+
                     $(document).on('blur', '.setClassifyName', function () {
                         var name = $(this).val();
                         if(name != ""){

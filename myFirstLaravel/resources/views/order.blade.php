@@ -62,8 +62,8 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <button  value="{{$order->orderId}}" type="button"
-                                                    data-toggle="modal" class="btn_addOrderDetail btn btn-success btn-sm">
+                                                <button value="{{$order->orderId}}" type="button" data-toggle="modal"
+                                                    class="btn_addOrderDetail btn btn-success btn-sm">
                                                     <i class="fas fa-plus fa-xs"></i>
                                                     <input value="{{$order->store_id}}" hidden>
                                                 </button>
@@ -125,21 +125,99 @@
                                                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
                                                     data-parent="#accordionExample">
                                                     <div class="card-body">
-                                                        <table class="table table-striped table-dark">
+                                                        <table class="table table-striped table-light">
                                                             <thead>
                                                                 <tr>
+                                                                    <th scope="col" rowspan="2">#</th>
                                                                     <th scope="col" rowspan="2">餐點品項</th>
                                                                     <th scope="col" colspan="3" style="text-align:center;">價格</th>
                                                                     <th scope="col" rowspan="2">數量</th>
                                                                     <th scope="col" rowspan="2">備註</th>
                                                                 </tr>
                                                                 <tr>
-                                                                    <th scope="col">小</th>
-                                                                    <th scope="col">中</th>
-                                                                    <th scope="col">大</th>
+                                                                    <th>小</th>
+                                                                    <th>中</th>
+                                                                    <th>大</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody id ="add_menu_item">                                                                
+                                                            <tbody id="add_menu_item">
+                                                                <!-- <tr>
+                                                                    <td scope="row">
+                                                                        <label class="custom-control custom-checkbox">
+                                                                            <input type="checkbox" class="custom-control-input">
+                                                                            <span class="custom-control-indicator"></span>
+                                                                        </label>
+                                                                    </td>
+                                                                    <td>測試用</td>
+                                                                    <td>
+                                                                        <div class="form-check">
+                                                                            <label class="form-check-label">
+                                                                                <input type="radio" class="form-check-input"
+                                                                                    name="optradio">50
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-check">
+                                                                            <label class="form-check-label">
+                                                                                <input type="radio" class="form-check-input"
+                                                                                    name="optradio">60
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-check">
+                                                                            <label class="form-check-label">
+                                                                                <input type="radio" class="form-check-input"
+                                                                                    name="optradio">80
+                                                                            </label>
+                                                                        </div>
+                                                                    </td> -->
+                                                                    <!-- <td class="p-0">
+                                                                        <input class="text-nicelabel" data-nicelabel="{position_class: text_radio, checked_text: Checked, unchecked_text: jQuery}"
+                                                                            checked="" type="radio" name="text_radio"
+                                                                            id="nicelabel-1">
+                                                                        <label class="text_radio radio-inline" for="nicelabel-1">
+                                                                            <span class="nicelabel-unchecked-image"
+                                                                                style="background-image: url( ./nicelabel/ico/tick-unchecked.png );"></span>
+                                                                            <span class="nicelabel-unchecked">50</span>
+                                                                            <span class="nicelabel-checked-image" style="background-image: url( ./nicelabel/ico/tick-checked.png );"></span>
+                                                                            <span class="nicelabel-checked">50</span>
+                                                                        </label>
+                                                                    </td>
+                                                                    <td class="p-0">
+                                                                        <input class="text-nicelabel" data-nicelabel="{position_class: text_radio, checked_text: Checked, unchecked_text: jQuery}"
+                                                                            checked="" type="radio" name="text_radio"
+                                                                            id="nicelabel-2">
+                                                                        <label class="text_radio radio-inline" for="nicelabel-2">
+                                                                            <span class="nicelabel-unchecked-image"
+                                                                                style="background-image: url( ./nicelabel/ico/tick-unchecked.png );"></span>
+                                                                            <span class="nicelabel-unchecked">50</span>
+                                                                            <span class="nicelabel-checked-image" style="background-image: url( ./nicelabel/ico/tick-checked.png );"></span>
+                                                                            <span class="nicelabel-checked">50</span>
+                                                                        </label>
+                                                                    </td>
+                                                                    <td class="p-0">
+                                                                        <input class="text-nicelabel" data-nicelabel="{position_class: text_radio, checked_text: Checked, unchecked_text: jQuery}"
+                                                                            checked="" type="radio" name="text_radio"
+                                                                            id="nicelabel-3">
+                                                                        <label class="text_radio radio-inline" for="nicelabel-3">
+                                                                            <span class="nicelabel-unchecked-image"
+                                                                                style="background-image: url( ./nicelabel/ico/tick-unchecked.png );"></span>
+                                                                            <span class="nicelabel-unchecked">50</span>
+                                                                            <span class="nicelabel-checked-image" style="background-image: url( ./nicelabel/ico/tick-checked.png );"></span>
+                                                                            <span class="nicelabel-checked">50</span>
+                                                                        </label>
+                                                                    </td> -->
+                                                                    <!-- <td>
+                                                                        <div class="input-group"><input type="number"
+                                                                                aria-label="Last name" class="form-control"></div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="input-group"> <input type="text"
+                                                                                aria-label="Last name" class="form-control"></div>
+                                                                    </td>
+                                                                </tr> -->
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -259,7 +337,7 @@
 
         });
 
-        $('.btn_addOrderDetail').click(function () {//加訂按鈕被點擊
+        $('.btn_addOrderDetail').click(function () { //加訂按鈕被點擊
             // var name = $(this).parent().parent().children('td')[4].val();
             var store_id = $(this).children('input').attr('value');
             var day = $(this).parent().parent().children("td")[3].textContent;
@@ -278,28 +356,81 @@
                 dataType: "json",
                 success: function (response) {
                     var html = '';
-                    response.forEach(function(item, index) {
-                        html = '<tr>'+
-                                    '<td>'+item['mname']+'</td>'+
-                                    '<td>'+item['price_s']+'</td>'+
-                                    '<td>'+item['price_m']+'</td>'+
-                                    '<td>'+item['price_l']+'</td>'+
-                                    '<td>'+
-                                        '<div class="input-group">'+
-                                            '<input type="number" aria-label="Last name"                                                class="form-control">'+
-                                        '</div>'+
-                                    '</td>'+
-                                    '<td>'+
-                                    '<div class="input-group">'+
-                                    ' <input type="text" aria-label="Last name" class="form-control">'+
-                                    '</div>'+
+                    response.forEach(function (item, index) {
+                        if ((item['price_s'] == 0 && item['price_m'] == 0) || (item[
+                                'price_m'] == 0 && item['price_l'] == 0) || (item[
+                                'price_s'] == 0 && item['price_l'] == 0)) {
+                            html = '<tr>' +
+                                '<td>' + item['mname'] + '</td>' +
+                                '<td></td>' +
+                                '<td>' +
+                                item['price_s'] != 0 ? item['price_s'] : item[
+                                    'price_m'] != 0 ? item['price_m'] : item[
+                                    'price_l'] + '</td>' +
+                                '<td></td>' +
+                                '<td>' +
+                                '<div class="input-group">' +
+                                '<input type="number" aria-label="Last name"                                                class="form-control">' +
+                                '</div>' +
+                                '</td>' +
+                                '<td>' +
+                                '<div class="input-group">' +
+                                ' <input type="text" aria-label="Last name" class="form-control">' +
+                                '</div>' +
                                 '</td>';
+                        } else {
+
+                        }
+                        html = '<tr>' +
+                            '<td scope="row">' +
+                            '<label class="custom-control custom-checkbox">' +
+                            '<input type="checkbox" class="custom-control-input">' +
+                            '<span class="custom-control-indicator"></span>' +
+                            '</label>' +
+                            '</td>' +
+                            '<td>' + item['mname'] + '</td>' +
+                            '<td >' + 
+                                '<div class="form-check">' +
+                                    '<label class="form-check-label">' +
+                                        '<input type="radio" class="form-check-input"                                                name="optradio">'+
+                                        item['price_s'] +
+
+                                    '</label>' +
+                                '</div>'+
+                            '</td>' +
+                            '<td >' + 
+                                '<div class="form-check">' +
+                                    '<label class="form-check-label">' +
+                                        '<input type="radio" class="form-check-input"                                                name="optradio">'+
+                                        item['price_m'] +
+
+                                    '</label>' +
+                                '</div>'+
+                            '</td>' +
+                            '<td >' + 
+                                '<div class="form-check">' +
+                                    '<label class="form-check-label">' +
+                                        '<input type="radio" class="form-check-input"                                                name="optradio">'+
+                                        item['price_l'] +
+
+                                    '</label>' +
+                                '</div>'+
+                            '</td>' +
+                            '<td >' +
+                            '<div class="input-group">' +
+                            '<input type="number" aria-label="Last name"                                                class="form-control">' +
+                            '</div>' +
+                            '</td>' +
+                            '<td >' +
+                            '<div class="input-group">' +
+                            ' <input type="text" aria-label="Last name" class="form-control">' +
+                            '</div>' +
+                            '</td>';
                         $('#add_menu_item').append(html);
-                        console.log(item);
                         $('#addOrderModal').modal('show');
                         // del();
                     });
-                    
+
                 },
                 error: function (response) {
                     console.log(response);
@@ -307,7 +438,7 @@
             });
 
 
-            
+
         });
 
         $(".btn_setLock").click(function () {

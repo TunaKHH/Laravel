@@ -9,7 +9,7 @@
                             店家管理
                         </div>
                         <div class="col" style="text-align: end;">
-                            <button data-toggle="modal" data-target="#addStoreModal" type="button" class="btn-showStoreModal btn btn-primary">新增</button>
+                            <button data-toggle="modal" data-target="#addStoreModal" data-backdrop="static" data-keyboard="false" type="button" class="btn-showStoreModal btn btn-primary">新增</button>
                         </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                                             </td>
                                             <td class="col-2">
                                                 <button value="{{$store->id}}" type="button" class="btn_addMenu btn btn-primary btn-sm">
-                                                    <i class="fas fa-archway"></i>
+                                                    <i class="fas fa-wrench fa-xs"></i>
                                                 </button>
                                             </td>
                                             <td class="col-5">{{ $store->name }}</td>
@@ -149,7 +149,7 @@
                     </div>
                     {{ Form::close() }}
 
-                    <!--Add Menu Modal -->
+                    <!--Edit Modal -->
                     <?php echo Form::open(array('action' => 'HomeController@setNewMenu', 'id' =>'addMenuForm'))?>
                     <div class="modal fade" id="addMenuModal" tabindex="-1" role="dialog" aria-labelledby="addMenuModalLabel"
                         aria-hidden="true">
@@ -182,6 +182,32 @@
                                             </select>
                                         </div>
                                         <br>
+                                        <div class="form-group" style="text-align: center;">
+                                            <table class="table table-borderless">
+                                                <tbody>
+                                                    <tr class="row">
+                                                        <td class="col-1"></td>
+                                                        <td class="col-3">
+                                                            <!-- <div class="row">
+                                                                <label class="switch">
+                                                                    <input type="checkbox" id="switch">
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                            </div> -->
+                                                        </td>
+                                                        <td class="col-4">
+                                                            <label class="control-label h3">分類管理</label>
+                                                        </td>
+                                                        <td class="col-4" style="text-align:end;">
+                                                            <button type="button" class="add3 btn btn-primary">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div id="addItem3"></div>
+                                        </div>
                                         <div class="form-group" style="text-align: center;">
                                             <table class="table table-borderless">
                                                 <tbody>
@@ -252,8 +278,20 @@
             '</button>' +
             '</div>' +
             '</div>';
-        $(".add").click(function () {
+        
+        var html_classify = '<div class="row top-buffer">' +
+                                '<div class="col">' +
+                                    '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
+                                '</div>' +
+                                '<div class="col">' +
+                                    '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
+                                '</div>' +
+                                '<div class="col">' +
+                                    '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
+                                '</div>' +
+                            '</div>';
 
+        $(".add").click(function () {
             $("#addItem").prepend(html);
             del();
         })
@@ -270,9 +308,16 @@
             del();
         })
 
+        $(".add3").click(function () {
+            $("#addItem3").prepend(html_classify);
+            del();
+        })
+
         $(".addStoreForm_submit").click(function () {
             $("#addStoreForm").submit();
         })
+
+        
 
         $('#addStore_storeTel').blur(function () {
             var tel = $(this).val();
@@ -284,7 +329,6 @@
                 },
                 dataType: "json",
                 success: function (data) {
-                    console.log(data);
                     if (data) {
                         $('#addStore_storeTel').removeClass('is-valid');
                         $('#addStore_storeTel').addClass('is-invalid');
@@ -294,8 +338,6 @@
                         $('#addStore_storeTel').addClass('is-valid');
                         $('.addStoreForm_submit').attr('disabled', false);
                     }
-
-
                 },
                 error: function (data) {
 
@@ -313,7 +355,6 @@
                 },
                 dataType: "json",
                 success: function (data) {
-                    console.log(data);
                     if (data) {
                         $('#addStore_storeName').removeClass('is-valid');
                         $('#addStore_storeName').addClass('is-invalid');
@@ -323,8 +364,6 @@
                         $('#addStore_storeName').addClass('is-valid');
                         $('.addStoreForm_submit').attr('disabled', false);
                     }
-
-
                 },
                 error: function (data) {
 
@@ -384,6 +423,7 @@
 
         $('.btn_addMenu').click(function () {
             $("#addItem2").children().remove();
+            $("#addItem3").children().remove();
             var id = $(this).attr('value');
             $('#addMenu_id').val(id);
             $.ajax({
@@ -426,7 +466,16 @@
                     }
 
                     $("#addItem2").prepend(html);
+                    $("#addItem3").append(html_classify);
+                    $('#addMenuModal').modal({backdrop: 'static', keyboard: false})  
                     $('#addMenuModal').modal('show');
+
+                    $(document).on('blur', '.setClassifyName', function () {
+                        var name = $(this).val();
+                        if(name != ""){
+                            console.log(name);
+                        }
+                    })
 
                     //當使用jqury送出時無法彈出swal視窗 button送出時亦同
 
