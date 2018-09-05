@@ -141,83 +141,6 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="add_menu_item">
-                                                                <!-- <tr>
-                                                                    <td scope="row">
-                                                                        <label class="custom-control custom-checkbox">
-                                                                            <input type="checkbox" class="custom-control-input">
-                                                                            <span class="custom-control-indicator"></span>
-                                                                        </label>
-                                                                    </td>
-                                                                    <td>測試用</td>
-                                                                    <td>
-                                                                        <div class="form-check">
-                                                                            <label class="form-check-label">
-                                                                                <input type="radio" class="form-check-input"
-                                                                                    name="optradio">50
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="form-check">
-                                                                            <label class="form-check-label">
-                                                                                <input type="radio" class="form-check-input"
-                                                                                    name="optradio">60
-                                                                            </label>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="form-check">
-                                                                            <label class="form-check-label">
-                                                                                <input type="radio" class="form-check-input"
-                                                                                    name="optradio">80
-                                                                            </label>
-                                                                        </div>
-                                                                    </td> -->
-                                                                    <!-- <td class="p-0">
-                                                                        <input class="text-nicelabel" data-nicelabel="{position_class: text_radio, checked_text: Checked, unchecked_text: jQuery}"
-                                                                            checked="" type="radio" name="text_radio"
-                                                                            id="nicelabel-1">
-                                                                        <label class="text_radio radio-inline" for="nicelabel-1">
-                                                                            <span class="nicelabel-unchecked-image"
-                                                                                style="background-image: url( ./nicelabel/ico/tick-unchecked.png );"></span>
-                                                                            <span class="nicelabel-unchecked">50</span>
-                                                                            <span class="nicelabel-checked-image" style="background-image: url( ./nicelabel/ico/tick-checked.png );"></span>
-                                                                            <span class="nicelabel-checked">50</span>
-                                                                        </label>
-                                                                    </td>
-                                                                    <td class="p-0">
-                                                                        <input class="text-nicelabel" data-nicelabel="{position_class: text_radio, checked_text: Checked, unchecked_text: jQuery}"
-                                                                            checked="" type="radio" name="text_radio"
-                                                                            id="nicelabel-2">
-                                                                        <label class="text_radio radio-inline" for="nicelabel-2">
-                                                                            <span class="nicelabel-unchecked-image"
-                                                                                style="background-image: url( ./nicelabel/ico/tick-unchecked.png );"></span>
-                                                                            <span class="nicelabel-unchecked">50</span>
-                                                                            <span class="nicelabel-checked-image" style="background-image: url( ./nicelabel/ico/tick-checked.png );"></span>
-                                                                            <span class="nicelabel-checked">50</span>
-                                                                        </label>
-                                                                    </td>
-                                                                    <td class="p-0">
-                                                                        <input class="text-nicelabel" data-nicelabel="{position_class: text_radio, checked_text: Checked, unchecked_text: jQuery}"
-                                                                            checked="" type="radio" name="text_radio"
-                                                                            id="nicelabel-3">
-                                                                        <label class="text_radio radio-inline" for="nicelabel-3">
-                                                                            <span class="nicelabel-unchecked-image"
-                                                                                style="background-image: url( ./nicelabel/ico/tick-unchecked.png );"></span>
-                                                                            <span class="nicelabel-unchecked">50</span>
-                                                                            <span class="nicelabel-checked-image" style="background-image: url( ./nicelabel/ico/tick-checked.png );"></span>
-                                                                            <span class="nicelabel-checked">50</span>
-                                                                        </label>
-                                                                    </td> -->
-                                                                    <!-- <td>
-                                                                        <div class="input-group"><input type="number"
-                                                                                aria-label="Last name" class="form-control"></div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="input-group"> <input type="text"
-                                                                                aria-label="Last name" class="form-control"></div>
-                                                                    </td>
-                                                                </tr> -->
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -277,7 +200,6 @@
                 },
                 error: function (response) {
                     console.log(response);
-                    // console.log('error');
                 }
             });
 
@@ -338,7 +260,6 @@
         });
 
         $('.btn_addOrderDetail').click(function () { //加訂按鈕被點擊
-            // var name = $(this).parent().parent().children('td')[4].val();
             var store_id = $(this).children('input').attr('value');
             var day = $(this).parent().parent().children("td")[3].textContent;
             var store_name = $(this).parent().parent().children("td")[5].textContent;
@@ -370,7 +291,7 @@
                                 '<td></td>' +
                                 '<td>' +
                                 '<div class="input-group">' +
-                                '<input type="number" aria-label="Last name"                                                class="form-control">' +
+                                '<input type="number" aria-label="Last name" class="form-control">' +
                                 '</div>' +
                                 '</td>' +
                                 '<td>' +
@@ -381,54 +302,57 @@
                         } else {
 
                         }
-                        html = '<tr>' +
-                            '<td scope="row">' +
-                            '<label class="custom-control custom-checkbox">' +
-                            '<input type="checkbox" class="custom-control-input">' +
-                            '<span class="custom-control-indicator"></span>' +
-                            '</label>' +
-                            '</td>' +
-                            '<td>' + item['mname'] + '</td>' +
-                            '<td >' + 
-                                '<div class="form-check">' +
-                                    '<label class="form-check-label">' +
-                                        '<input type="radio" class="form-check-input"                                                name="optradio">'+
-                                        item['price_s'] +
-
-                                    '</label>' +
-                                '</div>'+
-                            '</td>' +
-                            '<td >' + 
-                                '<div class="form-check">' +
-                                    '<label class="form-check-label">' +
-                                        '<input type="radio" class="form-check-input"                                                name="optradio">'+
-                                        item['price_m'] +
-
-                                    '</label>' +
-                                '</div>'+
-                            '</td>' +
-                            '<td >' + 
-                                '<div class="form-check">' +
-                                    '<label class="form-check-label">' +
-                                        '<input type="radio" class="form-check-input"                                                name="optradio">'+
-                                        item['price_l'] +
-
-                                    '</label>' +
-                                '</div>'+
-                            '</td>' +
-                            '<td >' +
-                            '<div class="input-group">' +
-                            '<input type="number" aria-label="Last name"                                                class="form-control">' +
-                            '</div>' +
-                            '</td>' +
-                            '<td >' +
-                            '<div class="input-group">' +
-                            ' <input type="text" aria-label="Last name" class="form-control">' +
-                            '</div>' +
-                            '</td>';
+                        
+                        html = 
+                            `<tr>
+                                <td scope="row">
+                                    <label class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input">
+                                        <span class="custom-control-indicator"></span>
+                                    </label>
+                                </td>
+                                <td> ${item['mname']} </td>
+                                <td>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="radio" value="s" class="price form-check-input" name="group ${item['mid']}" >
+                                            ${item['price_s']}
+                                        </label>
+                                    </div>
+                                </td>
+                                <td >
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="radio" value="m" class="price form-check-input" name="group ${item['mid']}">
+                                            ${item['price_m']}
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="radio" value="l" class="price form-check-input" name="group ${item['mid']}">
+                                            ${item['price_l']}
+                                        </label>
+                                    </div>
+                                </td>
+                                <td >
+                                    <div class="input-group">
+                                        <input type="number" aria-label="Last name" name="num[]" class="num form-control">
+                                    </div>
+                                </td>
+                                <td >
+                                    <div class="input-group">
+                                        <input type="text" aria-label="Last name" name="memo[]" class="memo form-control">
+                                    </div>
+                                </td>
+                            </tr>`;
                         $('#add_menu_item').append(html);
-                        $('#addOrderModal').modal('show');
-                        // del();
+                    });
+                    $('#addOrderModal').modal('show');
+                    
+                    $(".price").click(function () {                    
+                        var item = $(this).parents('tr').find('.num').val('1');
                     });
 
                 },
@@ -471,9 +395,6 @@
                 $(this).parent().parent().remove();
             })
         }
-
-
-
 
     });
 

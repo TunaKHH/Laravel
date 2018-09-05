@@ -9,7 +9,8 @@
                             店家管理
                         </div>
                         <div class="col" style="text-align: end;">
-                            <button data-toggle="modal" data-target="#addStoreModal" data-backdrop="static" data-keyboard="false" type="button" class="btn-showStoreModal btn btn-primary">新增</button>
+                            <button data-toggle="modal" data-target="#addStoreModal" data-backdrop="static"
+                                data-keyboard="false" type="button" class="btn-showStoreModal btn btn-primary">新增</button>
                         </div>
                     </div>
                 </div>
@@ -261,16 +262,16 @@
         });
         var html = '<div class="row top-buffer">' +
             '<div class="col-5">' +
-            '<input name="setProductName[]" type="text" class="form-control" placeholder="品項名稱" required>' +
+            '<input name="setProductName[]" type="text" class="setProductName form-control" placeholder="品項名稱" required>' +
             '</div>' +
             '<div class="col-2">' +
-            '<input name="setPriceS[]" type="number" class="form-control" placeholder="價格(小)" >' +
+            '<input name="setPriceS[]" type="number" class="setPriceS form-control" placeholder="價格(小)" >' +
             '</div>' +
             '<div class="col-2">' +
-            '<input name="setPriceM[]" type="number" class="form-control" placeholder="價格(中)" >' +
+            '<input name="setPriceM[]" type="number" class=" setPriceM form-control" placeholder="價格(中)" >' +
             '</div>' +
             '<div class="col-2">' +
-            '<input name="setPriceL[]" type="number" class="form-control" placeholder="價格(大)" >' +
+            '<input name="setPriceL[]" type="number" class="setPriceL form-control" placeholder="價格(大)" >' +
             '</div>' +
             '<div class="col-1">' +
             '<button type="button" class="del btn btn-danger">' +
@@ -278,18 +279,18 @@
             '</button>' +
             '</div>' +
             '</div>';
-        
+
         var html_classify = '<div class="row top-buffer">' +
-                                '<div class="col">' +
-                                    '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
-                                '</div>' +
-                                '<div class="col">' +
-                                    '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
-                                '</div>' +
-                                '<div class="col">' +
-                                    '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
-                                '</div>' +
-                            '</div>';
+            '<div class="col">' +
+            '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
+            '</div>' +
+            '<div class="col">' +
+            '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
+            '</div>' +
+            '<div class="col">' +
+            '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
+            '</div>' +
+            '</div>';
 
         $(".add").click(function () {
             $("#addItem").prepend(html);
@@ -317,7 +318,7 @@
             $("#addStoreForm").submit();
         })
 
-        
+
 
         $('#addStore_storeTel').blur(function () {
             var tel = $(this).val();
@@ -421,6 +422,8 @@
                 });
         });
 
+        
+
         $('.btn_addMenu').click(function () {
             $("#addItem2").children().remove();
             $("#addItem3").children().remove();
@@ -440,7 +443,10 @@
                     $('#addMenu_storeType').val(data[0].type);
                     if (typeof (data[0].mname) != 'undefined') {
                         for (var i = 0; i < data.length; i++) {
-                            var html2 = '<div class="row top-buffer">' +
+                            var html2 =
+                                '<div class="row top-buffer">' +
+                                '<input name="edit_mid[]" value="' + data[i].mid +
+                                '" hidden>' +
                                 '<div class="col-5">' +
                                 '<input name="edit_mname[]" value="' + data[i].mname +
                                 '" type="text" class="edit_mname form-control" placeholder="品項名稱" disabled>' +
@@ -458,6 +464,10 @@
                                 '" type="number" class="edit_price_l form-control" placeholder="價格(大)" disabled>' +
                                 '</div>' +
                                 '<div class="col-1">' +
+                                '<button type="button" class="btn_edit_del btn btn-danger" value="' +
+                                data[i].mid + '" hidden>' +
+                                '<i class="fas fa-minus"></i>' +
+                                '</button>' +
                                 '</div>' +
                                 '</div>';
 
@@ -467,12 +477,58 @@
 
                     $("#addItem2").prepend(html);
                     $("#addItem3").append(html_classify);
-                    $('#addMenuModal').modal({backdrop: 'static', keyboard: false})  
+                    $('#addMenuModal').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    })
                     $('#addMenuModal').modal('show');
+
+                    $('.btn_edit_del').click(function () {
+                        var id = $(this).attr('value');
+                        swal({
+                                title: "Are you sure?",
+                                text: "刪除後，您將無法回復此操作！",
+                                icon: "warning",
+                                buttons: true,
+                                dangerMode: true,
+                        })
+                        .then((willDelete) => {
+                            if (willDelete) {
+                                $.ajax({
+                                    url: 'delOneMenu',
+                                    method: 'POST',
+                                    data: {
+                                        id: id
+                                    },
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        swal("刪除成功！", {
+                                                icon: "success",
+                                                button: "OK",
+                                            })
+                                            .then((willDelete) => {
+                                                    location.reload()
+                                                }
+
+                                            );
+                                    },
+                                    error: function (data) {
+                                        console.log('error');
+                                    }
+                                })
+
+                            } else {
+                                swal("刪除取消，您的操作未被執行!", {
+                                    icon: "error",
+                                });
+                            }
+                        });
+                    });
 
                     $(document).on('blur', '.setClassifyName', function () {
                         var name = $(this).val();
-                        if(name != ""){
+                        if (name != "") {
                             console.log(name);
                         }
                     })
@@ -522,6 +578,12 @@
                 $('.edit_price_s').attr("disabled", false);
                 $('.edit_price_m').attr("disabled", false);
                 $('.edit_price_l').attr("disabled", false);
+                $('.setProductName').attr("disabled", true);
+                $('.setPriceS').attr("disabled", true);
+                $('.setPriceM').attr("disabled", true);
+                $('.setPriceL').attr("disabled", true);
+                $('.btn_edit_del').attr("hidden", false);
+
             } else {
                 $('#addMenuForm').attr("action", "setNewMenu");
                 $('#addMenu_storeName').attr("disabled", true);
@@ -531,6 +593,11 @@
                 $('.edit_price_m').attr("disabled", true);
                 $('.edit_price_l').attr("disabled", true);
                 $('.edit_price_s').attr("disabled", true);
+                $('.setProductName').attr("disabled", false);
+                $('.setPriceS').attr("disabled", false);
+                $('.setPriceM').attr("disabled", false);
+                $('.setPriceL').attr("disabled", false);
+                $('.btn_edit_del').attr("hidden", true);
             }
         });
 

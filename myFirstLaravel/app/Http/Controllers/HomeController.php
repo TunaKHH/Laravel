@@ -125,6 +125,17 @@ class HomeController extends Controller
         
     }
 
+    public function setEditStoreAndMenu(){
+        $id = Request::input('edit_mid');
+        $ProductName = Request::input('edit_mname');            
+        $PriceS = Request::input('edit_price_s');
+        $PriceM = Request::input('edit_price_m');
+        $PriceL = Request::input('edit_price_l');
+        
+        Store::setEditStoreAndMenu($id, $ProductName, $PriceS, $PriceM, $PriceL);
+        return Redirect::route('store');
+    }
+
     public function setNewOrder(){
         $id = $_POST['userId'];
         $name = $_POST['name'];
@@ -160,9 +171,9 @@ class HomeController extends Controller
         return Store::delStoreAndTheMenu($id);
     }
     
-    public function delMenu(){
+    public function delOneMenu(){
         $id = $_POST['id'];
-        Store::delMenu($id);
+        return Store::delOneMenu($id);
     }
 
     public function delOrder(){

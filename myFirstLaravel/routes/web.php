@@ -42,6 +42,8 @@ Route::post('/delStoreAndTheMenu', 'HomeController@delStoreAndTheMenu');
 
 Route::post('/delOrder', 'HomeController@delOrder');
 
+Route::post('/delOneMenu', 'HomeController@delOneMenu');
+
 Route::post('/checkStoreTel', 'HomeController@checkStoreTel');
 
 Route::post('/checkStoreName', 'HomeController@checkStoreName');
