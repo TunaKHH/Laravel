@@ -36,6 +36,8 @@ Route::post('/setNewOrder', 'HomeController@setNewOrder');
 
 Route::post('/setOrderLock', 'HomeController@setOrderLock');
 
+Route::post('/setUsersOrder', 'HomeController@setUsersOrder');
+
 Route::post('/editStore', 'HomeController@editStore');
 
 Route::post('/delStoreAndTheMenu', 'HomeController@delStoreAndTheMenu');

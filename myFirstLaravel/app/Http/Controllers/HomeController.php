@@ -158,11 +158,20 @@ class HomeController extends Controller
             $lock_type = 0;
         }else{
             $lock_type = 1;
-        }
-            
+        }            
 
         return Store::setOrderLock($id, $lock_type);
     }
+
+    public function setUsersOrder(){
+        $mid = Request::input('mid');
+        $num = Request::input('num');
+        $memo = Request::input('memo');
+        print_r($_POST);
+        
+        // Store::setUsersOrder();
+                
+    }    
 
     public function delStoreAndTheMenu(){
         $id = $_POST['id'];
