@@ -12,7 +12,7 @@
 */
 
 // Route::get('/', function () {
-//     return view('welcome');    
+//     return view('welcome');
 // });
 Route::get('/', 'HomeController@index')->name('home');
 
@@ -36,11 +36,15 @@ Route::post('/setNewOrder', 'HomeController@setNewOrder');
 
 Route::post('/setOrderLock', 'HomeController@setOrderLock');
 
+Route::post('/setUsersOrder', 'HomeController@setUsersOrder');
+
 Route::post('/editStore', 'HomeController@editStore');
 
 Route::post('/delStoreAndTheMenu', 'HomeController@delStoreAndTheMenu');
 
 Route::post('/delOrder', 'HomeController@delOrder');
+
+Route::post('/delOneMenu', 'HomeController@delOneMenu');
 
 Route::post('/checkStoreTel', 'HomeController@checkStoreTel');
 

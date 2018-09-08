@@ -13,6 +13,7 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('nicelabel/js/jquery.min.js') }}"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -20,6 +21,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('nicelabel/css/jquery-nicelabel.css') }}"rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
         crossorigin="anonymous">
 
@@ -178,13 +180,6 @@
         }
         /*以上 https://bootsnipp.com/snippets/featured/multi-select-tiled-layout */
 
-        /* 以下Radio CSS 參考https://bootsnipp.com/snippets/featured/sexy-radio-butons */
-        .radioBtn .notActive{
-            color: #3276b1;
-            background-color: #fff;
-        }
-        /* 以上Radio CSS 參考https://bootsnipp.com/snippets/featured/sexy-radio-butons */
-
     </style>
 
 
@@ -271,15 +266,6 @@
                 e.preventDefault();
                 console.log(1);
             });
-
-            $('.radioBtn a').on('click', function(){
-                var sel = $(this).data('title');
-                var tog = $(this).data('toggle');
-                $('#'+tog).prop('value', sel);
-                
-                $('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
-                $('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
-            })
         </script>
     </div>
 </body>

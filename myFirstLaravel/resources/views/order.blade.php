@@ -86,8 +86,6 @@
                                             </td>
                                             <td>{{ $order->updated_at }}</td>
                                             <td>{{ $order->telphone }}</td>
-
-
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -109,9 +107,10 @@
                                     </button>
                                 </div>
                                 <?php echo Form::open(array('action' => 'HomeController@setUsersOrder', 'id' => 'setUsersOrder'))?>
-                                <div class="modal-body">                                    
+                                <input name="user_id" value="<?php echo $userId?>" hidden>
+                                <div class="modal-body">
                                         <input id="order_id" name="order_id" hidden>
-                                        <div class="accordion" id="accordionExample">                                        
+                                        <div class="accordion" id="accordionExample">
                                             <div class="card">
                                                 <div class="card-header" id="headingOne">
                                                     <h5 class="mb-0">
@@ -148,7 +147,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
@@ -261,11 +260,11 @@
         });
 
         $('.btn_addOrderDetail').click(function () { //加訂按鈕被點擊
-            let order_id = $(this).attr('value');            
+            let order_id = $(this).attr('value');
             let store_id = $(this).children('input').attr('value');
             let day = $(this).parent().parent().children("td")[3].textContent;
             let store_name = $(this).parent().parent().children("td")[5].textContent;
-
+            $('#add_menu_item').children().remove();
             $('.modal-title').text(day + store_name);
             $('#order_id').val(order_id);
 
@@ -304,8 +303,8 @@
                         } else {
 
                         }
-                        
-                        html = 
+
+                        html =
                             `<tr>
                                 <td scope="row">
                                     <label class="custom-control custom-checkbox">
@@ -315,12 +314,12 @@
                                 </td>
                                 <td>
                                     <input value="${item['mid']}" name="mid[]" hidden>
-                                    ${item['mname']} 
+                                    ${item['mname']}
                                 </td>
                                 <td>
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input type="radio" value="s" class="price form-check-input" name="group${item['mid']}" >
+                                            <input type="radio" value="S" class="price form-check-input" name="group${item['mid']}" >
                                             ${item['price_s']}
                                         </label>
                                     </div>
@@ -328,7 +327,7 @@
                                 <td >
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input type="radio" value="m" class="price form-check-input" name="group${item['mid']}">
+                                            <input type="radio" value="M" class="price form-check-input" name="group${item['mid']}">
                                             ${item['price_m']}
                                         </label>
                                     </div>
@@ -336,7 +335,7 @@
                                 <td>
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input type="radio" value="l" class="price form-check-input" name="group${item['mid']}">
+                                            <input type="radio" value="L" class="price form-check-input" name="group${item['mid']}">
                                             ${item['price_l']}
                                         </label>
                                     </div>
@@ -355,7 +354,7 @@
                         $('#add_menu_item').append(html);
                     });
                     $('#addOrderModal').modal('show');
-                    
+
                     $(".price").click(function () {//當價格被點擊時數量更改為1
                         var item = $(this).parents('tr').find('.num').val('1');
                     });

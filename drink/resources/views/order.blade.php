@@ -102,14 +102,15 @@
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header bg-primary" style="color: #ffffff">
-                                    <h5 class="modal-title" id="exampleModalLabel">Order點餐介面</h5>
+                                    <h5 class="modal-title" >Order點餐介面</h5>
                                     <button style="color: #ffffff" type="button" class="close" data-dismiss="modal"
                                         aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
+                                <?php echo Form::open(array('action' => 'HomeController@setUsersOrder', 'id' => 'setUsersOrder'))?>
                                 <div class="modal-body">
-                                    <form>
+                                        <input id="order_id" name="order_id" hidden>
                                         <div class="accordion" id="accordionExample">
                                             <div class="card">
                                                 <div class="card-header" id="headingOne">
@@ -141,62 +142,19 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody id="add_menu_item">
-                                                                <tr>
-                                                                    <td scope="row">
-                                                                        <label class="custom-control custom-checkbox">
-                                                                            <input type="checkbox" class="custom-control-input">
-                                                                            <span class="custom-control-indicator"></span>
-                                                                        </label>
-                                                                    </td>
-                                                                    <td>測試用</td>
-                                                                    <td colspan="3">
-                                                                            <div class="form-group">
-                                                                                <div class="col-sm-7 col-md-7">
-                                                                                    <div class="input-group">
-                                                                                        <div id="radioBtn" class="btn-group">
-                                                                                            <a class="btn btn-primary btn-sm active" data-toggle="fun" data-title="Y">YES</a>
-                                                                                            <a class="btn btn-primary btn-sm notActive" data-toggle="fun" data-title="X">I don't know</a>
-                                                                                            <a class="btn btn-primary btn-sm notActive" data-toggle="fun" data-title="N">NO</a>
-                                                                                        </div>
-                                                                                        <input type="hidden" name="fun" id="fun">
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        <!-- <div class="form-group">
-                                                                            <div class="col-sm-7 col-md-7">
-                                                                                <div class="input-group">
-                                                                                    <div class="btn-group radioBtn">
-                                                                                        <a class="btn btn-primary btn-sm active" data-toggle="fun" data-title="Y">50</a>
-                                                                                        <a class="btn btn-primary btn-sm notActive" data-toggle="fun" data-title="X">60</a>
-                                                                                        <a class="btn btn-primary btn-sm notActive" data-toggle="fun" data-title="N">70</a>
-                                                                                    </div>
-                                                                                    <input type="hidden" name="fun" id="fun">
-                                                                                </div>
-                                                                            </div>
-                                                                        </div> -->
-                                                                    </td>
-    
-                                                                    <td>
-                                                                        <div class="input-group"><input type="number"
-                                                                                aria-label="Last name" class="form-control"></div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="input-group"> <input type="text"
-                                                                                aria-label="Last name" class="form-control"></div>
-                                                                    </td>
-                                                                </tr>
                                                             </tbody>
                                                         </table>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
                                     <button type="submit" class="btn btn-danger" id="addMenu_submit">送出</button>
                                 </div>
+                                {{ Form::close() }}
                             </div>
                         </div>
                     </div>
@@ -244,10 +202,8 @@
                 },
                 error: function (response) {
                     console.log(response);
-                    // console.log('error');
                 }
             });
-
         });
 
         $('.btn_editStore').click(function () {
@@ -305,11 +261,13 @@
         });
 
         $('.btn_addOrderDetail').click(function () { //加訂按鈕被點擊
-            // var name = $(this).parent().parent().children('td')[4].val();
-            var store_id = $(this).children('input').attr('value');
-            var day = $(this).parent().parent().children("td")[3].textContent;
-            var store_name = $(this).parent().parent().children("td")[5].textContent;
+            let order_id = $(this).attr('value');
+            let store_id = $(this).children('input').attr('value');
+            let day = $(this).parent().parent().children("td")[3].textContent;
+            let store_name = $(this).parent().parent().children("td")[5].textContent;
+
             $('.modal-title').text(day + store_name);
+            $('#order_id').val(order_id);
 
             $.ajax({
                 headers: {
@@ -322,7 +280,7 @@
                 },
                 dataType: "json",
                 success: function (response) {
-                    var html = '';
+                    let html = '';
                     response.forEach(function (item, index) {
                         if ((item['price_s'] == 0 && item['price_m'] == 0) || (item[
                                 'price_m'] == 0 && item['price_l'] == 0) || (item[
@@ -331,13 +289,11 @@
                                 '<td>' + item['mname'] + '</td>' +
                                 '<td></td>' +
                                 '<td>' +
-                                item['price_s'] != 0 ? item['price_s'] : item[
-                                    'price_m'] != 0 ? item['price_m'] : item[
-                                    'price_l'] + '</td>' +
+                                item['price_s'] != 0 ? item['price_s'] : item['price_m'] != 0 ? item['price_m'] : item['price_l'] + '</td>' +
                                 '<td></td>' +
                                 '<td>' +
                                 '<div class="input-group">' +
-                                '<input type="number" aria-label="Last name"                                                class="form-control">' +
+                                '<input type="number" aria-label="Last name" class="form-control">' +
                                 '</div>' +
                                 '</td>' +
                                 '<td>' +
@@ -348,30 +304,60 @@
                         } else {
 
                         }
-                        html = '<tr>' +
-                            '<td scope="row">' +
-                            '<label class="custom-control custom-checkbox">' +
-                            '<input type="checkbox" class="custom-control-input">' +
-                            '<span class="custom-control-indicator"></span>' +
-                            '</label>' +
-                            '</td>' +
-                            '<td >' + item['mname'] + '</td>' +
-                            '<td >' + item['price_s'] + '</td>' +
-                            '<td >' + item['price_m'] + '</td>' +
-                            '<td >' + item['price_l'] + '</td>' +
-                            '<td >' +
-                            '<div class="input-group">' +
-                            '<input type="number" aria-label="Last name"                                                class="form-control">' +
-                            '</div>' +
-                            '</td>' +
-                            '<td >' +
-                            '<div class="input-group">' +
-                            ' <input type="text" aria-label="Last name" class="form-control">' +
-                            '</div>' +
-                            '</td>';
+
+                        html =
+                            `<tr>
+                                <td scope="row">
+                                    <label class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input">
+                                        <span class="custom-control-indicator"></span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <input value="${item['mid']}" name="mid[]" hidden>
+                                    ${item['mname']}
+                                </td>
+                                <td>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="radio" value="s" class="price form-check-input" name="group${item['mid']}" >
+                                            ${item['price_s']}
+                                        </label>
+                                    </div>
+                                </td>
+                                <td >
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="radio" value="m" class="price form-check-input" name="group${item['mid']}">
+                                            ${item['price_m']}
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="radio" value="l" class="price form-check-input" name="group${item['mid']}">
+                                            ${item['price_l']}
+                                        </label>
+                                    </div>
+                                </td>
+                                <td >
+                                    <div class="input-group">
+                                        <input type="number" aria-label="Last name" name="num[]" class="num form-control">
+                                    </div>
+                                </td>
+                                <td >
+                                    <div class="input-group">
+                                        <input type="text" aria-label="Last name" name="memo[]" class="memo form-control">
+                                    </div>
+                                </td>
+                            </tr>`;
                         $('#add_menu_item').append(html);
-                        $('#addOrderModal').modal('show');
-                        // del();
+                    });
+                    $('#addOrderModal').modal('show');
+
+                    $(".price").click(function () {//當價格被點擊時數量更改為1
+                        var item = $(this).parents('tr').find('.num').val('1');
                     });
 
                 },
@@ -414,9 +400,6 @@
                 $(this).parent().parent().remove();
             })
         }
-
-
-
 
     });
 

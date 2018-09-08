@@ -39,7 +39,7 @@ class Store extends Model
     static function setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $id){
         for($i = count($ProductName)-1; $i>=0; $i--){
             if(isset($ProductName[$i])){
-                DB::insert('insert into menus (name,price_s,price_m,price_l,store_id) values (?, ?, ?, ?, ?)', array(isset($ProductName[$i]) ? $ProductName[$i] : '0', isset($PriceS[$i]) ? $PriceS[$i] : '0', isset($PriceM[$i]) ? $PriceM[$i] : '0', isset($PriceL[$i]) ? $PriceL[$i] : '0', $id));    
+                DB::insert('insert into menus (name,price_s,price_m,price_l,store_id) values (?, ?, ?, ?, ?)', array(isset($ProductName[$i]) ? $ProductName[$i] : '0', isset($PriceS[$i]) ? $PriceS[$i] : '0', isset($PriceM[$i]) ? $PriceM[$i] : '0', isset($PriceL[$i]) ? $PriceL[$i] : '0', $id));
             }
         }
     }
@@ -58,18 +58,27 @@ class Store extends Model
         return DB::table('orders')
                             ->where('id',$id)
                             ->update(['lock_type' => $type ]);
-        
+
     }
 
     static function getOneStore($id){
         $results = DB::select('select * from stores where id=?', array($id));
-        
-        return $results;        
+
+        return $results;
     }
-    
-    // static function getOneStoreMenuList($id){
-    //     return DB::table('orders')->where('store_id', '=', $id)->get();
-    // }
+
+    static function setUsersOrder($orders_id, $users_id, $menus_id, $size, $quantity, $memo){
+        $results = DB::table('users_orders')
+                                ->insert([
+                                    'orders_id'=>$orders_id,
+                                    'users_id'=>$users_id,
+                                    'menus_id'=>$menus_id,
+                                    'quantity'=>$quantity,
+                                    'memo'=>$memo
+                                ]);
+
+        return $results;
+    }
 
     static function setEditStore($data){
 

@@ -29,7 +29,7 @@ class HomeController extends Controller
     public function index()
     {
         $stores = $this->getAllStores();
-        return view('store')->with('stores',$stores);        
+        return view('store')->with('stores',$stores);
     }
 
     public function store()
@@ -48,8 +48,8 @@ class HomeController extends Controller
         }else{
             Redirect::route('home');
         }
-        
-        return view('order')->with('orders',$orders)->with('stores',$stores)->with('userId',$id);        
+
+        return view('order')->with('orders',$orders)->with('stores',$stores)->with('userId',$id);
     }
 
     static private function getAllStores(){
@@ -63,15 +63,15 @@ class HomeController extends Controller
 
         return $results;
     }
-    
+
     public function getTheStoreAndMenuListByTheStore(){
 
         $result = Store::getMenuListByTheStore($_POST['id']);
 
         if(!count($result)>0){
             $result = $this->getOneStore($_POST['id']);
-        }       
-        // $result = json_encode($result); 
+        }
+        // $result = json_encode($result);
         return $result;
     }
 
@@ -88,50 +88,50 @@ class HomeController extends Controller
 
     public function setNewStore(){
         if (Request::has('setStoreName') && Request::has('setStoreTel'))
-        {            
+        {
             $name = Request::input('setStoreName');
             $tel = Request::input('setStoreTel');
             $type = Request::input('setStoreType');
             $store_id = Store::setNewStore($name, $tel, $type);
-            
+
             if(Request::has('setProductName')){
-                $ProductName = Request::input('setProductName');  
+                $ProductName = Request::input('setProductName');
                 $PriceS = Request::input('setPriceS');
                 $PriceM = Request::input('setPriceM');
                 $PriceL = Request::input('setPriceL');
                 Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $store_id);
             }
-            
+
             return Redirect::route('store');
         }else{
             return "新增店家失敗";
-        }        
+        }
     }
 
     public function setNewMenu(){
         if (Request::has('setProductName'))
         {
-            $ProductName = Request::input('setProductName');            
+            $ProductName = Request::input('setProductName');
             $PriceS = Request::input('setPriceS');
             $PriceM = Request::input('setPriceM');
             $PriceL = Request::input('setPriceL');
             $id = $_POST['id'];
-            
+
             Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $id);
             return Redirect::route('store');
         }else{
             return "新增菜單失敗";
         }
-        
+
     }
 
     public function setEditStoreAndMenu(){
         $id = Request::input('edit_mid');
-        $ProductName = Request::input('edit_mname');            
+        $ProductName = Request::input('edit_mname');
         $PriceS = Request::input('edit_price_s');
         $PriceM = Request::input('edit_price_m');
         $PriceL = Request::input('edit_price_l');
-        
+
         Store::setEditStoreAndMenu($id, $ProductName, $PriceS, $PriceM, $PriceL);
         return Redirect::route('store');
     }
@@ -140,14 +140,14 @@ class HomeController extends Controller
         $id = $_POST['userId'];
         $name = $_POST['name'];
         $store = $_POST['store'];
-        
+
         if(Store::setNewOrder($id,$name,$store)){
             return 1;
         }else
         {
             return 0;
         }
-        
+
     }
 
     public function setOrderLock(){
@@ -158,28 +158,33 @@ class HomeController extends Controller
             $lock_type = 0;
         }else{
             $lock_type = 1;
-        }            
+        }
 
         return Store::setOrderLock($id, $lock_type);
     }
 
     public function setUsersOrder(){
-        $mid = Request::input('mid');
-        $num = Request::input('num');
+        $order_id = Request::input('order_id');
+        $user_id = Request::input('user_id');
+        $menus_id = Request::input('mid');
+        $quantity = Request::input('num');
         $memo = Request::input('memo');
-        print_r($_POST);
-        
-        // Store::setUsersOrder();
-                
-    }    
+
+        print_r(Request::input());
+        for($i = 0; $i < count($menus_id); $i++){
+            if(isset($num[$i])){
+                $size = Request::input('group'.$mid[$i]);
+                Store::setUsersOrder($order_id[$i], $user_id[$i], $menus_id[$i], $size, $quantity[$i], $memo[$i]);
+            }
+        }
+        // print_r(Request::input());
+    }
 
     public function delStoreAndTheMenu(){
         $id = $_POST['id'];
-        // Store::delStoreAndTheMenu($id);
-        // return Redirect::route('store');
         return Store::delStoreAndTheMenu($id);
     }
-    
+
     public function delOneMenu(){
         $id = $_POST['id'];
         return Store::delOneMenu($id);

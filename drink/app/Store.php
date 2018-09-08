@@ -19,7 +19,7 @@ class Store extends Model
     }
 
     static function getMenuListByTheStore($id){
-        $results = DB::select('select s.name as name, s.telphone as telphone, type, m.name as mname, m.price_s,m.price_m, m.price_l from menus as m,stores as s where m.store_id=s.id and s.id=?', array($id));
+        $results = DB::select('select m.id as mid,s.name as name, s.telphone as telphone, type, m.name as mname, m.price_s,m.price_m, m.price_l from menus as m,stores as s where m.store_id=s.id and s.id=?', array($id));
 
         return $results;
     }
@@ -42,7 +42,16 @@ class Store extends Model
                 DB::insert('insert into menus (name,price_s,price_m,price_l,store_id) values (?, ?, ?, ?, ?)', array(isset($ProductName[$i]) ? $ProductName[$i] : '0', isset($PriceS[$i]) ? $PriceS[$i] : '0', isset($PriceM[$i]) ? $PriceM[$i] : '0', isset($PriceL[$i]) ? $PriceL[$i] : '0', $id));    
             }
         }
-        
+    }
+
+    static function setEditStoreAndMenu($id, $ProductName, $PriceS, $PriceM, $PriceL){
+        for($i = 0; $i < count($id); $i++){
+            if(isset($ProductName[$i])){
+                DB::table('menus')
+                            ->where('id' , $id[$i])
+                            ->update(array('name' => isset($ProductName[$i]) ? $ProductName[$i] : '0', 'price_s' => isset($PriceS[$i]) ? $PriceS[$i] : '0', 'price_M' => isset($PriceM[$i]) ? $PriceM[$i] : '0', 'price_L' => isset($PriceL[$i]) ? $PriceL[$i] : '0'));
+            }
+        }
     }
 
     static function setOrderLock($id, $type){
@@ -73,6 +82,10 @@ class Store extends Model
 
     static function delOrder($id){
         return DB::table('orders')->where('id', '=', $id)->delete();
+    }
+
+    static function delOneMenu($id){
+        return DB::table('menus')->where('id', '=', $id)->delete();
     }
 
     static function checkStoreTel($tel){
