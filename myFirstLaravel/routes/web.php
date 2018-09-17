@@ -26,6 +26,8 @@ Route::get('/store', 'HomeController@store')->name('store');
 
 Route::post('/getTheStoreAndMenuListByTheStore', 'HomeController@getTheStoreAndMenuListByTheStore');
 
+Route::post('/getAllUsersOrderList', 'HomeController@getAllUsersOrderList');
+
 Route::post('/setEditStoreAndMenu', 'HomeController@setEditStoreAndMenu');
 
 Route::post('/setNewStore', 'HomeController@setNewStore');

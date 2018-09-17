@@ -82,8 +82,13 @@ class HomeController extends Controller
     public function getOneStore($id){
 
         return $result = Store::getOneStore($id);
+    }
 
-        // return $result;
+    public function getAllUsersOrderList(){
+        $id = Request::input('id');
+        $result = Store::getAllUsersOrderList($id);
+
+        return $result;
     }
 
     public function setNewStore(){
@@ -170,14 +175,13 @@ class HomeController extends Controller
         $quantity = Request::input('num');
         $memo = Request::input('memo');
 
-        print_r(Request::input());
         for($i = 0; $i < count($menus_id); $i++){
-            if(isset($num[$i])){
-                $size = Request::input('group'.$mid[$i]);
-                Store::setUsersOrder($order_id[$i], $user_id[$i], $menus_id[$i], $size, $quantity[$i], $memo[$i]);
+            if(isset($quantity[$i])){
+                $size = Request::input('group'.$menus_id[$i]);
+                Store::setUsersOrder($order_id, $user_id, $menus_id[$i], $size, $quantity[$i], $memo[$i]);
             }
         }
-        // print_r(Request::input());
+        Redirect::route('order');
     }
 
     public function delStoreAndTheMenu(){

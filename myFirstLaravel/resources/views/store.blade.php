@@ -422,8 +422,6 @@
                 });
         });
 
-        
-
         $('.btn_addMenu').click(function () {
             $("#addItem2").children().remove();
             $("#addItem3").children().remove();

@@ -78,14 +78,14 @@
                                                     <input value="{{$order->lock_type}}" type="hidden">
                                                 </button>
                                             </td>
-                                            <td>{{ $order->orderName }}</td>
-                                            <td>{{ $order->userName }}</td>
-                                            <td>{{ $order->storeName }}</td>
-                                            <td>
+                                            <td class="row_view_orders" value="{{$order->orderId}}">{{ $order->orderName }}</td>
+                                            <td class="row_view_orders" value="{{$order->orderId}}">{{ $order->userName }}</td>
+                                            <td class="row_view_orders" value="{{$order->orderId}}">{{ $order->storeName }}</td>
+                                            <td class="row_view_orders" value="{{$order->orderId}}">
                                                 @if($order->type == 0) 飲料 @elseif($order->type == 1) 便當 @endif
                                             </td>
-                                            <td>{{ $order->updated_at }}</td>
-                                            <td>{{ $order->telphone }}</td>
+                                            <td class="row_view_orders" value="{{$order->orderId}}">{{ $order->updated_at }}</td>
+                                            <td class="row_view_orders" value="{{$order->orderId}}">{{ $order->telphone }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -157,6 +157,101 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- view user's order list -->
+                    <div class="modal fade" id="viewUsersOrderModal" tabindex="-1" role="dialog" aria-labelledby="viewUsersOrderLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header bg-primary" style="color: #ffffff">
+                                    <h5 class="modal-title" id="exampleModalLabel">新增/管理菜單</h5>
+                                    <button style="color: #ffffff" type="button" class="close" data-dismiss="modal"
+                                        aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <input type="hidden" name="id" id="addMenu_id">
+                                        <div class="form-group">
+                                            <label for="store-name" class="control-label">店家名稱:</label>
+                                            <input type="text" class="form-control" id="addMenu_storeName" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">店家電話:</label>
+                                            <input type="text" name="setStoreTel2" class="form-control" id="addMenu_storeTel"
+                                                disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="setStoreType" class="control-label">商店類型</label>
+                                            <select id="addMenu_storeType" class="form-control" disabled>
+                                                <option value="0">飲料店</option>
+                                                <option value="1" selected>便當店</option>
+                                            </select>
+                                        </div>
+                                        <br>
+                                        <div class="form-group" style="text-align: center;">
+                                            <table class="table table-borderless">
+                                                <tbody>
+                                                    <tr class="row">
+                                                        <td class="col-1"></td>
+                                                        <td class="col-3">
+                                                            <!-- <div class="row">
+                                                                <label class="switch">
+                                                                    <input type="checkbox" id="switch">
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                            </div> -->
+                                                        </td>
+                                                        <td class="col-4">
+                                                            <label class="control-label h3">分類管理</label>
+                                                        </td>
+                                                        <td class="col-4" style="text-align:end;">
+                                                            <button type="button" class="add3 btn btn-primary">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div id="addItem3"></div>
+                                        </div>
+                                        <div class="form-group" style="text-align: center;">
+                                            <table class="table table-borderless">
+                                                <tbody>
+                                                    <tr class="row">
+                                                        <td class="col-1"></td>
+                                                        <td class="col-3">
+                                                            <div class="row">
+                                                                <label class="switch">
+                                                                    <input type="checkbox" id="switch">
+                                                                    <span class="slider round"></span>
+                                                                </label>
+                                                            </div>
+
+                                                        </td>
+                                                        <td class="col-4">
+                                                            <label class="control-label h3 ">菜單管理</label>
+                                                        </td>
+                                                        <td class="col-4" style="text-align:end;">
+                                                            <button type="button" class="add2 btn btn-primary">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div id="addItem2"></div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                                    <button type="submit" class="btn btn-danger" id="addMenu_submit">送出</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -170,6 +265,122 @@
         $('#order_name').val(Today);
 
         var userId = "<?php echo $userId?>";
+
+        $('.row_view_orders').click(function (e) {
+            e.preventDefault();
+            let id = $(this).attr('value');
+
+            $.ajax({
+                url: 'getAllUsersOrderList',
+                method: 'POST',
+                data: {
+                    id: id
+                },
+                type: 'POST',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    // $('#addMenu_storeName').val(data[0].name);
+                    // $('#addMenu_storeTel').val(data[0].telphone);
+                    // $('#addMenu_storeType').val(data[0].type);
+                    // if (typeof (data[0].mname) != 'undefined') {
+                    //     for (var i = 0; i < data.length; i++) {
+                    //         var html2 =
+                    //             '<div class="row top-buffer">' +
+                    //             '<input name="edit_mid[]" value="' + data[i].mid +
+                    //             '" hidden>' +
+                    //             '<div class="col-5">' +
+                    //             '<input name="edit_mname[]" value="' + data[i].mname +
+                    //             '" type="text" class="edit_mname form-control" placeholder="品項名稱" disabled>' +
+                    //             '</div>' +
+                    //             '<div class="col-2">' +
+                    //             '<input name="edit_price_s[]" value="' + data[i].price_s +
+                    //             '" type="number" class="edit_price_s form-control" placeholder="價格(小)" disabled>' +
+                    //             '</div>' +
+                    //             '<div class="col-2">' +
+                    //             '<input name="edit_price_m[]" value="' + data[i].price_m +
+                    //             '" type="number" class="edit_price_m form-control" placeholder="價格(中)" disabled>' +
+                    //             '</div>' +
+                    //             '<div class="col-2">' +
+                    //             '<input name="edit_price_l[]" value="' + data[i].price_l +
+                    //             '" type="number" class="edit_price_l form-control" placeholder="價格(大)" disabled>' +
+                    //             '</div>' +
+                    //             '<div class="col-1">' +
+                    //             '<button type="button" class="btn_edit_del btn btn-danger" value="' +
+                    //             data[i].mid + '" hidden>' +
+                    //             '<i class="fas fa-minus"></i>' +
+                    //             '</button>' +
+                    //             '</div>' +
+                    //             '</div>';
+
+                    //         $("#addItem2").append(html2);
+                    //     }
+                    // }
+
+                    // $("#addItem2").prepend(html);
+                    // $("#addItem3").append(html_classify);
+                    $('#viewUsersOrderModal').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    })
+                    $('#viewUsersOrderModal').modal('show');
+
+                    $('.btn_edit_del').click(function () {
+                        var id = $(this).attr('value');
+                        swal({
+                                title: "Are you sure?",
+                                text: "刪除後，您將無法回復此操作！",
+                                icon: "warning",
+                                buttons: true,
+                                dangerMode: true,
+                        })
+                        .then((willDelete) => {
+                            if (willDelete) {
+                                $.ajax({
+                                    url: 'delOneMenu',
+                                    method: 'POST',
+                                    data: {
+                                        id: id
+                                    },
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        swal("刪除成功！", {
+                                                icon: "success",
+                                                button: "OK",
+                                            })
+                                            .then((willDelete) => {
+                                                    location.reload()
+                                                }
+
+                                            );
+                                    },
+                                    error: function (data) {
+                                        console.log('error');
+                                    }
+                                })
+
+                            } else {
+                                swal("刪除取消，您的操作未被執行!", {
+                                    icon: "error",
+                                });
+                            }
+                        });
+                    });
+
+                    $(document).on('blur', '.setClassifyName', function () {
+                        var name = $(this).val();
+                        if (name != "") {
+                            console.log(name);
+                        }
+                    })
+                },
+                error: function (data) {
+                    console.log('error');
+                }
+            })
+        });
+
         $(".btn-addOrder").click(function () {
             var order_name = $("#order_name").val();
             var order_store = $("#order_store").val();

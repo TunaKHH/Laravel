@@ -67,17 +67,26 @@ class Store extends Model
         return $results;
     }
 
+    static function getAllUsersOrderList($id){
+        $results = DB::select('select *
+                                from users_orders, orders
+                                where orders_id = orders.id
+                                And users_id = users.id
+                                And menus_id = menus.id
+                                And orders_id = ?', array($id));
+        return $results;
+    }
+
     static function setUsersOrder($orders_id, $users_id, $menus_id, $size, $quantity, $memo){
         $results = DB::table('users_orders')
                                 ->insert([
-                                    'orders_id'=>$orders_id,
-                                    'users_id'=>$users_id,
-                                    'menus_id'=>$menus_id,
-                                    'quantity'=>$quantity,
-                                    'memo'=>$memo
+                                    'orders_id' => $orders_id,
+                                    'users_id' => $users_id,
+                                    'menus_id' => $menus_id,
+                                    'size' => $size,
+                                    'quantity' => $quantity,
+                                    'memo' => $memo
                                 ]);
-
-        return $results;
     }
 
     static function setEditStore($data){
