@@ -7,6 +7,7 @@ use Redirect;
 use Socialize;
 use Auth;
 use App\Store;
+use Illuminate\Http\Request;
 
 
 class HomeController extends Controller
@@ -52,6 +53,29 @@ class HomeController extends Controller
         return view('order')->with('orders',$orders)->with('stores',$stores)->with('userId',$id);
     }
 
+    public function permission()
+    {
+        $users = $this->getAllUsers();
+        if(Auth::check()){
+            $id = Auth::user()->id;
+        }else{
+            Redirect::route('home');
+        }
+
+        return view('permission')->with('userId',$id)->with('users',$users);
+    }
+
+    public function history()
+    {
+        if(Auth::check()){
+            $id = Auth::user()->id;
+        }else{
+            Redirect::route('home');
+        }
+
+        return view('history')->with('userId',$id);
+    }
+
     static private function getAllStores(){
         $results = Store::getAllStores();
 
@@ -60,6 +84,12 @@ class HomeController extends Controller
 
     static private function getAllOrders(){
         $results = Store::getAllOrders();
+
+        return $results;
+    }
+
+    static private function getAllUsers(){
+        $results = Store::getAllUsers();
 
         return $results;
     }
@@ -87,6 +117,10 @@ class HomeController extends Controller
     public function getAllUsersOrderList(){
         $id = Request::input('id');
         $result = Store::getAllUsersOrderList($id);
+
+        if(!count($result) > 0){
+            $result = Store::getStoreInfoByOrderId($id);
+        }
 
         return $result;
     }
@@ -128,6 +162,14 @@ class HomeController extends Controller
             return "新增菜單失敗";
         }
 
+    }
+
+    public function setEditUserPermission(){
+        $id = Request::input('id');
+
+        Store::setEditUserPermission($id);
+
+        return Redirect::route('permission');
     }
 
     public function setEditStoreAndMenu(){
@@ -181,7 +223,7 @@ class HomeController extends Controller
                 Store::setUsersOrder($order_id, $user_id, $menus_id[$i], $size, $quantity[$i], $memo[$i]);
             }
         }
-        Redirect::route('order');
+        return Redirect::route('order');
     }
 
     public function delStoreAndTheMenu(){

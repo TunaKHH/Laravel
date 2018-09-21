@@ -8,6 +8,12 @@ use Carbon\Carbon;
 class Store extends Model
 {
     //
+
+    static function getAllUsers(){
+        $results = DB::select('select id ,name ,email ,permission from users');
+        return $results;
+    }
+
     static function getAllStores(){
         $results = DB::select('select * from stores');
         return $results;
@@ -68,12 +74,21 @@ class Store extends Model
     }
 
     static function getAllUsersOrderList($id){
-        $results = DB::select('select *
-                                from users_orders, orders
-                                where orders_id = orders.id
+        $results = DB::select('select stores.name as store_name, stores.telphone as store_telphone, stores.type as store_type, menus.name as menu_name, size, menus.price_s, menus.price_m, menus.price_l, users.name, memo
+                                from users_orders, orders, menus, users, stores
+                                where orders.id = ?
+                                And orders_id = orders.id
                                 And users_id = users.id
                                 And menus_id = menus.id
-                                And orders_id = ?', array($id));
+                                And menus.store_id = stores.id', array($id));
+        return $results;
+    }
+
+    static function getStoreInfoByOrderId($id){
+        $results = DB::select('select stores.name as store_name, stores.telphone as store_telphone, stores.type as store_type
+                                from orders, stores
+                                where orders.id = ?
+                                And stores.id = store_id', array($id));
         return $results;
     }
 

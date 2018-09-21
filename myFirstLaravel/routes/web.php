@@ -24,11 +24,17 @@ Route::get('/order', 'HomeController@order')->name('order');
 
 Route::get('/store', 'HomeController@store')->name('store');
 
+Route::get('/permission', 'HomeController@permission')->name('permission');
+
+Route::get('/history', 'HomeController@history')->name('history');
+
 Route::post('/getTheStoreAndMenuListByTheStore', 'HomeController@getTheStoreAndMenuListByTheStore');
 
 Route::post('/getAllUsersOrderList', 'HomeController@getAllUsersOrderList');
 
 Route::post('/setEditStoreAndMenu', 'HomeController@setEditStoreAndMenu');
+
+Route::post('/setEditUserPermission', 'HomeController@setEditUserPermission');
 
 Route::post('/setNewStore', 'HomeController@setNewStore');
 

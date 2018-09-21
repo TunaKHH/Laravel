@@ -213,11 +213,10 @@
                                 aria-selected="false">店家管理</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="pills-authority-tab" href="#pills-authority" role="tab"
-                                aria-controls="pills-authority" aria-selected="false">權限管理</a>
+                            <a class="nav-link" id="pills-permission-tab" href="permission" role="tab" aria-controls="pills-permission" aria-selected="false">權限管理</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="pills-track-tab" href="#pills-track" role="tab" aria-controls="pills-track"
+                            <a class="nav-link" id="pills-history-tab" href="history" role="tab" aria-controls="pills-history"
                                 aria-selected="false">訂購紀錄</a>
                         </li>
                         @endguest

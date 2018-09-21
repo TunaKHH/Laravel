@@ -542,8 +542,8 @@
                     //         button: "OK",
                     //     })
                     //     .then((willDoSomething) => {
-                    //         $('#addMenuForm').submit();                                
-                    //     });                        
+                    //         $('#addMenuForm').submit();
+                    //     });
                     // });
                 },
                 error: function (data) {
@@ -567,7 +567,7 @@
             else
                 switch_type = 1;
 
-            if (switch_type) { //switch_type = 1為進入編輯模式        
+            if (switch_type) { //switch_type = 1為進入編輯模式
                 $('#addMenuForm').attr("action", "setEditStoreAndMenu");
                 $('#addMenu_storeName').attr("disabled", false);
                 $('#addMenu_storeTel').attr("disabled", false);

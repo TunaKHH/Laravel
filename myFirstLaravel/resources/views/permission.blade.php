@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">訂單管理</div>
+                <div class="card-header">權限管理</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -13,229 +13,38 @@
                     @endif
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-order" role="tabpanel" aria-labelledby="order-tab">
-                            <?php echo Form::open(array('action' => 'HomeController@setNewOrder', 'id' => 'setNewOrder'))?>
-                            <div class="row">
-                                <div class="col">
-                                    <input name="order_name" id="order_name" type="text" class="form-control"
-                                        placeholder="訂單名稱">
-                                </div>
-                                <div class="col">
-                                    <select name="order_store" id="order_store" class="form-control">
-                                        <option selected>請選擇店家</option>
-                                        @foreach($stores as $store)
-                                        <option value="{{ $store->id }}">
-                                            {{ $store->name }}
-                                        </option>
-                                        @endforeach
-
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <button type="button" class="btn-addOrder btn btn-primary">
-                                        新增</button>
-                                </div>
-                            </div>
-                            {{ Form::close() }}
-
                             <br />
                             <div class="row">
                                 <table class="table table-striped">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th scope="col">刪除</th>
-                                            <th scope="col">加訂</th>
-                                            <th scope="col">Lock</th>
-                                            <th scope="col">訂單名稱</th>
-                                            <th scope="col">主揪</th>
-                                            <th scope="col">店家</th>
-                                            <th scope="col">類型</th>
-                                            <th scope="col">開單時間</th>
-                                            <th scope="col">店家電話</th>
+                                            <th scope="col">修改權限</th>
+                                            <th scope="col">帳號</th>
+                                            <th scope="col">姓名</th>
+                                            <th scope="col">權限</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($orders as $order)
+                                        @foreach($users as $user)
                                         <tr>
-                                            <td scope="col">
-                                                <button value="{{$order->orderId}}" type="button" class="btn_delOrder btn btn-danger btn-sm">
-                                                    <i class="far fa-trash-alt fa-xs"></i>
+                                            <th scope="col">
+                                                <button value="{{$user->id}}" type="button" class="btn_editPer btn btn-danger btn-sm">
+                                                    <i class="fas fa-wrench fa-xs"></i>
                                                 </button>
-                                            </td>
-                                            <td>
-                                                <button value="{{$order->orderId}}" type="button" data-toggle="modal"
-                                                    class="btn_addOrderDetail btn btn-success btn-sm">
-                                                    <i class="fas fa-plus fa-xs"></i>
-                                                    <input value="{{$order->store_id}}" hidden>
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <button value="{{$order->orderId}}" type="button" class="btn_setLock btn btn-dark btn-sm">
-                                                    @if($order->lock_type)
-                                                    <i class="fas fa-lock fa-xs"></i>
-                                                    @else
-                                                    <i class="fas fa-lock-open fa-xs"></i>
-                                                    @endif
-                                                    <input value="{{$order->lock_type}}" type="hidden">
-                                                </button>
-                                            </td>
-                                            <td class="row_view_orders" value="{{$order->orderId}}">{{ $order->orderName }}</td>
-                                            <td class="row_view_orders" value="{{$order->orderId}}">{{ $order->userName }}</td>
-                                            <td class="row_view_orders" value="{{$order->orderId}}">{{ $order->storeName }}</td>
-                                            <td class="row_view_orders" value="{{$order->orderId}}">
-                                                @if($order->type == 0) 飲料 @elseif($order->type == 1) 便當 @endif
-                                            </td>
-                                            <td class="row_view_orders" value="{{$order->orderId}}">{{ $order->updated_at }}</td>
-                                            <td class="row_view_orders" value="{{$order->orderId}}">{{ $order->telphone }}</td>
+                                            </th>
+                                            <th scope="col">{{$user->email}}</th>
+                                            <th scope="col">{{$user->name}}</th>
+                                            <th scope="col">
+                                                @if($user->permission)
+                                                    一般使用者
+                                                @else
+                                                    管理員
+                                                @endif
+                                            </th>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--add Order Modal-->
-                    <div class="modal fade" id="addOrderModal" tabindex="-1" role="dialog" aria-labelledby="addOrderModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header bg-primary" style="color: #ffffff">
-                                    <h5 class="modal-title" >Order點餐介面</h5>
-                                    <button style="color: #ffffff" type="button" class="close" data-dismiss="modal"
-                                        aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <?php echo Form::open(array('action' => 'HomeController@setUsersOrder', 'id' => 'setUsersOrder'))?>
-                                <input name="user_id" value="<?php echo $userId?>" hidden>
-                                <div class="modal-body">
-                                        <input id="order_id" name="order_id" hidden>
-                                        <div class="accordion" id="accordionExample">
-                                            <div class="card">
-                                                <div class="card-header" id="headingOne">
-                                                    <h5 class="mb-0">
-                                                        <button class="btn btn-link" type="button" data-toggle="collapse"
-                                                            data-target="#collapseOne" aria-expanded="true"
-                                                            aria-controls="collapseOne">
-                                                            尚未分類
-                                                        </button>
-                                                    </h5>
-                                                </div>
-
-                                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                                    data-parent="#accordionExample">
-                                                    <div class="card-body">
-                                                        <table class="table table-striped table-light">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th scope="col" rowspan="2">#</th>
-                                                                    <th scope="col" rowspan="2">餐點品項</th>
-                                                                    <th scope="col" colspan="3" style="text-align:center;">價格</th>
-                                                                    <th scope="col" rowspan="2">數量</th>
-                                                                    <th scope="col" rowspan="2">備註</th>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>小</th>
-                                                                    <th>中</th>
-                                                                    <th>大</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="add_menu_item">
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                                    <button type="submit" class="btn btn-danger" id="addMenu_submit">送出</button>
-                                </div>
-                                {{ Form::close() }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- view user's order list -->
-                    <div class="modal fade" id="viewUsersOrderModal" tabindex="-1" role="dialog" aria-labelledby="viewUsersOrderLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header bg-primary" style="color: #ffffff">
-                                    <h5 class="modal-title" id="exampleModalLabel">檢視菜單</h5>
-                                    <button style="color: #ffffff" type="button" class="close" data-dismiss="modal"
-                                        aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <input type="hidden" name="id" id="addMenu_id">
-                                        <div class="form-group">
-                                            <label for="store-name" class="control-label">店家名稱:</label>
-                                            <input type="text" class="form-control" id="addMenu_storeName" disabled>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">店家電話:</label>
-                                            <input type="text" name="setStoreTel2" class="form-control" id="addMenu_storeTel"
-                                                disabled>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="setStoreType" class="control-label">商店類型</label>
-                                            <select id="addMenu_storeType" class="form-control" disabled>
-                                                <option value="0">飲料店</option>
-                                                <option value="1" selected>便當店</option>
-                                            </select>
-                                        </div>
-                                        <br>
-                                        <div class="form-group" style="text-align: center;">
-                                            <table class="table table-borderless">
-                                                <tbody>
-                                                    <tr class="row">
-                                                        <td class="col-1"></td>
-                                                        <td class="col-3">
-                                                            <!-- <div class="row">
-                                                                <label class="switch">
-                                                                    <input type="checkbox" id="switch">
-                                                                    <span class="slider round"></span>
-                                                                </label>
-                                                            </div> -->
-                                                        </td>
-                                                        <td class="col-4">
-                                                            <label class="control-label h3">已訂購訂單</label>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            <div class="row top-buffer">
-                                                <div class="col">
-                                                    品名
-                                                </div>
-                                                <div class="col">
-                                                    SIZE
-                                                </div>
-                                                <div class="col">
-                                                    價格
-                                                </div>
-                                                <div class="col">
-                                                    買方
-                                                </div>
-                                                <div class="col">
-                                                    備註
-                                                </div>
-                                                <div class="col">
-
-                                                </div>
-                                            </div>
-                                            <div id="addItem2"></div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -253,8 +62,48 @@
 
         var userId = "<?php echo $userId?>";
 
-        $('.row_view_orders').click(function (e) {
+        $('.btn_editPer').click(function (e) {
             e.preventDefault();
+            swal({
+                title: "Are you sure?",
+                text: "確定要更改此使用者的權限嗎？",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: 'setEditUserPermission',
+                        method: 'POST',
+                        data: {
+                            id: id
+                        },
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function (data) {
+                            swal("刪除成功！", {
+                                    icon: "success",
+                                    button: "OK",
+                                })
+                                .then((willDelete) => {
+                                        location.reload()
+                                    }
+
+                                );
+                        },
+                        error: function (data) {
+                            console.log('error');
+                        }
+                    })
+
+                } else {
+                    swal("刪除取消，您的操作未被執行!", {
+                        icon: "error",
+                    });
+                }
+            });
+
             let id = $(this).attr('value');
 
             $.ajax({
