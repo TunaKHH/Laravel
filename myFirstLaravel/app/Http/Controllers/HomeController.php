@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Request;
@@ -7,8 +6,8 @@ use Redirect;
 use Socialize;
 use Auth;
 use App\Store;
-use Illuminate\Http\Request;
-
+// use Illuminate\Http\Request;
+session_start();
 
 class HomeController extends Controller
 {
@@ -29,15 +28,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $stores = $this->getAllStores();
-        return view('store')->with('stores',$stores);
+        $data = $this->getUserPermission();
+        $_SESSION['userPermission'] = $data[0]->permission;
+        return $this->order();
     }
 
     public function store()
     {
-        $stores = $this->getAllStores();
-
-        return view('store')->with('stores',$stores);
+        if($_SESSION['userPermission'] == 0){
+            $stores = $this->getAllStores();
+            return view('store')->with('stores',$stores);
+        }
     }
 
     public function order()
@@ -55,14 +56,16 @@ class HomeController extends Controller
 
     public function permission()
     {
-        $users = $this->getAllUsers();
-        if(Auth::check()){
-            $id = Auth::user()->id;
-        }else{
-            Redirect::route('home');
-        }
+        if($_SESSION['userPermission'] == 0){
+            $users = $this->getAllUsers();
+            if (Auth::check()) {
+                $id = Auth::user()->id;
+            } else {
+                Redirect::route('home');
+            }
 
-        return view('permission')->with('userId',$id)->with('users',$users);
+            return view('permission')->with('userId', $id)->with('users', $users);
+        }
     }
 
     public function history()
@@ -74,6 +77,25 @@ class HomeController extends Controller
         }
 
         return view('history')->with('userId',$id);
+    }
+
+    public function print()
+    {
+        if(isset($_GET['id'])){
+            $id = $_GET['id'];
+            $haveData = Store::checkPrintOrderData($id);
+            if($haveData != 0){
+                $result = $this->getAllUsersOrderList();
+                $ordersStatistics = $this->getOrdersStatistics();
+
+            }else{
+                echo "<script> alert('無訂餐資料，將導回訂餐頁面')</script>";
+                return $this->order();
+            }
+            return view('print')->with('datas' ,$result)->with('datas2' ,$ordersStatistics);
+        }else{
+            return $this->order();
+        }
     }
 
     static private function getAllStores(){
@@ -101,25 +123,38 @@ class HomeController extends Controller
         if(!count($result)>0){
             $result = $this->getOneStore($_POST['id']);
         }
-        // $result = json_encode($result);
         return $result;
     }
 
-    // public function getOneOrderList($id){
-    //     return Store::getOneOrderList();
-    // }
+    public function getUserPermission(){//取得用戶權限
+        $id = Auth::user()->id;
+        $result = Store::getUserPermission($id);
+        return $result;
+    }
 
     public function getOneStore($id){
-
         return $result = Store::getOneStore($id);
     }
 
     public function getAllUsersOrderList(){
-        $id = Request::input('id');
+        if(isset($_GET['id'])){
+            $id = $_GET['id'];
+        }else{
+            $id = Request::input('id');
+        }
         $result = Store::getAllUsersOrderList($id);
 
         if(!count($result) > 0){
             $result = Store::getStoreInfoByOrderId($id);
+        }
+
+        return $result;
+    }
+
+    public function getOrdersStatistics(){//取得統計資料
+        if(isset($_GET['id'])){
+            $id = $_GET['id'];
+            $result = Store::getOrdersStatistics($id);
         }
 
         return $result;
@@ -219,8 +254,10 @@ class HomeController extends Controller
 
         for($i = 0; $i < count($menus_id); $i++){
             if(isset($quantity[$i])){
-                $size = Request::input('group'.$menus_id[$i]);
-                Store::setUsersOrder($order_id, $user_id, $menus_id[$i], $size, $quantity[$i], $memo[$i]);
+                for($i2 = 0; $i2<$quantity[$i]; $i2++){
+                    $size = Request::input('group'.$menus_id[$i]);
+                    Store::setUsersOrder($order_id, $user_id, $menus_id[$i], $size, $memo[$i]);
+                }
             }
         }
         return Redirect::route('order');

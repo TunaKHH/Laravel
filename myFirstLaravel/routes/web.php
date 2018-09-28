@@ -28,6 +28,8 @@ Route::get('/permission', 'HomeController@permission')->name('permission');
 
 Route::get('/history', 'HomeController@history')->name('history');
 
+Route::get('/print', 'HomeController@print')->name('print');
+
 Route::post('/getTheStoreAndMenuListByTheStore', 'HomeController@getTheStoreAndMenuListByTheStore');
 
 Route::post('/getAllUsersOrderList', 'HomeController@getAllUsersOrderList');

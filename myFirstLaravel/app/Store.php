@@ -20,7 +20,7 @@ class Store extends Model
     }
 
     static function getAllOrders(){
-        $results = DB::select('select stores.id as store_id, orders.id as orderId, orders.name as orderName, users.name as userName, stores.name as storeName,stores.telphone, stores.type, lock_type, orders.updated_at from orders, stores, users where orders.store_id = stores.id and orders.user_id = users.id Order By 1 DESC');
+        $results = DB::select('select stores.id as store_id, orders.id as orderId, orders.name as orderName, users.name as userName, stores.name as storeName,stores.telphone, stores.type, lock_type, orders.updated_at from orders, stores, users where orders.store_id = stores.id and orders.user_id = users.id Order By orders.updated_at DESC');
         return $results;
     }
 
@@ -60,6 +60,15 @@ class Store extends Model
         }
     }
 
+    static function getUserPermission($id){
+        $userPermission = DB::table('users')
+                            ->where('id' ,$id)
+                            ->select('permission')
+                            ->get();
+
+        return $userPermission;
+    }
+
     static function setOrderLock($id, $type){
         return DB::table('orders')
                             ->where('id',$id)
@@ -84,6 +93,15 @@ class Store extends Model
         return $results;
     }
 
+    static function getOrdersStatistics($order_id){
+        $results = DB::select('select menus.name as menus_name, size, price_s, price_m, price_l, COUNT(*) as count
+                                from users_orders, menus
+                                where users_orders.orders_id = ?
+                                And menus.id = menus_id
+                                Group By menus_name , size, price_s, price_m, price_l', array($order_id));
+        return $results;
+    }
+
     static function getStoreInfoByOrderId($id){
         $results = DB::select('select stores.name as store_name, stores.telphone as store_telphone, stores.type as store_type
                                 from orders, stores
@@ -92,20 +110,15 @@ class Store extends Model
         return $results;
     }
 
-    static function setUsersOrder($orders_id, $users_id, $menus_id, $size, $quantity, $memo){
+    static function setUsersOrder($orders_id, $users_id, $menus_id, $size, $memo){
         $results = DB::table('users_orders')
                                 ->insert([
                                     'orders_id' => $orders_id,
                                     'users_id' => $users_id,
                                     'menus_id' => $menus_id,
                                     'size' => $size,
-                                    'quantity' => $quantity,
                                     'memo' => $memo
                                 ]);
-    }
-
-    static function setEditStore($data){
-
     }
 
     static function delStoreAndTheMenu($id){
@@ -128,4 +141,9 @@ class Store extends Model
     static function checkStoreName($name){
         return DB::table('stores')->where('name', '=' , $name)->get()->count();
     }
+
+    static function checkPrintOrderData($id){
+        return DB::table('users_orders')->where('orders_id', '=', $id)->get()->count();
+    }
+
 }

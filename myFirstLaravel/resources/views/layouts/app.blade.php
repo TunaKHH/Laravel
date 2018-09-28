@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
+<?php //session_start();?>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -208,13 +208,15 @@
                             <a class="nav-link" id="pills-order-tab" href="order" role="tab" aria-controls="pills-order"
                                 aria-selected="true">訂單管理</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-store-tab" href="store" role="tab" aria-controls="pills-store"
-                                aria-selected="false">店家管理</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="pills-permission-tab" href="permission" role="tab" aria-controls="pills-permission" aria-selected="false">權限管理</a>
-                        </li>
+                        <?php if($_SESSION['userPermission'] == '0'){ ?>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-store-tab" href="store" role="tab" aria-controls="pills-store"
+                                    aria-selected="false">店家管理</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-permission-tab" href="permission" role="tab" aria-controls="pills-permission" aria-selected="false">權限管理</a>
+                            </li>
+                        <?php }?>
                         <li class="nav-item">
                             <a class="nav-link" id="pills-history-tab" href="history" role="tab" aria-controls="pills-history"
                                 aria-selected="false">訂購紀錄</a>

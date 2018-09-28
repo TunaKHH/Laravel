@@ -13,38 +13,45 @@
                     @endif
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-order" role="tabpanel" aria-labelledby="order-tab">
-                            <?php echo Form::open(array('action' => 'HomeController@setNewOrder', 'id' => 'setNewOrder'))?>
-                            <div class="row">
-                                <div class="col">
-                                    <input name="order_name" id="order_name" type="text" class="form-control"
-                                        placeholder="訂單名稱">
-                                </div>
-                                <div class="col">
-                                    <select name="order_store" id="order_store" class="form-control">
-                                        <option selected>請選擇店家</option>
-                                        @foreach($stores as $store)
-                                        <option value="{{ $store->id }}">
-                                            {{ $store->name }}
-                                        </option>
-                                        @endforeach
+                            <?php if($_SESSION['userPermission'] == '0'){
+                                    ?>
+                                <?php echo Form::open(array('action' => 'HomeController@setNewOrder', 'id' => 'setNewOrder'))?>
+                                    <div class="row">
+                                        <div class="col">
+                                            <input name="order_name" id="order_name" type="text" class="form-control"
+                                                placeholder="訂單名稱">
+                                        </div>
+                                        <div class="col">
+                                            <select name="order_store" id="order_store" class="form-control">
+                                                <option selected>請選擇店家</option>
+                                                @foreach($stores as $store)
+                                                <option value="{{ $store->id }}">
+                                                    {{ $store->name }}
+                                                </option>
+                                                @endforeach
 
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <button type="button" class="btn-addOrder btn btn-primary">
-                                        新增</button>
-                                </div>
-                            </div>
-                            {{ Form::close() }}
-
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <button type="button" class="btn-addOrder btn btn-primary">
+                                                新增</button>
+                                        </div>
+                                    </div>
+                                {{ Form::close() }}
+                            <?php
+                                }?>
                             <br />
                             <div class="row">
                                 <table class="table table-striped">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th scope="col">刪除</th>
+                                            <?php if($_SESSION['userPermission'] == '0'){?>
+                                                <th scope="col">刪除</th>
+                                            <?php }?>
                                             <th scope="col">加訂</th>
-                                            <th scope="col">Lock</th>
+                                            <?php if($_SESSION['userPermission'] == '0'){?>
+                                                <th scope="col">Lock</th>
+                                            <?php }?>
                                             <th scope="col">訂單名稱</th>
                                             <th scope="col">主揪</th>
                                             <th scope="col">店家</th>
@@ -56,28 +63,44 @@
                                     <tbody>
                                         @foreach($orders as $order)
                                         <tr>
-                                            <td scope="col">
-                                                <button value="{{$order->orderId}}" type="button" class="btn_delOrder btn btn-danger btn-sm">
-                                                    <i class="far fa-trash-alt fa-xs"></i>
-                                                </button>
-                                            </td>
+                                            <?php if($_SESSION['userPermission'] == '0'){
+                                                ?>
+                                                <td scope="col">
+                                                    <button value="{{$order->orderId}}" type="button" class="btn_delOrder btn btn-danger btn-sm">
+                                                        <i class="far fa-trash-alt fa-xs"></i>
+                                                    </button>
+                                                </td>
+                                            <?php
+                                            }?>
                                             <td>
-                                                <button value="{{$order->orderId}}" type="button" data-toggle="modal"
-                                                    class="btn_addOrderDetail btn btn-success btn-sm">
-                                                    <i class="fas fa-plus fa-xs"></i>
+                                                @if($order->lock_type)
+                                                <button type="button" data-toggle="modal" alt="此訂單已上鎖！"
+                                                    class="btn btn-danger btn-sm" disabled/>
+                                                        <i class="fas fa-ban fa-xs"></i>
                                                     <input value="{{$order->store_id}}" hidden>
                                                 </button>
-                                            </td>
-                                            <td>
-                                                <button value="{{$order->orderId}}" type="button" class="btn_setLock btn btn-dark btn-sm">
-                                                    @if($order->lock_type)
-                                                    <i class="fas fa-lock fa-xs"></i>
-                                                    @else
-                                                    <i class="fas fa-lock-open fa-xs"></i>
-                                                    @endif
-                                                    <input value="{{$order->lock_type}}" type="hidden">
+                                                @else
+                                                <button value="{{$order->orderId}}" type="button" data-toggle="modal"
+                                                    class="btn_addOrderDetail btn btn-success btn-sm">
+                                                        <i class="fas fa-plus fa-xs"></i>
+                                                    <input value="{{$order->store_id}}" hidden>
                                                 </button>
+                                                @endif
                                             </td>
+                                            <?php if($_SESSION['userPermission'] == '0'){
+                                                ?>
+                                                <td>
+                                                    <button value="{{$order->orderId}}" type="button" class="btn_setLock btn btn-dark btn-sm">
+                                                        @if($order->lock_type)
+                                                        <i class="fas fa-lock fa-xs"></i>
+                                                        @else
+                                                        <i class="fas fa-lock-open fa-xs"></i>
+                                                        @endif
+                                                        <input value="{{$order->lock_type}}" type="hidden">
+                                                    </button>
+                                                </td>
+                                            <?php
+                                            }?>
                                             <td class="row_view_orders" value="{{$order->orderId}}">{{ $order->orderName }}</td>
                                             <td class="row_view_orders" value="{{$order->orderId}}">{{ $order->userName }}</td>
                                             <td class="row_view_orders" value="{{$order->orderId}}">{{ $order->storeName }}</td>
@@ -234,6 +257,7 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
+                                    <button id="btn_print" type="button" class="btn btn-warning" style="background: #FF9800;border-color: #FF9800; color: white;">列印</button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
                                 </div>
                             </div>
@@ -252,11 +276,10 @@
         $('#order_name').val(Today);
 
         var userId = "<?php echo $userId?>";
-
+        var id;
         $('.row_view_orders').click(function (e) {
             e.preventDefault();
-            let id = $(this).attr('value');
-
+            id = $(this).attr('value');
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -274,45 +297,77 @@
                     $('#addMenu_storeTel').val(data[0].store_telphone);
                     $('#addMenu_storeType').val(data[0].store_type);
                     if (typeof (data[0].menu_name) != 'undefined') {
-                        for (var i = 0; i < data.length; i++) {
-                            var html2 =
-                                '<div class="row top-buffer">' +
-                                    '<div class="col">' +
-                                        '<input value="' + data[i].menu_name +
-                                        '" type="text" class="edit_mname form-control" placeholder="品項名稱" disabled>' +
-                                    '</div>' +
-                                    '<div class="col">' +
-                                        '<input value="' + data[i].size +
-                                        '"  class="edit_price_s form-control" disabled>' +
-                                    '</div>' +
-                                    '<div class="col">' +
-                                        '<input value="' + (data[i].size =='S'?data[i].price_s : data[i].size =='M'?data[i].price_m : data[i].price_l) +
-                                        '" type="number" class="edit_price_m form-control" disabled>' +
-                                    '</div>' +
-                                    '<div class="col">' +
-                                        '<input value="' + data[i].name +
-                                        '" class="edit_price_l form-control" disabled>' +
-                                    '</div>' +
-                                    '<div class="col">' +
-                                        '<input value="' + data[i].memo +
-                                        '" class="edit_price_l form-control" disabled>' +
-                                    '</div>' +
-                                    '<div class="col">' +
-                                        '<button type="button" class="btn_edit_del btn btn-danger" value="' +
-                                        data[i].mid + '" >' +
-                                            '<i class="fas fa-minus"></i>' +
-                                        '</button>' +
-                                    '</div>' +
-                                '</div>';
+                        let userPermission = "<?php echo $_SESSION['userPermission']?>";
+                        let lock_type = "{{$order->lock_type}}";
+                        if(userPermission == 0 && lock_type == 0){
+                            for (var i = 0; i < data.length; i++) {
+                                var html2 =
+                                    '<div class="row top-buffer">' +
+                                        '<div class="col">' +
+                                            '<input value="' + data[i].menu_name +
+                                            '" type="text" class="edit_mname form-control" placeholder="品項名稱" disabled>' +
+                                        '</div>' +
+                                        '<div class="col">' +
+                                            '<input value="' + data[i].size +
+                                            '"  class="edit_price_s form-control" disabled>' +
+                                        '</div>' +
+                                        '<div class="col">' +
+                                            '<input value="' + (data[i].size =='S'?data[i].price_s : data[i].size =='M'?data[i].price_m : data[i].price_l) +
+                                            '" type="number" class="edit_price_m form-control" disabled>' +
+                                        '</div>' +
+                                        '<div class="col">' +
+                                            '<input value="' + data[i].name +
+                                            '" class="edit_price_l form-control" disabled>' +
+                                        '</div>' +
+                                        '<div class="col">' +
+                                            '<input value="' + data[i].memo +
+                                            '" class="edit_price_l form-control" disabled>' +
+                                        '</div>' +
+                                        '<div class="col">' +
+                                            '<button type="button" class="btn_edit_del btn btn-danger" value="' +
+                                            data[i].mid + '" >' +
+                                                '<i class="fas fa-minus"></i>' +
+                                            '</button>' +
+                                        '</div>' +
+                                    '</div>';
 
-                            $("#addItem2").append(html2);
+                                $("#addItem2").append(html2);
+                            }
+                        }else{
+                            for (var i = 0; i < data.length; i++) {
+                                var html2 =
+                                    '<div class="row top-buffer">' +
+                                        '<div class="col">' +
+                                            '<input value="' + data[i].menu_name +
+                                            '" type="text" class="edit_mname form-control" placeholder="品項名稱" disabled>' +
+                                        '</div>' +
+                                        '<div class="col">' +
+                                            '<input value="' + data[i].size +
+                                            '"  class="edit_price_s form-control" disabled>' +
+                                        '</div>' +
+                                        '<div class="col">' +
+                                            '<input value="' + (data[i].size =='S'?data[i].price_s : data[i].size =='M'?data[i].price_m : data[i].price_l) +
+                                            '" type="number" class="edit_price_m form-control" disabled>' +
+                                        '</div>' +
+                                        '<div class="col">' +
+                                            '<input value="' + data[i].name +
+                                            '" class="edit_price_l form-control" disabled>' +
+                                        '</div>' +
+                                        '<div class="col">' +
+                                            '<input value="' + data[i].memo +
+                                            '" class="edit_price_l form-control" disabled>' +
+                                        '</div>'+
+                                    '</div>';
+
+                                $("#addItem2").append(html2);
+                            }
                         }
                     }
 
                     $('#viewUsersOrderModal').modal('show');
 
                     $('.btn_edit_del').click(function () {
-                        var id = $(this).attr('value');
+                        let id = $(this).attr('value');
                         swal({
                             title: "Are you sure?",
                             text: "刪除後，您將無法回復此操作！",
@@ -323,7 +378,7 @@
                         .then((willDelete) => {
                             if (willDelete) {
                                 $.ajax({
-                                    url: 'delOneMenu',
+                                    url: 'delOneUserOrder',
                                     method: 'POST',
                                     data: {
                                         id: id
@@ -332,14 +387,14 @@
                                     dataType: 'json',
                                     success: function (data) {
                                         swal("刪除成功！", {
-                                                icon: "success",
-                                                button: "OK",
-                                            })
-                                            .then((willDelete) => {
-                                                    location.reload()
-                                                }
+                                            icon: "success",
+                                            button: "OK",
+                                        })
+                                        .then((willDelete) => {
+                                                location.reload()
+                                            }
 
-                                            );
+                                        );
                                     },
                                     error: function (data) {
                                         console.log('error');
@@ -365,6 +420,12 @@
                     console.log('error');
                 }
             })
+        });
+
+        $('#btn_print').click(function () {
+            let href = './print?id=' + id;
+            window.location.href = href;
+            // console.log(href);
         });
 
         $(".btn-addOrder").click(function () {
@@ -516,7 +577,7 @@
                                 <td>
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input type="radio" value="S" class="price form-check-input" name="group${item['mid']}" >
+                                            <input type="radio" value="S" class="price form-check-input" name="group${item['mid']}" ${item['price_s'] == 0?'disabled':item['price_s']}>
                                             ${item['price_s']}
                                         </label>
                                     </div>
@@ -524,7 +585,7 @@
                                 <td >
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input type="radio" value="M" class="price form-check-input" name="group${item['mid']}">
+                                            <input type="radio" value="M" class="price form-check-input" name="group${item['mid']}" ${item['price_m'] == 0?'disabled':item['price_m']}>
                                             ${item['price_m']}
                                         </label>
                                     </div>
@@ -532,7 +593,7 @@
                                 <td>
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input type="radio" value="L" class="price form-check-input" name="group${item['mid']}">
+                                            <input type="radio" value="L" class="price form-check-input" name="group${item['mid']}" ${item['price_l'] == 0?'disabled':item['price_l']}>
                                             ${item['price_l']}
                                         </label>
                                     </div>

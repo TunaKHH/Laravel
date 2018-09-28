@@ -19,7 +19,6 @@ class CreateUsersOrdersTable extends Migration
             $table->integer('users_id');
             $table->integer('menus_id');
             $table->char('size',1);
-            $table->tinyInteger('quantity')->comment('訂購數量');//訂購數量
             $table->integer('memo')->nullable()->comment('備註');//備註
             $table->timestamps();
         });
