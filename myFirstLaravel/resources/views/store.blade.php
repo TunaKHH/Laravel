@@ -24,32 +24,32 @@
                         <div class="tab-pane fade show active" id="pills-store">
                             <br>
                             <div class="container">
-                                <table class="table table-striped">
+                                <table id="store_datatable" class="table table-striped" >
                                     <thead class="thead-dark">
-                                        <tr class="row">
-                                            <th class="col-2">刪除</th>
-                                            <th class="col-2">新增/管理菜單</th>
-                                            <th class="col-5">店家名稱</th>
-                                            <th class="col-2">電話</th>
-                                            <th class="col-1">類型</th>
+                                        <tr>
+                                            <th >刪除</th>
+                                            <th >新增/管理菜單</th>
+                                            <th >店家名稱</th>
+                                            <th >電話</th>
+                                            <th >類型</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($stores as $store)
-                                        <tr class="row">
-                                            <td class="col-2">
+                                        <tr>
+                                            <td>
                                                 <button value="{{$store->id}}" type="button" class="btn_delStore btn btn-danger btn-sm">
                                                     <i class="far fa-trash-alt fa-xs"></i>
                                                 </button>
                                             </td>
-                                            <td class="col-2">
+                                            <td>
                                                 <button value="{{$store->id}}" type="button" class="btn_addMenu btn btn-primary btn-sm">
                                                     <i class="fas fa-wrench fa-xs"></i>
                                                 </button>
                                             </td>
-                                            <td class="col-5">{{ $store->name }}</td>
-                                            <td class="col-2">{{ $store->telphone }}</td>
-                                            <td class="col-1">
+                                            <td>{{ $store->name }}</td>
+                                            <td>{{ $store->telphone }}</td>
+                                            <td>
                                                 @if($store->type == 0) 飲料 @elseif($store->type == 1) 便當 @endif
                                             </td>
 
@@ -128,6 +128,7 @@
                                                             <button type="button" class="add_100 btn btn-dark">
                                                                 <i class="fas fa-plus"></i>
                                                             </button>
+                                                            X 100
                                                         </td>
                                                         <td class="col-2" style="text-align:end;">
                                                             <button type="button" class="add btn btn-primary">
@@ -165,7 +166,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <form>
-                                        <input type="hidden" name="id" id="addMenu_id">
+                                        <input type="hidden" name="store_id" id="addMenu_id">
                                         <div class="form-group">
                                             <label for="store-name" class="control-label">店家名稱:</label>
                                             <input type="text" class="form-control" id="addMenu_storeName" disabled>
@@ -196,6 +197,7 @@
                                                                 </label>
                                                             </div> -->
                                                         </td>
+                                                        <!--
                                                         <td class="col-4">
                                                             <label class="control-label h3">分類管理</label>
                                                         </td>
@@ -203,7 +205,7 @@
                                                             <button type="button" class="add3 btn btn-primary">
                                                                 <i class="fas fa-plus"></i>
                                                             </button>
-                                                        </td>
+                                                        </td>-->
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -240,7 +242,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                                    <button type="submit" class="btn btn-danger" id="addMenu_submit">送出</button>
+                                    <button type="button" class="btn btn-danger" id="addMenu_submit">送出</button>
                                 </div>
                             </div>
                         </div>
@@ -254,184 +256,60 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        var switch_type = 0;
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        var html = '<div class="row top-buffer">' +
-            '<div class="col-5">' +
-            '<input name="setProductName[]" type="text" class="setProductName form-control" placeholder="品項名稱" required>' +
-            '</div>' +
-            '<div class="col-2">' +
-            '<input name="setPriceS[]" type="number" class="setPriceS form-control" placeholder="價格(小)" >' +
-            '</div>' +
-            '<div class="col-2">' +
-            '<input name="setPriceM[]" type="number" class=" setPriceM form-control" placeholder="價格(中)" >' +
-            '</div>' +
-            '<div class="col-2">' +
-            '<input name="setPriceL[]" type="number" class="setPriceL form-control" placeholder="價格(大)" >' +
-            '</div>' +
-            '<div class="col-1">' +
-            '<button type="button" class="del btn btn-danger">' +
-            '<i class="fas fa-minus"></i>' +
-            '</button>' +
-            '</div>' +
-            '</div>';
-
-        var html_classify = '<div class="row top-buffer">' +
-            '<div class="col">' +
-            '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
-            '</div>' +
-            '<div class="col">' +
-            '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
-            '</div>' +
-            '<div class="col">' +
-            '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
-            '</div>' +
-            '</div>';
-
-        $(".add").click(function () {
-            $("#addItem").prepend(html);
-            del();
-        })
-
-        $(".add_100").click(function () {
-            for (var i = 0; i < 100; i++) {
-                $("#addItem").prepend(html);
-            }
-            del();
-        })
-
-        $(".add2").click(function () {
-            $("#addItem2").prepend(html);
-            del();
-        })
-
-        $(".add3").click(function () {
-            $("#addItem3").prepend(html_classify);
-            del();
-        })
-
-        $(".addStoreForm_submit").click(function () {
-            $("#addStoreForm").submit();
-        })
-
-
-
-        $('#addStore_storeTel').blur(function () {
-            var tel = $(this).val();
-            $.ajax({
-                type: "post",
-                url: "checkStoreTel",
-                data: {
-                    tel: tel
-                },
-                dataType: "json",
-                success: function (data) {
-                    if (data) {
-                        $('#addStore_storeTel').removeClass('is-valid');
-                        $('#addStore_storeTel').addClass('is-invalid');
-                        $('.addStoreForm_submit').attr('disabled', true);
-                    } else {
-                        $('#addStore_storeTel').removeClass('is-invalid');
-                        $('#addStore_storeTel').addClass('is-valid');
-                        $('.addStoreForm_submit').attr('disabled', false);
-                    }
-                },
-                error: function (data) {
-
-                }
-            });
-        })
-
-        $('#addStore_storeName').blur(function () {
-            var storeName = $(this).val();
-            $.ajax({
-                type: "post",
-                url: "checkStoreName",
-                data: {
-                    name: storeName
-                },
-                dataType: "json",
-                success: function (data) {
-                    if (data) {
-                        $('#addStore_storeName').removeClass('is-valid');
-                        $('#addStore_storeName').addClass('is-invalid');
-                        $('.addStoreForm_submit').attr('disabled', true);
-                    } else {
-                        $('#addStore_storeName').removeClass('is-invalid');
-                        $('#addStore_storeName').addClass('is-valid');
-                        $('.addStoreForm_submit').attr('disabled', false);
-                    }
-                },
-                error: function (data) {
-
-                }
-            });
-        })
-
-        function del() {
-            $(".del").click(function () {
-                $(this).parent().parent().remove();
-            })
-        }
-
-        $('.btn_delStore').click(function () {
-
+        $("body").delegate('#store_datatable tr .btn_delStore', 'click', function () {
             var id = $(this).attr('value');
             swal({
-                    title: "Are you sure?",
-                    text: "刪除後，您將無法回復此操作！",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        $.ajax({
-                            url: 'delStoreAndTheMenu',
-                            method: 'POST',
-                            data: {
-                                id: id
-                            },
-                            type: 'POST',
-                            dataType: 'json',
-                            success: function (data) {
-                                swal("刪除成功！", {
-                                        icon: "success",
-                                        button: "OK",
-                                    })
-                                    .then((willDelete) => {
-                                            location.reload()
-                                        }
+                title: "Are you sure?",
+                text: "刪除後，您將無法回復此操作！",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: 'delStoreAndTheMenu',
+                        method: 'POST',
+                        data: {
+                            id: id
+                        },
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function (data) {
+                            swal("刪除成功！", {
+                                    icon: "success",
+                                    button: "OK",
+                                })
+                                .then((willDelete) => {
+                                        location.reload()
+                                    }
 
-                                    );
-                            },
-                            error: function (data) {
-                                console.log('error');
-                            }
-                        })
+                                );
+                        },
+                        error: function (data) {
+                            console.log('error');
+                        }
+                    })
 
-                    } else {
-                        swal("刪除取消，您的操作未被執行!", {
-                            icon: "error",
-                        });
-                    }
-                });
+                } else {
+                    swal("刪除取消，您的操作未被執行!", {
+                        icon: "error",
+                    });
+                }
+            });
         });
 
-        $('.btn_addMenu').click(function () {
+        $("body").delegate('#store_datatable tr .btn_addMenu', 'click', function () {
+            
             $("#addItem2").children().remove();
             $("#addItem3").children().remove();
-            var id = $(this).attr('value');
-            $('#addMenu_id').val(id);
+            store_id = $(this).attr('value');
+            $('#addMenu_id').val(store_id);
             $.ajax({
                 url: 'getTheStoreAndMenuListByTheStore',
                 method: 'POST',
                 data: {
-                    id: id
+                    id: store_id
                 },
                 type: 'POST',
                 dataType: 'json',
@@ -474,7 +352,7 @@
                     }
 
                     $("#addItem2").prepend(html);
-                    $("#addItem3").append(html_classify);
+                    //$("#addItem3").append(html_classify);
                     $('#addMenuModal').modal({
                         backdrop: 'static',
                         keyboard: false
@@ -552,6 +430,165 @@
             })
         });
 
+        $('#store_datatable').DataTable(
+            // "oLanguage":{
+            //     "sInfo": "显示 _START_ 至 _END_ 条 &nbsp;&nbsp;本页共 _TOTAL_ 条",
+            //     "oPaginate": {
+            //         "sPrevious": " 上一页 ",
+            //         "sNext":     " 下一页 ",
+            //     }
+            // }
+        );
+        var store_id ;
+        var switch_type = 0;
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        var html = '<div class="row top-buffer">' +
+            '<div class="col-5">' +
+            '<input name="setProductName[]" type="text" class="setProductName form-control" placeholder="品項名稱" required>' +
+            '</div>' +
+            '<div class="col-2">' +
+            '<input name="setPriceS[]" type="number" class="setPriceS form-control" placeholder="價格(小)" >' +
+            '</div>' +
+            '<div class="col-2">' +
+            '<input name="setPriceM[]" type="number" class=" setPriceM form-control" placeholder="價格(中)" >' +
+            '</div>' +
+            '<div class="col-2">' +
+            '<input name="setPriceL[]" type="number" class="setPriceL form-control" placeholder="價格(大)" >' +
+            '</div>' +
+            '<div class="col-1">' +
+            '<button type="button" class="del btn btn-danger">' +
+            '<i class="fas fa-minus"></i>' +
+            '</button>' +
+            '</div>' +
+            '</div>';
+
+        var html_classify = '<div class="row top-buffer">' +
+            '<div class="col">' +
+            '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
+            '</div>' +
+            '<div class="col">' +
+            '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
+            '</div>' +
+            '<div class="col">' +
+            '<input type="text" class="setClassifyName form-control" placeholder="分類名稱" >' +
+            '</div>' +
+            '</div>';
+
+        $(".add").click(function () {
+            $("#addItem").prepend(html);
+            del();
+        })
+
+        $(".add_100").click(function () {
+            for (var i = 0; i < 100; i++) {
+                $("#addItem").prepend(html);
+            }
+            del();
+        })
+
+        $(".add2").click(function () {
+            $("#addItem2").prepend(html);
+            del();
+        })
+
+        $(".add3").click(function () {
+            $("#addItem3").prepend(html_classify);
+            del();
+        })
+
+        $(".addStoreForm_submit").click(function () {
+            $("#addStoreForm").submit();
+        })
+
+        $("#addMenu_submit").click(function () {
+
+
+            $("#addMenuForm").submit();
+        })
+
+        $('#addStore_storeTel').blur(function () {
+            var tel = $(this).val();
+            $.ajax({
+                type: "post",
+                url: "checkStoreTel",
+                data: {
+                    tel: tel
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data) {
+                        $('#addStore_storeTel').removeClass('is-valid');
+                        $('#addStore_storeTel').addClass('is-invalid');
+                        $('.addStoreForm_submit').attr('disabled', true);
+                    } else {
+                        $('#addStore_storeTel').removeClass('is-invalid');
+                        $('#addStore_storeTel').addClass('is-valid');
+                        $('.addStoreForm_submit').attr('disabled', false);
+                    }
+                },
+                error: function (data) {
+
+                }
+            });
+        })
+
+        $('#addStore_storeName').blur(function () {
+            var storeName = $(this).val();
+            $.ajax({
+                type: "post",
+                url: "checkStoreName",
+                data: {
+                    name: storeName
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data) {
+                        $('#addStore_storeName').removeClass('is-valid');
+                        $('#addStore_storeName').addClass('is-invalid');
+                        $('.addStoreForm_submit').attr('disabled', true);
+                    } else {
+                        $('#addStore_storeName').removeClass('is-invalid');
+                        $('#addStore_storeName').addClass('is-valid');
+                        $('.addStoreForm_submit').attr('disabled', false);
+                    }
+                },
+                error: function (data) {
+
+                }
+            });
+        })
+
+        function del() {
+            $(".del").click(function () {
+                $(this).parent().parent().remove();
+            })
+        }
+
+        $('#addMenuModal').on('shown.bs.modal', function (e) {
+            switch_type = 0;
+            $('#switch').attr("checked", false);
+            $('#addMenuForm').attr("action", "setNewMenu");
+            $('#addMenu_storeName').attr("disabled", true);
+            $('#addMenu_storeTel').attr("disabled", true);
+            $('#addMenu_storeType').attr("disabled", true);
+            $('.edit_mname').attr("disabled", true);
+            $('.edit_price_m').attr("disabled", true);
+            $('.edit_price_l').attr("disabled", true);
+            $('.edit_price_s').attr("disabled", true);
+            $('.setProductName').attr("disabled", false);
+            $('.setPriceS').attr("disabled", false);
+            $('.setPriceM').attr("disabled", false);
+            $('.setPriceL').attr("disabled", false);
+            $('.btn_edit_del').attr("hidden", true);
+            $('.add2').attr("hidden", false);
+            $('#addMenu_submit').attr("style", "");
+            $('#addMenu_submit').text("送出");
+        })
+
         $('.btn-showStoreModal').click(function () {
             $("#addItem").children().remove();
             $("#addItem").prepend(html);
@@ -581,7 +618,9 @@
                 $('.setPriceM').attr("disabled", true);
                 $('.setPriceL').attr("disabled", true);
                 $('.btn_edit_del').attr("hidden", false);
-
+                $('.add2').attr("hidden", true);
+                $('#addMenu_submit').attr("style", "background: #FF9800;border-color: #FF9800; color: white;");
+                $('#addMenu_submit').text("保存");
             } else {
                 $('#addMenuForm').attr("action", "setNewMenu");
                 $('#addMenu_storeName').attr("disabled", true);
@@ -596,6 +635,9 @@
                 $('.setPriceM').attr("disabled", false);
                 $('.setPriceL').attr("disabled", false);
                 $('.btn_edit_del').attr("hidden", true);
+                $('.add2').attr("hidden", false);
+                $('#addMenu_submit').attr("style", "");
+                $('#addMenu_submit').text("送出");
             }
         });
 

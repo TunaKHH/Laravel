@@ -41,14 +41,15 @@
                             <?php
                                 }?>
                             <br />
-                            <div class="row">
-                                <table class="table table-striped">
+                            <div class="container">
+                                <table id="order_datatable" class="table table-striped">
                                     <thead class="thead-dark">
                                         <tr>
                                             <?php if($_SESSION['userPermission'] == '0'){?>
                                                 <th scope="col">刪除</th>
                                             <?php }?>
                                             <th scope="col">加訂</th>
+                                            <th scope="col">檢視</th>
                                             <?php if($_SESSION['userPermission'] == '0'){?>
                                                 <th scope="col">Lock</th>
                                             <?php }?>
@@ -87,6 +88,12 @@
                                                 </button>
                                                 @endif
                                             </td>
+                                            <td scope="col">
+                                                <button value="{{$order->orderId}}" style="color:#ffffff" type="button" class="btn_viewOrder btn btn-info btn-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </td>
+
                                             <?php if($_SESSION['userPermission'] == '0'){
                                                 ?>
                                                 <td>
@@ -132,45 +139,44 @@
                                 <?php echo Form::open(array('action' => 'HomeController@setUsersOrder', 'id' => 'setUsersOrder'))?>
                                 <input name="user_id" value="<?php echo $userId?>" hidden>
                                 <div class="modal-body">
-                                        <input id="order_id" name="order_id" hidden>
-                                        <div class="accordion" id="accordionExample">
-                                            <div class="card">
-                                                <div class="card-header" id="headingOne">
-                                                    <h5 class="mb-0">
-                                                        <button class="btn btn-link" type="button" data-toggle="collapse"
-                                                            data-target="#collapseOne" aria-expanded="true"
-                                                            aria-controls="collapseOne">
-                                                            尚未分類
-                                                        </button>
-                                                    </h5>
-                                                </div>
+                                    <input id="order_id" name="order_id" hidden>
+                                    <div class="accordion" id="accordionExample">
+                                        <div class="card">
+                                            <div class="card-header" id="headingOne">
+                                                <h5 class="mb-0">
+                                                    <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                        data-target="#collapseOne" aria-expanded="true"
+                                                        aria-controls="collapseOne">
+                                                        尚未分類
+                                                    </button>
+                                                </h5>
+                                            </div>
 
-                                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                                    data-parent="#accordionExample">
-                                                    <div class="card-body">
-                                                        <table class="table table-striped table-light">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th scope="col" rowspan="2">#</th>
-                                                                    <th scope="col" rowspan="2">餐點品項</th>
-                                                                    <th scope="col" colspan="3" style="text-align:center;">價格</th>
-                                                                    <th scope="col" rowspan="2">數量</th>
-                                                                    <th scope="col" rowspan="2">備註</th>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>小</th>
-                                                                    <th>中</th>
-                                                                    <th>大</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="add_menu_item">
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
+                                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                                data-parent="#accordionExample">
+                                                <div class="card-body">
+                                                    <table class="table table-striped table-light">
+                                                        <thead>
+                                                            <tr>
+                                                                <!--<th scope="col" rowspan="2">#</th>-->
+                                                                <th scope="col" rowspan="2">餐點品項</th>
+                                                                <th scope="col" colspan="3" style="text-align:center;">價格</th>
+                                                                <th scope="col" rowspan="2">數量</th>
+                                                                <th scope="col" rowspan="2">備註</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>小</th>
+                                                                <th>中</th>
+                                                                <th>大</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="add_menu_item">
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>
-
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
@@ -271,13 +277,201 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        $("body").delegate('#order_datatable tr .btn_delOrder', 'click', function () {
+            var id = $(this).attr('value');
+            swal("確認要刪除訂單？", {
+                title: "Are you sure?",
+                text: "刪除後，您將無法回復此操作！",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDoSomething) => {
+                if (willDoSomething) {
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: "POST",
+                        url: "delOrder",
+                        data: {
+                            id: id
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response == true) {
+                                swal("刪除成功！", {
+                                        icon: "success",
+                                        button: "OK",
+                                    })
+                                    .then((willDoSomething) => {
+                                        location.reload()
+                                    });
+                            } else {
+                                console.log('error');
+                                console.log(response);
+                            }
+                        },
+                        error: function (response) {
+                            console.log(response);
+                            // console.log('error');
+                        }
+                    });
+
+                } else {
+                    swal("刪除取消，您的操作未被執行！", {
+                        icon: "error",
+                    })
+                }
+            });
+        });
+
+        $("body").delegate('#order_datatable tr .btn_addOrderDetail', 'click', function () {
+             //加訂按鈕被點擊
+             let order_id = $(this).attr('value');
+            let store_id = $(this).children('input').attr('value');
+            let day = $(this).parent().parent().children("td")[3].textContent;
+            let store_name = $(this).parent().parent().children("td")[5].textContent;
+            $('#add_menu_item').children().remove();
+            $('.modal-title').text(day + store_name);
+            $('#order_id').val(order_id);
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "post",
+                url: "getTheStoreAndMenuListByTheStore",
+                data: {
+                    id: store_id
+                },
+                dataType: "json",
+                success: function (response) {
+                    let html = '';
+                    response.forEach(function (item, index) {
+                        if ((item['price_s'] == 0 && item['price_m'] == 0) || (item[
+                                'price_m'] == 0 && item['price_l'] == 0) || (item[
+                                'price_s'] == 0 && item['price_l'] == 0)) {
+                            html = '<tr>' +
+                                '<td>' + item['mname'] + '</td>' +
+                                '<td></td>' +
+                                '<td>' +
+                                item['price_s'] != 0 ? item['price_s'] : item['price_m'] != 0 ? item['price_m'] : item['price_l'] + '</td>' +
+                                '<td></td>' +
+                                '<td>' +
+                                '<div class="input-group">' +
+                                '<input type="number" aria-label="Last name" class="form-control">' +
+                                '</div>' +
+                                '</td>' +
+                                '<td>' +
+                                '<div class="input-group">' +
+                                ' <input type="text" aria-label="Last name" class="form-control">' +
+                                '</div>' +
+                                '</td>';
+                        } else {
+
+                        }
+
+                        html =
+                            `<tr>
+                                <!--<td scope="row">
+                                    <label class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input">
+                                        <span class="custom-control-indicator"></span>
+                                    </label>
+                                </td>-->
+                                <td>
+                                    <input value="${item['mid']}" name="mid[]" hidden>
+                                    ${item['mname']}
+                                </td>
+                                <td>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="radio" value="S" class="price form-check-input" name="group${item['mid']}" ${item['price_s'] == 0?'disabled':item['price_s']}>
+                                            ${item['price_s']}
+                                        </label>
+                                    </div>
+                                </td>
+                                <td >
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="radio" value="M" class="price form-check-input" name="group${item['mid']}" ${item['price_m'] == 0?'disabled':item['price_m']}>
+                                            ${item['price_m']}
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="radio" value="L" class="price form-check-input" name="group${item['mid']}" ${item['price_l'] == 0?'disabled':item['price_l']}>
+                                            ${item['price_l']}
+                                        </label>
+                                    </div>
+                                </td>
+                                <td >
+                                    <div class="input-group">
+                                        <input type="number" aria-label="Last name" name="num[]" class="num form-control">
+                                    </div>
+                                </td>
+                                <td >
+                                    <div class="input-group">
+                                        <input type="text" aria-label="Last name" name="memo[]" class="memo form-control">
+                                    </div>
+                                </td>
+                            </tr>`;
+                        $('#add_menu_item').append(html);
+                    });
+                    $('#addOrderModal').modal('show');
+
+                    $(".price").click(function () {//當價格被點擊時數量更改為1
+                        var item = $(this).parents('tr').find('.num').val('1');
+                    });
+
+                    $('.num').focus(function (e) {
+                        e.preventDefault();
+                        var item = $(this).parents('tr').find('.price')[2].click();
+                    });
+
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        });
+
+        $("body").delegate('#order_datatable tr .btn_setLock', 'click', function () {
+            var id = $(this).attr('value');
+            var lock_type = $(this).children('input').attr('value');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "setOrderLock",
+                method: "post",
+                data: {
+                    id: id,
+                    lock_type: lock_type
+                },
+                type: "post",
+                dataType: "json",
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (response) {
+
+                }
+            });
+        });
+
+        $('#order_datatable').DataTable();
         var NowDate = new Date();
         var Today = NowDate.getFullYear() + '-' + (NowDate.getMonth() + 1) + '-' + NowDate.getDate();
         $('#order_name').val(Today);
 
         var userId = "<?php echo $userId?>";
         var id;
-        $('.row_view_orders').click(function (e) {
+
+        $('.row_view_orders, .btn_viewOrder').click(function (e) {
             e.preventDefault();
             id = $(this).attr('value');
             $.ajax({
@@ -320,12 +514,12 @@
                                             '" class="edit_price_l form-control" disabled>' +
                                         '</div>' +
                                         '<div class="col">' +
-                                            '<input value="' + data[i].memo +
+                                            '<input value="' + (data[i].memo == null ? '' : data[i].memo) +
                                             '" class="edit_price_l form-control" disabled>' +
                                         '</div>' +
                                         '<div class="col">' +
                                             '<button type="button" class="btn_edit_del btn btn-danger" value="' +
-                                            data[i].mid + '" >' +
+                                            data[i].users_orders_id + '" >' +
                                                 '<i class="fas fa-minus"></i>' +
                                             '</button>' +
                                         '</div>' +
@@ -354,7 +548,7 @@
                                             '" class="edit_price_l form-control" disabled>' +
                                         '</div>' +
                                         '<div class="col">' +
-                                            '<input value="' + data[i].memo +
+                                            '<input value="' + (data[i].memo == null ? '' : data[i].memo) +
                                             '" class="edit_price_l form-control" disabled>' +
                                         '</div>'+
                                     '</div>';
@@ -378,7 +572,10 @@
                         .then((willDelete) => {
                             if (willDelete) {
                                 $.ajax({
-                                    url: 'delOneUserOrder',
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    url: 'delUsersOrdersItem',
                                     method: 'POST',
                                     data: {
                                         id: id
@@ -398,6 +595,15 @@
                                     },
                                     error: function (data) {
                                         console.log('error');
+                                        swal("刪除失敗！請洽系統管理員", {
+                                            icon: "error",
+                                            button: "OK",
+                                        })
+                                        .then((willDelete) => {
+                                                location.reload()
+                                            }
+
+                                        );
                                     }
                                 })
 
@@ -467,190 +673,7 @@
             var id = $(this).attr('value');
         });
 
-        $('.btn_delOrder').click(function () {
-            var id = $(this).attr('value');
-            swal("確認要刪除訂單？", {
-                    title: "Are you sure?",
-                    text: "刪除後，您將無法回復此操作！",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willDoSomething) => {
-                    if (willDoSomething) {
-                        $.ajax({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            type: "POST",
-                            url: "delOrder",
-                            data: {
-                                id: id
-                            },
-                            dataType: "json",
-                            success: function (response) {
-                                if (response == true) {
-                                    swal("刪除成功！", {
-                                            icon: "success",
-                                            button: "OK",
-                                        })
-                                        .then((willDoSomething) => {
-                                            location.reload()
-                                        });
-                                } else {
-                                    console.log('error');
-                                    console.log(response);
-                                }
-                            },
-                            error: function (response) {
-                                console.log(response);
-                                // console.log('error');
-                            }
-                        });
 
-                    } else {
-                        swal("刪除取消，您的操作未被執行！", {
-                            icon: "error",
-                        })
-                    }
-                });
-
-        });
-
-        $('.btn_addOrderDetail').click(function () { //加訂按鈕被點擊
-            let order_id = $(this).attr('value');
-            let store_id = $(this).children('input').attr('value');
-            let day = $(this).parent().parent().children("td")[3].textContent;
-            let store_name = $(this).parent().parent().children("td")[5].textContent;
-            $('#add_menu_item').children().remove();
-            $('.modal-title').text(day + store_name);
-            $('#order_id').val(order_id);
-
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: "post",
-                url: "getTheStoreAndMenuListByTheStore",
-                data: {
-                    id: store_id
-                },
-                dataType: "json",
-                success: function (response) {
-                    let html = '';
-                    response.forEach(function (item, index) {
-                        if ((item['price_s'] == 0 && item['price_m'] == 0) || (item[
-                                'price_m'] == 0 && item['price_l'] == 0) || (item[
-                                'price_s'] == 0 && item['price_l'] == 0)) {
-                            html = '<tr>' +
-                                '<td>' + item['mname'] + '</td>' +
-                                '<td></td>' +
-                                '<td>' +
-                                item['price_s'] != 0 ? item['price_s'] : item['price_m'] != 0 ? item['price_m'] : item['price_l'] + '</td>' +
-                                '<td></td>' +
-                                '<td>' +
-                                '<div class="input-group">' +
-                                '<input type="number" aria-label="Last name" class="form-control">' +
-                                '</div>' +
-                                '</td>' +
-                                '<td>' +
-                                '<div class="input-group">' +
-                                ' <input type="text" aria-label="Last name" class="form-control">' +
-                                '</div>' +
-                                '</td>';
-                        } else {
-
-                        }
-
-                        html =
-                            `<tr>
-                                <td scope="row">
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input">
-                                        <span class="custom-control-indicator"></span>
-                                    </label>
-                                </td>
-                                <td>
-                                    <input value="${item['mid']}" name="mid[]" hidden>
-                                    ${item['mname']}
-                                </td>
-                                <td>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input type="radio" value="S" class="price form-check-input" name="group${item['mid']}" ${item['price_s'] == 0?'disabled':item['price_s']}>
-                                            ${item['price_s']}
-                                        </label>
-                                    </div>
-                                </td>
-                                <td >
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input type="radio" value="M" class="price form-check-input" name="group${item['mid']}" ${item['price_m'] == 0?'disabled':item['price_m']}>
-                                            ${item['price_m']}
-                                        </label>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input type="radio" value="L" class="price form-check-input" name="group${item['mid']}" ${item['price_l'] == 0?'disabled':item['price_l']}>
-                                            ${item['price_l']}
-                                        </label>
-                                    </div>
-                                </td>
-                                <td >
-                                    <div class="input-group">
-                                        <input type="number" aria-label="Last name" name="num[]" class="num form-control">
-                                    </div>
-                                </td>
-                                <td >
-                                    <div class="input-group">
-                                        <input type="text" aria-label="Last name" name="memo[]" class="memo form-control">
-                                    </div>
-                                </td>
-                            </tr>`;
-                        $('#add_menu_item').append(html);
-                    });
-                    $('#addOrderModal').modal('show');
-
-                    $(".price").click(function () {//當價格被點擊時數量更改為1
-                        var item = $(this).parents('tr').find('.num').val('1');
-                    });
-
-                },
-                error: function (response) {
-                    console.log(response);
-                }
-            });
-
-
-
-        });
-
-        $(".btn_setLock").click(function () {
-            var id = $(this).attr('value');
-            var lock_type = $(this).children('input').attr('value');
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: "setOrderLock",
-                method: "post",
-                data: {
-                    id: id,
-                    lock_type: lock_type
-                },
-                type: "post",
-                dataType: "json",
-                success: function (response) {
-                    location.reload();
-                },
-                error: function (response) {
-
-                }
-            });
-
-        });
 
         function del() {
             $(".del").click(function () {

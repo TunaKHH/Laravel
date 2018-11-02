@@ -8,9 +8,25 @@ use Carbon\Carbon;
 class Store extends Model
 {
     //
+    static function getAllCostOfUser($id){
+        $results = DB::select('select orders.name as orders_name, users.name as team_buyer, size, price_s, price_m, price_l,orders.created_at
+                                    from users_orders, orders, menus, users
+                                    where users_id  = ?
+                                    And users.id = orders.user_id
+                                    And users_orders.orders_id = orders.id
+                                    And users_orders.menus_id = menus.id
+                                    Order By orders.created_at DESC'
+                                    , array($id));
 
+        return $results;
+    }
     static function getAllUsers(){
         $results = DB::select('select id ,name ,email ,permission from users');
+        return $results;
+    }
+
+    static function getOrderLock($id){
+        $results = DB::select('select lock_type from orders where id = ?', array($id));
         return $results;
     }
 
@@ -38,6 +54,15 @@ class Store extends Model
 
     }
 
+    static function setEditUserPermission($id){
+        $userPermission = Store::getUserPermission($id);
+        $newUserPermission = $userPermission[0]->permission==0?1:0;
+        return DB::table('users')
+                    ->where('id' ,$id)
+                    ->update(['permission' => $newUserPermission]);
+
+    }
+
     static function setNewStore($name, $tel, $type){
         return DB::table('stores')->insertGetId(['name' => $name, 'telphone' => $tel, 'type' => $type]);
     }
@@ -50,7 +75,10 @@ class Store extends Model
         }
     }
 
-    static function setEditStoreAndMenu($id, $ProductName, $PriceS, $PriceM, $PriceL){
+    static function setEditStoreAndMenu($id, $ProductName, $PriceS, $PriceM, $PriceL, $storeName, $storeTel, $store_id){
+        // DB::table('stores')
+        //     ->where('id' ,$store_id)
+        //     ->update(['permission' => $newUserPermission]);
         for($i = 0; $i < count($id); $i++){
             if(isset($ProductName[$i])){
                 DB::table('menus')
@@ -83,7 +111,7 @@ class Store extends Model
     }
 
     static function getAllUsersOrderList($id){
-        $results = DB::select('select stores.name as store_name, stores.telphone as store_telphone, stores.type as store_type, menus.name as menu_name, size, menus.price_s, menus.price_m, menus.price_l, users.name, memo
+        $results = DB::select('select stores.name as store_name, stores.telphone as store_telphone, stores.type as store_type, users_orders.id as users_orders_id, menus.name as menu_name, size, menus.price_s, menus.price_m, menus.price_l, users.name, memo
                                 from users_orders, orders, menus, users, stores
                                 where orders.id = ?
                                 And orders_id = orders.id
@@ -132,6 +160,10 @@ class Store extends Model
 
     static function delOneMenu($id){
         return DB::table('menus')->where('id', '=', $id)->delete();
+    }
+
+    static function delUsersOrdersItem($id){
+        return DB::table('users_orders')->where('id', '=', $id)->delete();
     }
 
     static function checkStoreTel($tel){

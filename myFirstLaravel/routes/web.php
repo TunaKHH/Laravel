@@ -20,7 +20,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/order', 'HomeController@order')->name('order');
+Route::get('/order', 'HomeController@index')->name('order');
 
 Route::get('/store', 'HomeController@store')->name('store');
 
@@ -55,6 +55,8 @@ Route::post('/delStoreAndTheMenu', 'HomeController@delStoreAndTheMenu');
 Route::post('/delOrder', 'HomeController@delOrder');
 
 Route::post('/delOneMenu', 'HomeController@delOneMenu');
+
+Route::post('/delUsersOrdersItem', 'HomeController@delUsersOrdersItem');
 
 Route::post('/checkStoreTel', 'HomeController@checkStoreTel');
 

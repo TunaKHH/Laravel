@@ -30,6 +30,7 @@ class HomeController extends Controller
     {
         $data = $this->getUserPermission();
         $_SESSION['userPermission'] = $data[0]->permission;
+        // return $_SESSION['userPermission'];
         return $this->order();
     }
 
@@ -75,8 +76,8 @@ class HomeController extends Controller
         }else{
             Redirect::route('home');
         }
-
-        return view('history')->with('userId',$id);
+        $results = $this->getAllCostOfUser($id);
+        return view('history')->with('results',$results);
     }
 
     public function print()
@@ -96,6 +97,11 @@ class HomeController extends Controller
         }else{
             return $this->order();
         }
+    }
+
+    static private function getAllCostOfUser($id){
+        $results = Store::getAllCostOfUser($id);
+        return $results;
     }
 
     static private function getAllStores(){
@@ -189,7 +195,7 @@ class HomeController extends Controller
             $PriceS = Request::input('setPriceS');
             $PriceM = Request::input('setPriceM');
             $PriceL = Request::input('setPriceL');
-            $id = $_POST['id'];
+            $id = Request::input('store_id');;
 
             Store::setNewMenu($ProductName, $PriceS, $PriceM, $PriceL, $id);
             return Redirect::route('store');
@@ -202,19 +208,22 @@ class HomeController extends Controller
     public function setEditUserPermission(){
         $id = Request::input('id');
 
-        Store::setEditUserPermission($id);
+        return Store::setEditUserPermission($id);
 
-        return Redirect::route('permission');
+        // return Redirect::route('permission');
     }
 
     public function setEditStoreAndMenu(){
-        $id = Request::input('edit_mid');
+        $store_id = Request::input('store_id');
+        $storeName = Request::input('addMenu_storeName');
+        $storeTel = Request::input('addMenu_storeTel');
+        $mid = Request::input('edit_mid');
         $ProductName = Request::input('edit_mname');
         $PriceS = Request::input('edit_price_s');
         $PriceM = Request::input('edit_price_m');
         $PriceL = Request::input('edit_price_l');
 
-        Store::setEditStoreAndMenu($id, $ProductName, $PriceS, $PriceM, $PriceL);
+        Store::setEditStoreAndMenu($mid, $ProductName, $PriceS, $PriceM, $PriceL, $storeName, $storeTel, $store_id);
         return Redirect::route('store');
     }
 
@@ -245,18 +254,29 @@ class HomeController extends Controller
         return Store::setOrderLock($id, $lock_type);
     }
 
+    public function getOrderLock($id){
+        return Store::getOrderLock($id);
+    }
+
     public function setUsersOrder(){
         $order_id = Request::input('order_id');
-        $user_id = Request::input('user_id');
-        $menus_id = Request::input('mid');
-        $quantity = Request::input('num');
-        $memo = Request::input('memo');
 
-        for($i = 0; $i < count($menus_id); $i++){
-            if(isset($quantity[$i])){
-                for($i2 = 0; $i2<$quantity[$i]; $i2++){
-                    $size = Request::input('group'.$menus_id[$i]);
-                    Store::setUsersOrder($order_id, $user_id, $menus_id[$i], $size, $memo[$i]);
+        $lock_type = $this->getOrderLock($order_id)[0]->lock_type;
+
+        if($lock_type){//1為鎖定
+            // return Redirect::route('order');
+        }else{
+            $user_id = Request::input('user_id');
+            $menus_id = Request::input('mid');
+            $quantity = Request::input('num');
+            $memo = Request::input('memo');
+
+            for ($i = 0; $i < count($menus_id); $i++) {
+                if (isset($quantity[$i])) {
+                    for ($i2 = 0; $i2<$quantity[$i]; $i2++) {
+                        $size = Request::input('group'.$menus_id[$i]);
+                        Store::setUsersOrder($order_id, $user_id, $menus_id[$i], $size, $memo[$i]);
+                    }
                 }
             }
         }
@@ -276,6 +296,11 @@ class HomeController extends Controller
     public function delOrder(){
         $id = $_POST['id'];
         return Store::delOrder($id);
+    }
+
+    public function delUsersOrdersItem(){
+        $id = $_POST['id'];
+        return Store::delUsersOrdersItem($id);
     }
 
     public function checkStoreTel(){

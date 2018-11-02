@@ -13,6 +13,9 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.dataTables.min.js') }}" defer></script>
+    <!-- <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script> -->
+
     <script src="{{ asset('nicelabel/js/jquery.min.js') }}"></script>
 
     <!-- Fonts -->
@@ -21,6 +24,9 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <!-- <link href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet"> -->
     <link href="{{ asset('nicelabel/css/jquery-nicelabel.css') }}"rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
         crossorigin="anonymous">
@@ -262,12 +268,6 @@
         <main class="py-4">
             @yield('content')
         </main>
-        <script>
-            $('.nav_btn').click(function (e) {
-                e.preventDefault();
-                console.log(1);
-            });
-        </script>
     </div>
 </body>
 

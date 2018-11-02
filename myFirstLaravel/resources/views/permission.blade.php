@@ -56,6 +56,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
         var NowDate = new Date();
         var Today = NowDate.getFullYear() + '-' + (NowDate.getMonth() + 1) + '-' + NowDate.getDate();
         $('#order_name').val(Today);
@@ -63,6 +68,7 @@
         var userId = "<?php echo $userId?>";
 
         $('.btn_editPer').click(function (e) {
+            let id = $(this).attr('value');
             e.preventDefault();
             swal({
                 title: "Are you sure?",
@@ -82,7 +88,7 @@
                         type: 'POST',
                         dataType: 'json',
                         success: function (data) {
-                            swal("刪除成功！", {
+                            swal("更改成功！", {
                                     icon: "success",
                                     button: "OK",
                                 })
@@ -93,7 +99,16 @@
                                 );
                         },
                         error: function (data) {
-                            console.log('error');
+                            console.log(data);
+                            swal("更改失敗！", {
+                                    icon: "error",
+                                    button: "OK",
+                                })
+                                .then((willDelete) => {
+                                        location.reload()
+                                    }
+
+                                );
                         }
                     })
 
@@ -103,117 +118,6 @@
                     });
                 }
             });
-
-            let id = $(this).attr('value');
-
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: 'getAllUsersOrderList',
-                method: 'POST',
-                data: {
-                    id: id
-                },
-                type: 'POST',
-                dataType: 'json',
-                success: function (data) {
-                    $("#addItem2").children().remove();
-                    $('#addMenu_storeName').val(data[0].store_name);
-                    $('#addMenu_storeTel').val(data[0].store_telphone);
-                    $('#addMenu_storeType').val(data[0].store_type);
-                    if (typeof (data[0].menu_name) != 'undefined') {
-                        for (var i = 0; i < data.length; i++) {
-                            var html2 =
-                                '<div class="row top-buffer">' +
-                                    '<div class="col">' +
-                                        '<input value="' + data[i].menu_name +
-                                        '" type="text" class="edit_mname form-control" placeholder="品項名稱" disabled>' +
-                                    '</div>' +
-                                    '<div class="col">' +
-                                        '<input value="' + data[i].size +
-                                        '"  class="edit_price_s form-control" disabled>' +
-                                    '</div>' +
-                                    '<div class="col">' +
-                                        '<input value="' + (data[i].size =='S'?data[i].price_s : data[i].size =='M'?data[i].price_m : data[i].price_l) +
-                                        '" type="number" class="edit_price_m form-control" disabled>' +
-                                    '</div>' +
-                                    '<div class="col">' +
-                                        '<input value="' + data[i].name +
-                                        '" class="edit_price_l form-control" disabled>' +
-                                    '</div>' +
-                                    '<div class="col">' +
-                                        '<input value="' + data[i].memo +
-                                        '" class="edit_price_l form-control" disabled>' +
-                                    '</div>' +
-                                    '<div class="col">' +
-                                        '<button type="button" class="btn_edit_del btn btn-danger" value="' +
-                                        data[i].mid + '" >' +
-                                            '<i class="fas fa-minus"></i>' +
-                                        '</button>' +
-                                    '</div>' +
-                                '</div>';
-
-                            $("#addItem2").append(html2);
-                        }
-                    }
-
-                    $('#viewUsersOrderModal').modal('show');
-
-                    $('.btn_edit_del').click(function () {
-                        var id = $(this).attr('value');
-                        swal({
-                            title: "Are you sure?",
-                            text: "刪除後，您將無法回復此操作！",
-                            icon: "warning",
-                            buttons: true,
-                            dangerMode: true,
-                        })
-                        .then((willDelete) => {
-                            if (willDelete) {
-                                $.ajax({
-                                    url: 'delOneMenu',
-                                    method: 'POST',
-                                    data: {
-                                        id: id
-                                    },
-                                    type: 'POST',
-                                    dataType: 'json',
-                                    success: function (data) {
-                                        swal("刪除成功！", {
-                                                icon: "success",
-                                                button: "OK",
-                                            })
-                                            .then((willDelete) => {
-                                                    location.reload()
-                                                }
-
-                                            );
-                                    },
-                                    error: function (data) {
-                                        console.log('error');
-                                    }
-                                })
-
-                            } else {
-                                swal("刪除取消，您的操作未被執行!", {
-                                    icon: "error",
-                                });
-                            }
-                        });
-                    });
-
-                    $(document).on('blur', '.setClassifyName', function () {
-                        var name = $(this).val();
-                        if (name != "") {
-                            console.log(name);
-                        }
-                    })
-                },
-                error: function (data) {
-                    console.log('error');
-                }
-            })
         });
 
         $(".btn-addOrder").click(function () {

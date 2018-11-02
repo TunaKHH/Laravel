@@ -6,6 +6,10 @@
                 <div class="card-header">訂購紀錄</div>
 
                 <div class="card-body">
+                    @php ($total_money = 0)
+                    <span id="total_money">
+                    總計消費金額：
+                    </span>
                     @if (session('status'))
                     <div class="alert alert-success" role="alert">
                         {{ session('status') }}
@@ -14,8 +18,8 @@
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-order" role="tabpanel" aria-labelledby="order-tab">
                             <br />
-                            <div class="row">
-                                <table class="table table-striped">
+                            <div class="container">
+                                <table id="history_datatable" class="table table-striped">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th scope="col">訂購名稱</th>
@@ -25,12 +29,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach($results as $result)
+                                        @php ($total_money += $result->size =='S'?$result->price_s : $result->size =='M'?$result->price_m : $result->price_l)
                                         <tr>
-                                            <th scope="col">訂購名稱</th>
-                                            <th scope="col">主揪</th>
-                                            <th scope="col">日期</th>
-                                            <th scope="col">花費</th>
+                                            <th scope="col">{{$result->orders_name}}</th>
+                                            <th scope="col">{{$result->team_buyer}}</th>
+                                            <th scope="col">{{$result->created_at}}</th>
+                                            <th scope="col">{{($result->size =='S'?$result->price_s : $result->size =='M'?$result->price_m : $result->price_l)}}</th>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -44,11 +51,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        var NowDate = new Date();
-        var Today = NowDate.getFullYear() + '-' + (NowDate.getMonth() + 1) + '-' + NowDate.getDate();
-        $('#order_name').val(Today);
+        $('#history_datatable').DataTable();
 
-        var userId = "<?php echo $userId?>";
+        $('#total_money').text('總計消費金額：' + {{$total_money}});
 
         $('.row_view_orders').click(function (e) {
             e.preventDefault();
